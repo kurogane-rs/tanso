@@ -2,7 +2,7 @@
 include!("src/shared/resources.rs");
 
 fn main() {
-    tetsu_build::embed_windows_manifest();
+    tanso_build::embed_windows_manifest();
 
     // The icons alone: the manifest is the linker's, and a second one fails the link
     #[cfg(target_os = "windows")]

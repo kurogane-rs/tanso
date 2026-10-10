@@ -1,4 +1,4 @@
-use tetsu::*;
+use tanso::*;
 
 pub const PROCESS_TYPE: &str = "type";
 pub const RENDERER_PROCESS: &str = "renderer";

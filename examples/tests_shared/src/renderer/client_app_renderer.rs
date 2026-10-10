@@ -1,5 +1,5 @@
 use std::sync::{Arc, Mutex};
-use tetsu::*;
+use tanso::*;
 
 pub trait Delegate: Send {
     fn on_web_kit_initialized(&self, _app: &ClientAppRenderer) {}

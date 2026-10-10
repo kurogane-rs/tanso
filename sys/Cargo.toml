@@ -1,7 +1,7 @@
 [package]
-name = "tetsu-sys"
+name = "tanso-sys"
 description = "Generated bindings to the Chromium Embedded Framework's C API, loading libcef at run time"
-links = "tetsu"
+links = "tanso"
 
 version.workspace = true
 edition.workspace = true

@@ -230,7 +230,7 @@ pub(crate) fn functions() -> &'static LibcefFunctions {
 
 #[cold]
 fn not_loaded() -> ! {
-    panic!("libcef is not loaded; call tetsu_sys::load_libcef before any other CEF function")
+    panic!("libcef is not loaded; call tanso_sys::load_libcef before any other CEF function")
 }
 
 #[cfg(target_os = "windows")]

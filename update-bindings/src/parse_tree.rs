@@ -1751,7 +1751,7 @@ impl ParseTree<'_> {
             use crate::rc::{
                 ConvertParam, ConvertReturnValue, Rc, RcImpl, RefGuard, WrapParamRef,
             };
-            use tetsu_sys::*;
+            use tanso_sys::*;
         }
         .to_string();
         writeln!(f, "{header}")?;
@@ -2454,7 +2454,7 @@ methods implemented by the [`Impl{rust_name}`] trait.
 
 # Example
 ```rust
-# use tetsu::*;
+# use tanso::*;
 
 {wrap_type_macro}! {{
     struct My{rust_name} {{

@@ -1,4 +1,4 @@
-//! Build-script helpers for applications on tetsu.
+//! Build-script helpers for applications on tanso.
 //!
 //! What CEF documents an application's build must give its executables, for
 //! a build script to call.

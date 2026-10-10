@@ -1,4 +1,4 @@
-use tetsu::*;
+use tanso::*;
 
 wrap_app! {
     pub struct ClientAppOther {

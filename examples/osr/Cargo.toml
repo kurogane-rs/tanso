@@ -5,13 +5,13 @@ publish = false
 
 [features]
 default = ["accelerated_osr"]
-accelerated_osr = ["tetsu/accelerated_osr"]
+accelerated_osr = ["tanso/accelerated_osr"]
 
 [package.metadata.cef.bundle]
 helper_name = "cefsimple_helper"
 
 [dependencies]
-tetsu.workspace = true
+tanso.workspace = true
 wgpu.workspace = true
 
 env_logger = "0.11"

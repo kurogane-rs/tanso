@@ -1,4 +1,4 @@
-//! Bundles tetsu's examples into applications that run.
+//! Bundles tanso's examples into applications that run.
 //!
 //! A development tool of this repository. Applications ship with their own
 //! bundler, such as Kurogane's.

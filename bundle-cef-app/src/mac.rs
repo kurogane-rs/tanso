@@ -15,7 +15,7 @@ pub enum Error {
     #[error("Metadata error: {0:?}")]
     Metadata(#[from] super::metadata::Error),
     #[error("CEF not found: {0}")]
-    Cef(#[from] tetsu_sys::FindError),
+    Cef(#[from] tanso_sys::FindError),
     #[error("Plist error: {0:?}")]
     Plist(#[from] plist::Error),
 }
@@ -59,7 +59,7 @@ pub fn bundle(
         bundle_info.clone(),
         &target_path.join(executable_name),
     )?;
-    let cef_path = tetsu_sys::find_cef_dir()?.path;
+    let cef_path = tanso_sys::find_cef_dir()?.path;
     let to = main_app_path.join(FRAMEWORKS_PATH).join(FRAMEWORK);
     if to.exists() {
         fs::remove_dir_all(&to).unwrap();
@@ -343,7 +343,7 @@ pub fn main() -> anyhow::Result<()> {
     };
     let identifier = args
         .identifier
-        .unwrap_or_else(|| format!("rs.kurogane.tetsu.{}", args.name));
+        .unwrap_or_else(|| format!("rs.kurogane.tanso.{}", args.name));
     let display_name = args.display_name.unwrap_or_else(|| args.name.clone());
     let version = Version::parse(&args.version)?;
 

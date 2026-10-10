@@ -9,7 +9,7 @@ authors.workspace = true
 repository.workspace = true
 
 [dependencies]
-tetsu-download.workspace = true
+tanso-download.workspace = true
 
 bindgen.workspace = true
 clap.workspace = true

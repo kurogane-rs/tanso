@@ -13,7 +13,7 @@ mod mac;
 fn main() -> Result<(), &'static str> {
     shared::load_cef();
 
-    let args = tetsu::args::Args::new();
+    let args = tanso::args::Args::new();
     let Some(cmd_line) = args.as_cmd_line() else {
         return Err("Failed to parse command line arguments");
     };

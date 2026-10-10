@@ -1,11 +1,11 @@
 # export-cef-dir
 
 Export files from the prebuilt [Chromium Embedded Framework](https://github.com/chromiumembedded/cef)
-archive on any supported platform, laid out as `tetsu_sys::find_cef_dir` and `tetsu_sys::load_libcef`
+archive on any supported platform, laid out as `tanso_sys::find_cef_dir` and `tanso_sys::load_libcef`
 expect them.
 
-Without an output directory, the distribution goes into tetsu's shared installation,
-`tetsu/cef/<version>/cef_<os>_<arch>` under the local data directory, where an application
+Without an output directory, the distribution goes into tanso's shared installation,
+`tanso/cef/<version>/cef_<os>_<arch>` under the local data directory, where an application
 started without `CEF_PATH` finds it:
 
 ```sh

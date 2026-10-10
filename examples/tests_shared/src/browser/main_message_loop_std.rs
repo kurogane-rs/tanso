@@ -1,6 +1,6 @@
 use super::main_message_loop::*;
 use std::sync::{Arc, Mutex};
-use tetsu::*;
+use tanso::*;
 
 #[cfg(target_os = "windows")]
 use windows_sys::Win32::Foundation::HWND;

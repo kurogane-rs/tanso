@@ -3,7 +3,7 @@
 //! An executable inside a macOS application bundle runs the framework the
 //! bundle carries and no other. Any other executable runs a CEF beside it,
 //! else the one `CEF_PATH` names, else the shared installation of the CEF
-//! these bindings were generated for, which `tetsu_download::install` fills.
+//! these bindings were generated for, which `tanso_download::install` fills.
 
 use std::{
     env::consts::{ARCH, OS},
@@ -186,11 +186,11 @@ fn cef_version() -> &'static str {
 }
 
 /// The shared installation of the CEF these bindings were generated for,
-/// `tetsu/cef/<version>/cef_<os>_<arch>` under the local data directory as
-/// `tetsu_download::install` writes it; the directory may not exist.
+/// `tanso/cef/<version>/cef_<os>_<arch>` under the local data directory as
+/// `tanso_download::install` writes it; the directory may not exist.
 pub fn cef_install_dir() -> Option<PathBuf> {
     dirs::data_local_dir().map(|dir| {
-        dir.join("tetsu")
+        dir.join("tanso")
             .join("cef")
             .join(cef_version())
             .join(format!("cef_{OS}_{ARCH}"))
@@ -204,7 +204,7 @@ mod tests {
 
     /// A fresh directory under the system's temporary directory.
     fn tmp(name: &str) -> PathBuf {
-        let dir = std::env::temp_dir().join(format!("tetsu-cef-dir-{}-{name}", std::process::id()));
+        let dir = std::env::temp_dir().join(format!("tanso-cef-dir-{}-{name}", std::process::id()));
         let _ = fs::remove_dir_all(&dir);
         fs::create_dir_all(&dir).unwrap();
         dir

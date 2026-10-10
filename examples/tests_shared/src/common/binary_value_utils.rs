@@ -3,7 +3,7 @@ use std::{
     sync::OnceLock,
     time::{Duration, Instant},
 };
-use tetsu::*;
+use tanso::*;
 
 pub const TEST_SEND_PROCESS_MESSAGE: &[u8] = b"testSendProcessMessage";
 pub const TEST_SEND_SMR_PROCESS_MESSAGE: &[u8] = b"testSendSMRProcessMessage";

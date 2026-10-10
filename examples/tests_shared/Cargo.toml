@@ -9,7 +9,7 @@ authors.workspace = true
 repository.workspace = true
 
 [dependencies]
-tetsu = { workspace = true, features = ["wrapper"] }
+tanso = { workspace = true, features = ["wrapper"] }
 
 [target.'cfg(target_os = "windows")'.dependencies.windows-sys]
 workspace = true

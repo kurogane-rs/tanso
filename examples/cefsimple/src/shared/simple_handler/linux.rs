@@ -1,4 +1,4 @@
-use tetsu::*;
+use tanso::*;
 
 fn window_from_browser(browser: Option<&mut Browser>) -> Option<WindowHandle> {
     let window = browser?.host()?.window_handle();

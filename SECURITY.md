@@ -2,13 +2,13 @@
 
 ## Supported Versions
 
-The newest release of tetsu is supported. tetsu follows CEF's stable channel,
-so a fix lands on the CEF version tetsu is on.
+The newest release of tanso is supported. tanso follows CEF's stable channel,
+so a fix lands on the CEF version tanso is on.
 
 ## Reporting a Vulnerability
 
-Report a vulnerability in tetsu privately through GitHub's
-[private vulnerability reporting](https://github.com/kurogane-rs/tetsu/security/advisories/new).
+Report a vulnerability in tanso privately through GitHub's
+[private vulnerability reporting](https://github.com/kurogane-rs/tanso/security/advisories/new).
 Please do not open a public issue or pull request for it.
 
 A vulnerability in CEF or Chromium itself belongs to their projects:

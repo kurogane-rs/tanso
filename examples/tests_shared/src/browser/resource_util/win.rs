@@ -3,7 +3,7 @@ use std::{
     mem,
     sync::{Arc, Mutex, OnceLock},
 };
-use tetsu::{
+use tanso::{
     wrapper::{byte_read_handler::*, resource_manager::*, stream_resource_handler::*},
     *,
 };

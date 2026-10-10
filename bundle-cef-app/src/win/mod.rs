@@ -12,7 +12,7 @@ pub enum Error {
     #[error("Metadata error: {0:?}")]
     Metadata(#[from] super::metadata::Error),
     #[error("CEF not found: {0}")]
-    Cef(#[from] tetsu_sys::FindError),
+    Cef(#[from] tanso_sys::FindError),
 }
 
 pub type Result<T> = std::result::Result<T, Error>;
@@ -28,7 +28,7 @@ pub fn bundle(
     executable_name: &str,
     bootstrap: Option<&str>,
 ) -> Result<PathBuf> {
-    let cef_path = tetsu_sys::find_cef_dir()?.path;
+    let cef_path = tanso_sys::find_cef_dir()?.path;
     copy_directory(&cef_path, app_path)?;
 
     const LOCALES_DIR: &str = "locales";
@@ -81,7 +81,7 @@ fn copy_app(
 ) -> Result<PathBuf> {
     let mut manifest_file =
         fs::File::create(app_path.join(format!("{executable_name}.exe.manifest")))?;
-    manifest_file.write_all(tetsu_build::WINDOWS_MANIFEST.as_bytes())?;
+    manifest_file.write_all(tanso_build::WINDOWS_MANIFEST.as_bytes())?;
 
     let executable_path = app_path.join(format!("{executable_name}.exe"));
     if let Some(library) = bootstrap {
@@ -99,7 +99,7 @@ fn copy_app(
             fs::copy(&target_pdb, app_path.join(&pdb_name))?;
         }
 
-        let cef_path = tetsu_sys::find_cef_dir()?.path;
+        let cef_path = tanso_sys::find_cef_dir()?.path;
         fs::copy(cef_path.join("bootstrap.exe"), &executable_path)?;
     } else {
         fs::copy(

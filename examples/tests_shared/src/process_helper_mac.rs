@@ -2,7 +2,7 @@ use crate::{
     common::{client_app::*, client_app_other::*},
     renderer::client_app_renderer::*,
 };
-use tetsu::{args::Args, *};
+use tanso::{args::Args, *};
 
 pub fn run_main(
     args: Args,
@@ -10,7 +10,7 @@ pub fn run_main(
     app_renderer_delegates: Vec<Box<dyn Delegate>>,
 ) -> Result<(), i32> {
     let _sandbox = {
-        let mut sandbox = tetsu::sandbox::Sandbox::new().expect("cannot load the sandbox");
+        let mut sandbox = tanso::sandbox::Sandbox::new().expect("cannot load the sandbox");
         sandbox
             .initialize(args.as_main_args())
             .expect("cannot enter the sandbox");

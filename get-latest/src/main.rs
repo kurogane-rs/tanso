@@ -3,13 +3,13 @@
 use clap::Parser;
 use semver::{BuildMetadata, Version};
 use std::{env, fs, io::Write, path::PathBuf};
-use tetsu_download::{CefIndex, Channel};
+use tanso_download::{CefIndex, Channel};
 use toml_edit::{value, DocumentMut};
 
 #[derive(Debug, thiserror::Error)]
 enum Error {
     #[error("Download error: {0}")]
-    Download(#[from] tetsu_download::Error),
+    Download(#[from] tanso_download::Error),
     #[error("Invalid version: {0}")]
     InvalidVersion(#[from] semver::Error),
     #[error("No version is published for every target")]
@@ -26,7 +26,7 @@ type Result<T> = std::result::Result<T, Error>;
 #[command(about, long_about = None)]
 struct Args {
     /// Mirror of CEF's builds.
-    #[arg(short, long, default_value_t = tetsu_download::default_download_url())]
+    #[arg(short, long, default_value_t = tanso_download::default_download_url())]
     mirror_url: String,
     /// Release channel: stable or beta.
     #[arg(short, long, default_value = "stable")]
@@ -41,7 +41,7 @@ fn main() -> Result<()> {
     let channel = args.channel;
 
     let index = CefIndex::download(&args.mirror_url)?;
-    let latest_version = tetsu_download::supported_targets()
+    let latest_version = tanso_download::supported_targets()
         .map(|target| {
             let build = index.platform(target)?.latest(&channel)?;
             // `154.0.33+ga03e714+chromium-154.0.8037.94` is CEF 154.0.33
@@ -63,7 +63,7 @@ fn main() -> Result<()> {
     }
 
     let current_version =
-        Version::parse(&tetsu_download::default_version(env!("CARGO_PKG_VERSION")))?;
+        Version::parse(&tanso_download::default_version(env!("CARGO_PKG_VERSION")))?;
     if current_version >= latest_version {
         println!("The workspace is on {current_version} already");
         return Ok(());
@@ -89,7 +89,7 @@ fn main() -> Result<()> {
         .join("Cargo.toml");
     let mut doc = fs::read_to_string(&manifest)?.parse::<DocumentMut>()?;
     doc["workspace"]["package"]["version"] = value(next_version.to_string());
-    doc["workspace"]["dependencies"]["tetsu-sys"]["version"] = value(sys_version.to_string());
+    doc["workspace"]["dependencies"]["tanso-sys"]["version"] = value(format!("={sys_version}"));
     fs::write(&manifest, doc.to_string())?;
 
     println!("Moved the workspace to {next_version}");

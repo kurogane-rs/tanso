@@ -1,8 +1,8 @@
 # get-latest
 
 Finds the newest [Chromium Embedded Framework (CEF)](https://cef-builds.spotifycdn.com/index.html)
-version published for every target tetsu supports. With `--update-version` it moves the workspace to
-that version when it is newer, in tetsu's version scheme: `<CEF major>.<minor>.<patch>+<CEF version>`.
+version published for every target tanso supports. With `--update-version` it moves the workspace to
+that version when it is newer, in tanso's version scheme: `<CEF major>.<minor>.<patch>+<CEF version>`.
 
 ```sh
 cargo run -p get-latest

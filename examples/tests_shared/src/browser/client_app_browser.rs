@@ -7,7 +7,7 @@ use std::{
     rc::Rc,
     sync::Arc,
 };
-use tetsu::*;
+use tanso::*;
 
 pub trait Delegate: Send + Sync {
     fn on_before_command_line_processing(

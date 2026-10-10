@@ -7,7 +7,7 @@ use std::{
     ptr::{self, NonNull},
     slice,
 };
-use tetsu_sys::{
+use tanso_sys::{
     _cef_string_list_t, _cef_string_map_t, _cef_string_multimap_t, _cef_string_utf16_t,
     _cef_string_utf8_t, _cef_string_wide_t,
 };
@@ -40,15 +40,15 @@ impl<T> From<UserFreeData<T>> for *mut T {
 impl Clone for UserFreeData<_cef_string_utf8_t> {
     fn clone(&self) -> Self {
         Self(self.0.as_ref().and_then(|value| unsafe {
-            let data = NonNull::new(tetsu_sys::cef_string_userfree_utf8_alloc())?;
-            if tetsu_sys::cef_string_utf8_set(
+            let data = NonNull::new(tanso_sys::cef_string_userfree_utf8_alloc())?;
+            if tanso_sys::cef_string_utf8_set(
                 value.as_ref().str_,
                 value.as_ref().length,
                 data.as_ptr(),
                 1,
             ) == 0
             {
-                tetsu_sys::cef_string_userfree_utf8_free(data.as_ptr());
+                tanso_sys::cef_string_userfree_utf8_free(data.as_ptr());
                 None
             } else {
                 Some(data)
@@ -60,15 +60,15 @@ impl Clone for UserFreeData<_cef_string_utf8_t> {
 impl Clone for UserFreeData<_cef_string_utf16_t> {
     fn clone(&self) -> Self {
         Self(self.0.as_ref().and_then(|value| unsafe {
-            let data = NonNull::new(tetsu_sys::cef_string_userfree_utf16_alloc())?;
-            if tetsu_sys::cef_string_utf16_set(
+            let data = NonNull::new(tanso_sys::cef_string_userfree_utf16_alloc())?;
+            if tanso_sys::cef_string_utf16_set(
                 value.as_ref().str_,
                 value.as_ref().length,
                 data.as_ptr(),
                 1,
             ) == 0
             {
-                tetsu_sys::cef_string_userfree_utf16_free(data.as_ptr());
+                tanso_sys::cef_string_userfree_utf16_free(data.as_ptr());
                 None
             } else {
                 Some(data)
@@ -80,15 +80,15 @@ impl Clone for UserFreeData<_cef_string_utf16_t> {
 impl Clone for UserFreeData<_cef_string_wide_t> {
     fn clone(&self) -> Self {
         Self(self.0.as_ref().and_then(|value| unsafe {
-            let data = NonNull::new(tetsu_sys::cef_string_userfree_wide_alloc())?;
-            if tetsu_sys::cef_string_wide_set(
+            let data = NonNull::new(tanso_sys::cef_string_userfree_wide_alloc())?;
+            if tanso_sys::cef_string_wide_set(
                 value.as_ref().str_,
                 value.as_ref().length,
                 data.as_ptr(),
                 1,
             ) == 0
             {
-                tetsu_sys::cef_string_userfree_wide_free(data.as_ptr());
+                tanso_sys::cef_string_userfree_wide_free(data.as_ptr());
                 None
             } else {
                 Some(data)
@@ -124,7 +124,7 @@ impl Drop for CefStringUserfreeUtf8 {
         let value: *mut _cef_string_utf8_t = mem::take(&mut self.0).into();
         if !value.is_null() {
             unsafe {
-                tetsu_sys::cef_string_userfree_utf8_free(value);
+                tanso_sys::cef_string_userfree_utf8_free(value);
             }
         }
     }
@@ -157,7 +157,7 @@ impl Drop for CefStringUserfreeUtf16 {
         let value: *mut _cef_string_utf16_t = mem::take(&mut self.0).into();
         if !value.is_null() {
             unsafe {
-                tetsu_sys::cef_string_userfree_utf16_free(value);
+                tanso_sys::cef_string_userfree_utf16_free(value);
             }
         }
     }
@@ -200,14 +200,14 @@ impl From<*const _cef_string_utf16_t> for CefStringUserfreeWide {
                     return None;
                 }
                 let slice = slice::from_raw_parts(value.str_, value.length);
-                NonNull::new(tetsu_sys::cef_string_userfree_wide_alloc()).and_then(|data| {
-                    if tetsu_sys::cef_string_utf16_to_wide(
+                NonNull::new(tanso_sys::cef_string_userfree_wide_alloc()).and_then(|data| {
+                    if tanso_sys::cef_string_utf16_to_wide(
                         slice.as_ptr().cast(),
                         slice.len(),
                         data.as_ptr(),
                     ) == 0
                     {
-                        tetsu_sys::cef_string_userfree_wide_free(data.as_ptr());
+                        tanso_sys::cef_string_userfree_wide_free(data.as_ptr());
                         None
                     } else {
                         Some(data)
@@ -230,7 +230,7 @@ impl Drop for CefStringUserfreeWide {
         let value: *mut _cef_string_wide_t = mem::take(&mut self.0).into();
         if !value.is_null() {
             unsafe {
-                tetsu_sys::cef_string_userfree_wide_free(value);
+                tanso_sys::cef_string_userfree_wide_free(value);
             }
         }
     }
@@ -306,7 +306,7 @@ impl Drop for CefStringUtf8 {
         if let CefStringData::Clear(mut value) = &mut self.0 {
             if let Some(mut value) = mem::take(&mut value) {
                 unsafe {
-                    tetsu_sys::cef_string_utf8_clear(&mut value);
+                    tanso_sys::cef_string_utf8_clear(&mut value);
                 }
             }
         }
@@ -317,7 +317,7 @@ impl From<&str> for CefStringUtf8 {
     fn from(value: &str) -> Self {
         Self(CefStringData::Clear(unsafe {
             let mut data = mem::zeroed();
-            if tetsu_sys::cef_string_utf8_set(value.as_ptr().cast(), value.len(), &mut data, 1) == 0
+            if tanso_sys::cef_string_utf8_set(value.as_ptr().cast(), value.len(), &mut data, 1) == 0
             {
                 None
             } else {
@@ -332,7 +332,7 @@ impl From<&CefStringUserfreeUtf8> for CefStringUtf8 {
         let value: Option<&_cef_string_utf8_t> = value.into();
         Self(CefStringData::Clear(value.and_then(|value| unsafe {
             let mut data = mem::zeroed();
-            if tetsu_sys::cef_string_utf8_set(value.str_, value.length, &mut data, 1) == 0 {
+            if tanso_sys::cef_string_utf8_set(value.str_, value.length, &mut data, 1) == 0 {
                 None
             } else {
                 Some(data)
@@ -412,8 +412,8 @@ impl CefStringUtf8 {
 
         unsafe {
             assert_ne!(value.as_ptr(), data.as_ref().str_.cast());
-            tetsu_sys::cef_string_utf8_clear(data.as_ptr());
-            tetsu_sys::cef_string_utf8_set(value.as_ptr().cast(), value.len(), data.as_ptr(), 1)
+            tanso_sys::cef_string_utf8_clear(data.as_ptr());
+            tanso_sys::cef_string_utf8_set(value.as_ptr().cast(), value.len(), data.as_ptr(), 1)
                 != 0
         }
     }
@@ -424,7 +424,7 @@ impl From<&CefStringUtf16> for CefStringUtf8 {
         Self(CefStringData::Clear(unsafe {
             value.as_slice().and_then(|value| {
                 let mut data = mem::zeroed();
-                if tetsu_sys::cef_string_utf16_to_utf8(
+                if tanso_sys::cef_string_utf16_to_utf8(
                     value.as_ptr().cast(),
                     value.len(),
                     &mut data,
@@ -444,7 +444,7 @@ impl From<&CefStringWide> for CefStringUtf8 {
         Self(CefStringData::Clear(unsafe {
             value.as_slice().and_then(|value| {
                 let mut data = mem::zeroed();
-                if tetsu_sys::cef_string_wide_to_utf8(value.as_ptr().cast(), value.len(), &mut data)
+                if tanso_sys::cef_string_wide_to_utf8(value.as_ptr().cast(), value.len(), &mut data)
                     == 0
                 {
                     None
@@ -475,7 +475,7 @@ impl Drop for CefStringUtf16 {
         if let CefStringData::Clear(mut value) = &mut self.0 {
             if let Some(mut value) = mem::take(&mut value) {
                 unsafe {
-                    tetsu_sys::cef_string_utf16_clear(&mut value);
+                    tanso_sys::cef_string_utf16_clear(&mut value);
                 }
             }
         }
@@ -486,7 +486,7 @@ impl From<&str> for CefStringUtf16 {
     fn from(value: &str) -> Self {
         Self(CefStringData::Clear(unsafe {
             let mut data = mem::zeroed();
-            if tetsu_sys::cef_string_utf8_to_utf16(value.as_ptr().cast(), value.len(), &mut data)
+            if tanso_sys::cef_string_utf8_to_utf16(value.as_ptr().cast(), value.len(), &mut data)
                 == 0
             {
                 None
@@ -502,7 +502,7 @@ impl From<&[u16]> for CefStringUtf16 {
     fn from(value: &[u16]) -> Self {
         Self(CefStringData::Clear(unsafe {
             let mut data = mem::zeroed();
-            if tetsu_sys::cef_string_utf16_set(value.as_ptr().cast(), value.len(), &mut data, 1)
+            if tanso_sys::cef_string_utf16_set(value.as_ptr().cast(), value.len(), &mut data, 1)
                 == 0
             {
                 None
@@ -518,7 +518,7 @@ impl From<&CefStringUserfreeUtf16> for CefStringUtf16 {
         let value: Option<&_cef_string_utf16_t> = value.into();
         Self(CefStringData::Clear(value.and_then(|value| unsafe {
             let mut data = mem::zeroed();
-            if tetsu_sys::cef_string_utf16_set(value.str_, value.length, &mut data, 1) == 0 {
+            if tanso_sys::cef_string_utf16_set(value.str_, value.length, &mut data, 1) == 0 {
                 eprintln!("Invalid UTF-16 string");
                 None
             } else {
@@ -586,8 +586,8 @@ impl CefStringUtf16 {
         };
 
         unsafe {
-            tetsu_sys::cef_string_utf16_clear(data.as_ptr());
-            tetsu_sys::cef_string_utf8_to_utf16(value.as_ptr().cast(), value.len(), data.as_ptr())
+            tanso_sys::cef_string_utf16_clear(data.as_ptr());
+            tanso_sys::cef_string_utf8_to_utf16(value.as_ptr().cast(), value.len(), data.as_ptr())
                 != 0
         }
     }
@@ -598,7 +598,7 @@ impl From<&CefStringUtf8> for CefStringUtf16 {
         Self(CefStringData::Clear(unsafe {
             value.as_str().and_then(|value| {
                 let mut data = mem::zeroed();
-                if tetsu_sys::cef_string_utf8_to_utf16(
+                if tanso_sys::cef_string_utf8_to_utf16(
                     value.as_ptr().cast(),
                     value.len(),
                     &mut data,
@@ -618,7 +618,7 @@ impl From<&CefStringWide> for CefStringUtf16 {
         Self(CefStringData::Clear(unsafe {
             value.as_slice().and_then(|value| {
                 let mut data = mem::zeroed();
-                if tetsu_sys::cef_string_wide_to_utf16(
+                if tanso_sys::cef_string_wide_to_utf16(
                     value.as_ptr().cast(),
                     value.len(),
                     &mut data,
@@ -653,7 +653,7 @@ impl Drop for CefStringWide {
         if let CefStringData::Clear(mut value) = &mut self.0 {
             if let Some(mut value) = mem::take(&mut value) {
                 unsafe {
-                    tetsu_sys::cef_string_wide_clear(&mut value);
+                    tanso_sys::cef_string_wide_clear(&mut value);
                 }
             }
         }
@@ -664,7 +664,7 @@ impl From<&str> for CefStringWide {
     fn from(value: &str) -> Self {
         Self(CefStringData::Clear(unsafe {
             let mut data = mem::zeroed();
-            if tetsu_sys::cef_string_utf8_to_wide(value.as_ptr().cast(), value.len(), &mut data)
+            if tanso_sys::cef_string_utf8_to_wide(value.as_ptr().cast(), value.len(), &mut data)
                 == 0
             {
                 None
@@ -680,7 +680,7 @@ impl From<&CefStringUserfreeWide> for CefStringWide {
         let value: Option<&_cef_string_wide_t> = value.into();
         Self(CefStringData::Clear(value.and_then(|value| unsafe {
             let mut data = mem::zeroed();
-            if tetsu_sys::cef_string_wide_set(value.str_, value.length, &mut data, 1) == 0 {
+            if tanso_sys::cef_string_wide_set(value.str_, value.length, &mut data, 1) == 0 {
                 None
             } else {
                 Some(data)
@@ -747,8 +747,8 @@ impl CefStringWide {
         };
 
         unsafe {
-            tetsu_sys::cef_string_wide_clear(data.as_ptr());
-            tetsu_sys::cef_string_utf8_to_wide(value.as_ptr().cast(), value.len(), data.as_ptr())
+            tanso_sys::cef_string_wide_clear(data.as_ptr());
+            tanso_sys::cef_string_utf8_to_wide(value.as_ptr().cast(), value.len(), data.as_ptr())
                 != 0
         }
     }
@@ -759,7 +759,7 @@ impl From<&CefStringUtf8> for CefStringWide {
         Self(CefStringData::Clear(unsafe {
             value.as_str().and_then(|value| {
                 let mut data = mem::zeroed();
-                if tetsu_sys::cef_string_utf8_to_wide(value.as_ptr().cast(), value.len(), &mut data)
+                if tanso_sys::cef_string_utf8_to_wide(value.as_ptr().cast(), value.len(), &mut data)
                     == 0
                 {
                     None
@@ -776,7 +776,7 @@ impl From<&CefStringUtf16> for CefStringWide {
         Self(CefStringData::Clear(unsafe {
             value.as_slice().and_then(|value| {
                 let mut data = mem::zeroed();
-                if tetsu_sys::cef_string_utf16_to_wide(
+                if tanso_sys::cef_string_utf16_to_wide(
                     value.as_ptr().cast(),
                     value.len(),
                     &mut data,
@@ -869,7 +869,7 @@ pub struct CefStringList(CefStringCollection<_cef_string_list_t>);
 impl CefStringList {
     pub fn new() -> Self {
         Self(CefStringCollection::Free(NonNull::new(unsafe {
-            tetsu_sys::cef_string_list_alloc()
+            tanso_sys::cef_string_list_alloc()
         })))
     }
 
@@ -880,7 +880,7 @@ impl CefStringList {
         };
 
         let value = CefString::from(value);
-        unsafe { tetsu_sys::cef_string_list_append(list, (&value).into()) };
+        unsafe { tanso_sys::cef_string_list_append(list, (&value).into()) };
         true
     }
 }
@@ -895,7 +895,7 @@ impl Drop for CefStringList {
     fn drop(&mut self) {
         unsafe {
             if let CefStringCollection::Free(Some(list)) = &mut self.0 {
-                tetsu_sys::cef_string_list_free(list.as_ptr());
+                tanso_sys::cef_string_list_free(list.as_ptr());
             }
         }
     }
@@ -952,11 +952,11 @@ impl IntoIterator for CefStringList {
         let list: *mut _cef_string_list_t = (&mut list).into();
         let list = unsafe { list.as_mut() };
         list.map(|list| {
-            let count = unsafe { tetsu_sys::cef_string_list_size(list) };
+            let count = unsafe { tanso_sys::cef_string_list_size(list) };
             (0..count)
                 .filter_map(|i| unsafe {
                     let mut value = mem::zeroed();
-                    (tetsu_sys::cef_string_list_value(list, i, &mut value) > 0).then_some(value)
+                    (tanso_sys::cef_string_list_value(list, i, &mut value) > 0).then_some(value)
                 })
                 .map(|value| CefString::from(ptr::from_ref(&value)).to_string())
                 .collect::<Vec<_>>()
@@ -978,11 +978,11 @@ impl Debug for CefStringList {
 
             write!(f, "CefStringList [")?;
 
-            let count = tetsu_sys::cef_string_list_size(list);
+            let count = tanso_sys::cef_string_list_size(list);
             for i in 0..count {
                 let separator = if i > 0 { ", " } else { "" };
                 let mut value = mem::zeroed();
-                if tetsu_sys::cef_string_list_value(list, i, &mut value) != 0 {
+                if tanso_sys::cef_string_list_value(list, i, &mut value) != 0 {
                     let value = CefString::from(ptr::from_ref(&value)).to_string();
                     write!(f, "{separator}{value:?}")?;
                 } else {
@@ -1002,7 +1002,7 @@ pub struct CefStringMap(CefStringCollection<_cef_string_map_t>);
 impl CefStringMap {
     pub fn new() -> Self {
         Self(CefStringCollection::Free(NonNull::new(unsafe {
-            tetsu_sys::cef_string_map_alloc()
+            tanso_sys::cef_string_map_alloc()
         })))
     }
 
@@ -1014,7 +1014,7 @@ impl CefStringMap {
 
         let key = CefString::from(key);
         let value = CefString::from(value);
-        unsafe { tetsu_sys::cef_string_map_append(map, (&key).into(), (&value).into()) != 0 }
+        unsafe { tanso_sys::cef_string_map_append(map, (&key).into(), (&value).into()) != 0 }
     }
 }
 
@@ -1028,7 +1028,7 @@ impl Drop for CefStringMap {
     fn drop(&mut self) {
         unsafe {
             if let CefStringCollection::Free(Some(map)) = &mut self.0 {
-                tetsu_sys::cef_string_map_free(map.as_ptr());
+                tanso_sys::cef_string_map_free(map.as_ptr());
             }
         }
     }
@@ -1085,13 +1085,13 @@ impl IntoIterator for CefStringMap {
         let map: *mut _cef_string_map_t = (&mut map).into();
         let map = unsafe { map.as_mut() };
         map.map(|map| {
-            let count = unsafe { tetsu_sys::cef_string_map_size(map) };
+            let count = unsafe { tanso_sys::cef_string_map_size(map) };
             (0..count)
                 .filter_map(|i| unsafe {
                     let mut key = mem::zeroed();
                     let mut value = mem::zeroed();
-                    (tetsu_sys::cef_string_map_key(map, i, &mut key) > 0
-                        && tetsu_sys::cef_string_map_value(map, i, &mut value) > 0)
+                    (tanso_sys::cef_string_map_key(map, i, &mut key) > 0
+                        && tanso_sys::cef_string_map_value(map, i, &mut value) > 0)
                         .then_some((key, value))
                 })
                 .map(|(key, value)| {
@@ -1119,16 +1119,16 @@ impl Debug for CefStringMap {
 
             write!(f, "CefStringMultimap {{")?;
 
-            let count = tetsu_sys::cef_string_map_size(map);
+            let count = tanso_sys::cef_string_map_size(map);
             for i in 0..count {
                 let mut key = mem::zeroed();
-                if tetsu_sys::cef_string_map_key(map, i, &mut key) != 0 {
+                if tanso_sys::cef_string_map_key(map, i, &mut key) != 0 {
                     let separator = if i > 0 { ", " } else { "" };
                     let key = CefString::from(ptr::from_ref(&key));
                     write!(f, "{separator}{key}: ")?;
 
                     let mut value = mem::zeroed();
-                    if tetsu_sys::cef_string_map_value(map, i, &mut value) != 0 {
+                    if tanso_sys::cef_string_map_value(map, i, &mut value) != 0 {
                         let value = CefString::from(ptr::from_ref(&value)).to_string();
                         write!(f, "{value:?}")?;
                     } else {
@@ -1149,7 +1149,7 @@ pub struct CefStringMultimap(CefStringCollection<_cef_string_multimap_t>);
 impl CefStringMultimap {
     pub fn new() -> Self {
         Self(CefStringCollection::Free(NonNull::new(unsafe {
-            tetsu_sys::cef_string_multimap_alloc()
+            tanso_sys::cef_string_multimap_alloc()
         })))
     }
 
@@ -1161,7 +1161,7 @@ impl CefStringMultimap {
 
         let key = CefString::from(key);
         let value = CefString::from(value);
-        unsafe { tetsu_sys::cef_string_multimap_append(map, (&key).into(), (&value).into()) != 0 }
+        unsafe { tanso_sys::cef_string_multimap_append(map, (&key).into(), (&value).into()) != 0 }
     }
 }
 
@@ -1175,7 +1175,7 @@ impl Drop for CefStringMultimap {
     fn drop(&mut self) {
         unsafe {
             if let CefStringCollection::Free(Some(map)) = &mut self.0 {
-                tetsu_sys::cef_string_multimap_clear(map.as_ptr());
+                tanso_sys::cef_string_multimap_clear(map.as_ptr());
             }
         }
     }
@@ -1235,11 +1235,11 @@ impl IntoIterator for CefStringMultimap {
         multimap
             .map(|multimap| {
                 unsafe {
-                    let count = tetsu_sys::cef_string_multimap_size(multimap);
+                    let count = tanso_sys::cef_string_multimap_size(multimap);
                     let mut visited: BTreeSet<String> = Default::default();
                     for i in 0..count {
                         let mut key = mem::zeroed();
-                        if tetsu_sys::cef_string_multimap_key(multimap, i, &mut key) != 0 {
+                        if tanso_sys::cef_string_multimap_key(multimap, i, &mut key) != 0 {
                             let key = CefString::from(ptr::from_ref(&key));
                             let key_string = key.to_string();
                             if visited.contains(&key_string) {
@@ -1247,11 +1247,11 @@ impl IntoIterator for CefStringMultimap {
                             }
 
                             let count =
-                                tetsu_sys::cef_string_multimap_find_count(multimap, (&key).into());
+                                tanso_sys::cef_string_multimap_find_count(multimap, (&key).into());
                             let mut values = vec![];
                             for i in 0..count {
                                 let mut value = mem::zeroed();
-                                if tetsu_sys::cef_string_multimap_enumerate(
+                                if tanso_sys::cef_string_multimap_enumerate(
                                     multimap,
                                     (&key).into(),
                                     i,
@@ -1286,11 +1286,11 @@ impl Debug for CefStringMultimap {
 
             write!(f, "CefStringMultimap {{")?;
 
-            let count = tetsu_sys::cef_string_multimap_size(multimap);
+            let count = tanso_sys::cef_string_multimap_size(multimap);
             let mut visited: BTreeSet<String> = Default::default();
             for i in 0..count {
                 let mut key = mem::zeroed();
-                if tetsu_sys::cef_string_multimap_key(multimap, i, &mut key) != 0 {
+                if tanso_sys::cef_string_multimap_key(multimap, i, &mut key) != 0 {
                     let key = CefString::from(ptr::from_ref(&key));
                     let key_string = key.to_string();
                     if visited.contains(&key_string) {
@@ -1300,11 +1300,11 @@ impl Debug for CefStringMultimap {
                     let separator = if i > 0 { ", " } else { "" };
                     write!(f, "{separator}{key_string}: [")?;
 
-                    let count = tetsu_sys::cef_string_multimap_find_count(multimap, (&key).into());
+                    let count = tanso_sys::cef_string_multimap_find_count(multimap, (&key).into());
                     for i in 0..count {
                         let separator = if i > 0 { ", " } else { "" };
                         let mut value = mem::zeroed();
-                        if tetsu_sys::cef_string_multimap_enumerate(
+                        if tanso_sys::cef_string_multimap_enumerate(
                             multimap,
                             (&key).into(),
                             i,

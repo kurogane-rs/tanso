@@ -1,8 +1,8 @@
 name: Get latest CEF version
 
-# Moves tetsu to the newest stable CEF on every target, regenerates the
+# Moves tanso to the newest stable CEF on every target, regenerates the
 # bindings and opens a pull request against dev for review. Nothing is pushed
-# to dev and nothing is tagged; tetsu is tagged by hand, in pairs with
+# to dev and nothing is tagged; tanso is tagged by hand, in pairs with
 # Kurogane.
 
 on:
@@ -16,7 +16,7 @@ permissions:
 
 jobs:
   get-latest:
-    if: github.repository == 'kurogane-rs/tetsu'
+    if: github.repository == 'kurogane-rs/tanso'
     runs-on: ubuntu-latest
     outputs:
       updated: ${{ steps.push-changes.outputs.updated }}

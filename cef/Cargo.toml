@@ -1,5 +1,5 @@
 [package]
-name = "tetsu"
+name = "tanso"
 description = "Rust bindings to the Chromium Embedded Framework"
 
 version.workspace = true
@@ -29,7 +29,7 @@ accelerated_osr = [
 ]
 
 [dependencies]
-tetsu-sys.workspace = true
+tanso-sys.workspace = true
 
 # accelerated_osr
 ash = { workspace = true, optional = true }

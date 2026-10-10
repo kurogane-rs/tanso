@@ -1,6 +1,7 @@
 [package]
 name = "export-cef-dir"
 description = "Export pre-built CEF (Chromium Embedded Framework) archives."
+publish = false
 
 version.workspace = true
 edition.workspace = true
@@ -11,6 +12,6 @@ repository.workspace = true
 [dependencies]
 anyhow.workspace = true
 clap.workspace = true
-tetsu-download.workspace = true
+tanso-download.workspace = true
 semver.workspace = true
 serde_json.workspace = true

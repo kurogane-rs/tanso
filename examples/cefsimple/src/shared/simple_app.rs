@@ -1,5 +1,5 @@
 use std::cell::RefCell;
-use tetsu::*;
+use tanso::*;
 
 use super::simple_handler::*;
 

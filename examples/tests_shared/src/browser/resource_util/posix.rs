@@ -1,5 +1,5 @@
 use std::{fs::File, io::Read, path::PathBuf};
-use tetsu::*;
+use tanso::*;
 
 pub fn get_resource_directory() -> Option<PathBuf> {
     let mut path = std::env::current_exe().ok()?;

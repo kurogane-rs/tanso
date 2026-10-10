@@ -611,12 +611,12 @@ where
     Ok(cef_dir)
 }
 
-/// Where every project of the user that builds with tetsu finds its CEF,
-/// `tetsu/cef` under the local data directory (`~/.local/share`,
-/// `%LOCALAPPDATA%`, `~/Library/Application Support`). `tetsu_sys::cef_install_dir`
+/// Where every project of the user that builds with tanso finds its CEF,
+/// `tanso/cef` under the local data directory (`~/.local/share`,
+/// `%LOCALAPPDATA%`, `~/Library/Application Support`). `tanso_sys::cef_install_dir`
 /// names the same place at run time.
 pub fn cef_install_root() -> Option<PathBuf> {
-    dirs::data_local_dir().map(|dir| dir.join("tetsu").join("cef"))
+    dirs::data_local_dir().map(|dir| dir.join("tanso").join("cef"))
 }
 
 /// The distribution of `cef_version` for `os_arch` under [`cef_install_root`].
@@ -791,7 +791,7 @@ mod tests {
     /// A fresh directory under the system's temporary directory.
     fn tmp(test: &str) -> PathBuf {
         let dir =
-            std::env::temp_dir().join(format!("tetsu-download-{}-{test}", std::process::id()));
+            std::env::temp_dir().join(format!("tanso-download-{}-{test}", std::process::id()));
         let _ = std::fs::remove_dir_all(&dir);
         std::fs::create_dir_all(&dir).unwrap();
         dir
@@ -880,18 +880,18 @@ mod tests {
     }
 
     #[test]
-    fn the_installation_is_where_tetsu_sys_looks_for_it() {
+    fn the_installation_is_where_tanso_sys_looks_for_it() {
         let cef_version = format!(
             "{}.{}.{}",
-            tetsu_sys::CEF_VERSION_MAJOR,
-            tetsu_sys::CEF_VERSION_MINOR,
-            tetsu_sys::CEF_VERSION_PATCH
+            tanso_sys::CEF_VERSION_MAJOR,
+            tanso_sys::CEF_VERSION_MINOR,
+            tanso_sys::CEF_VERSION_PATCH
         );
         let os_arch = OsAndArch::try_from(DEFAULT_TARGET).unwrap();
 
         assert_eq!(
             cef_install_dir(&cef_version, &os_arch),
-            tetsu_sys::cef_install_dir()
+            tanso_sys::cef_install_dir()
         );
     }
 }

@@ -88,10 +88,10 @@ jobs:
       - name: Build
         run: cargo xwin build -p cefsimple --target x86_64-pc-windows-msvc --verbose
 
-  # Kurogane is tetsu's acceptance suite: its CI's clippy and tests run on
-  # this tetsu, through a path patch that lives only in this job
+  # Kurogane is tanso's acceptance suite: its CI's clippy and tests run on
+  # this tanso, through a path patch that lives only in this job
   kurogane:
-    name: Kurogane on this tetsu (${{ matrix.os }})
+    name: Kurogane on this tanso (${{ matrix.os }})
     strategy:
       fail-fast: false
       matrix:
@@ -109,7 +109,7 @@ jobs:
     steps:
       - uses: actions/checkout@v7
         with:
-          path: tetsu
+          path: tanso
 
       - uses: actions/checkout@v7
         with:
@@ -122,28 +122,28 @@ jobs:
           sudo apt-get update -q
           sudo apt-get install -yq pkg-config libssl-dev
 
-      - name: Patch Kurogane onto this tetsu
+      - name: Patch Kurogane onto this tanso
         run: |
-          TETSU="$GITHUB_WORKSPACE/tetsu"
-          PATCH='patch."https://github.com/kurogane-rs/tetsu"'
+          TANSO="$GITHUB_WORKSPACE/tanso"
+          PATCH='patch."https://github.com/kurogane-rs/tanso"'
           # TOML literal strings, so a Windows path's backslashes stay as they are
           {
-            printf "PATCH_ARGS=--config %s.tetsu.path='%s'" "$PATCH" "$TETSU/cef"
-            printf " --config %s.tetsu-sys.path='%s'" "$PATCH" "$TETSU/sys"
-            printf " --config %s.tetsu-download.path='%s'" "$PATCH" "$TETSU/download-cef"
-            printf " --config %s.tetsu-build.path='%s'\n" "$PATCH" "$TETSU/tetsu-build"
+            printf "PATCH_ARGS=--config %s.tanso.path='%s'" "$PATCH" "$TANSO/cef"
+            printf " --config %s.tanso-sys.path='%s'" "$PATCH" "$TANSO/sys"
+            printf " --config %s.tanso-download.path='%s'" "$PATCH" "$TANSO/download-cef"
+            printf " --config %s.tanso-build.path='%s'\n" "$PATCH" "$TANSO/tanso-build"
           } >> "$GITHUB_ENV"
 
-      # A patch Kurogane leaves unused, or a tetsu crate it still takes from
-      # git, means the job tests another tetsu
-      - name: Check that Kurogane takes every tetsu crate from this tetsu
+      # A patch Kurogane leaves unused, or a tanso crate it still takes from
+      # git, means the job tests another tanso
+      - name: Check that Kurogane takes every tanso crate from this tanso
         working-directory: kurogane
         run: |
           cargo metadata --format-version 1 $PATCH_ARGS 2>&1 > "$RUNNER_TEMP/metadata.json" \
             | tee "$RUNNER_TEMP/metadata.log"
           if grep -q "was not used in the crate graph" "$RUNNER_TEMP/metadata.log" \
-            || grep -q '"id":"git+https://github.com/kurogane-rs/tetsu' "$RUNNER_TEMP/metadata.json"; then
-            echo "Kurogane takes a tetsu crate from elsewhere, or leaves a patch unused"
+            || grep -q '"id":"git+https://github.com/kurogane-rs/tanso' "$RUNNER_TEMP/metadata.json"; then
+            echo "Kurogane takes a tanso crate from elsewhere, or leaves a patch unused"
             exit 1
           fi
 

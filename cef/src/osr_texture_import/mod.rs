@@ -13,13 +13,13 @@
 //! # Usage
 //!
 //! ```no_run
-//! use tetsu::{PaintElementType, AcceleratedPaintInfo};
+//! use tanso::{PaintElementType, AcceleratedPaintInfo};
 //! use wgpu::Device;
 //! fn on_accelerated_paint(device: &wgpu::Device, type_: PaintElementType, info: Option<&AcceleratedPaintInfo>) {
 //!     let Some(info) = info else { return };
 //!
 //!     let src_texture = {
-//!         use tetsu::osr_texture_import::shared_texture_handle::SharedTextureHandle;
+//!         use tanso::osr_texture_import::shared_texture_handle::SharedTextureHandle;
 //!
 //!         if type_ != PaintElementType::default() {
 //!             return;

@@ -12,7 +12,7 @@ use objc2_app_kit::{
 };
 use objc2_foundation::{NSBundle, NSObjectNSThreadPerformAdditions, ns_string};
 use std::{cell::Cell, ptr};
-use tetsu::application_mac::{CefAppProtocol, CrAppControlProtocol, CrAppProtocol};
+use tanso::application_mac::{CefAppProtocol, CrAppControlProtocol, CrAppProtocol};
 
 define_class! {
     #[unsafe(super(NSObject))]

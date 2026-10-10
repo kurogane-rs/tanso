@@ -9,7 +9,7 @@ members = [
     "export-cef-dir",
     "sys",
     "cef",
-    "tetsu-build",
+    "tanso-build",
     "examples/*",
 ]
 
@@ -22,13 +22,13 @@ authors = [
     "Bill Avery <wravery@gmail.com>",
     "csmoe <csmoe@msn.com>",
 ]
-repository = "https://github.com/kurogane-rs/tetsu"
+repository = "https://github.com/kurogane-rs/tanso"
 
 [workspace.dependencies]
-tetsu = { path = "cef", default-features = false }
-tetsu-sys = { version = "154.4.0", path = "sys" }
-tetsu-download = { version = "3.0", path = "download-cef" }
-tetsu-build = { path = "tetsu-build" }
+tanso = { path = "cef", default-features = false }
+tanso-sys = { version = "=154.4.0", path = "sys" }
+tanso-download = { version = "3.0", path = "download-cef" }
+tanso-build = { path = "tanso-build" }
 
 anyhow = "1"
 ash = "0.38"

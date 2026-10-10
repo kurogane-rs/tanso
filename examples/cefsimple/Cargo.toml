@@ -25,7 +25,7 @@ helper_name = "cefsimple_helper"
 resources_path = "resources"
 
 [dependencies]
-tetsu.workspace = true
+tanso.workspace = true
 
 [target.'cfg(target_os = "macos")'.dependencies]
 objc2.workspace = true
@@ -46,7 +46,7 @@ windows-sys = { workspace = true, features = [
 ] }
 
 [build-dependencies]
-tetsu-build.workspace = true
+tanso-build.workspace = true
 
 [target.'cfg(target_os = "windows")'.build-dependencies]
 winres.workspace = true

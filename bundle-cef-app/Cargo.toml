@@ -1,6 +1,6 @@
 [package]
 name = "bundle-cef-app"
-description = "Bundles tetsu's examples into applications that run"
+description = "Bundles tanso's examples into applications that run"
 publish = false
 
 version.workspace = true
@@ -10,7 +10,7 @@ authors.workspace = true
 repository.workspace = true
 
 [dependencies]
-tetsu-sys.workspace = true
+tanso-sys.workspace = true
 
 anyhow.workspace = true
 cargo_metadata.workspace = true
@@ -18,7 +18,7 @@ clap.workspace = true
 thiserror.workspace = true
 
 [target.'cfg(target_os = "windows")'.dependencies]
-tetsu-build.workspace = true
+tanso-build.workspace = true
 
 [target.'cfg(target_os = "macos")'.dependencies]
 plist.workspace = true

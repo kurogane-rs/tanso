@@ -8,19 +8,19 @@ use std::{
     sync::OnceLock,
     time::Duration,
 };
-use tetsu_download::{CefFile, CefIndex, OsAndArch, DEFAULT_TARGET};
+use tanso_download::{CefFile, CefIndex, OsAndArch, DEFAULT_TARGET};
 
 fn default_version() -> &'static str {
     static DEFAULT_VERSION: OnceLock<String> = OnceLock::new();
     DEFAULT_VERSION
-        .get_or_init(|| tetsu_download::default_version(env!("CARGO_PKG_VERSION")))
+        .get_or_init(|| tanso_download::default_version(env!("CARGO_PKG_VERSION")))
         .as_str()
 }
 
 fn default_download_url() -> &'static str {
     static DEFAULT_DOWNLOAD_URL: OnceLock<String> = OnceLock::new();
     DEFAULT_DOWNLOAD_URL
-        .get_or_init(tetsu_download::default_download_url)
+        .get_or_init(tanso_download::default_download_url)
         .as_str()
 }
 
@@ -43,7 +43,7 @@ struct Args {
     #[arg(short, long)]
     archive: Option<String>,
     /// The directory to export to; without one, the distribution goes into
-    /// tetsu's shared installation
+    /// tanso's shared installation
     output: Option<String>,
 }
 
@@ -97,7 +97,7 @@ fn main() -> anyhow::Result<()> {
     let (archive, extracted_dir) = match args.archive {
         Some(archive) => {
             let extracted_dir =
-                tetsu_download::extract_target_archive(target, &archive, &parent, true)?;
+                tanso_download::extract_target_archive(target, &archive, &parent, true)?;
             let archive = CefFile::try_from(Path::new(&archive))?;
             (archive, extracted_dir)
         }
@@ -119,7 +119,7 @@ fn main() -> anyhow::Result<()> {
                     3,
                 )?;
                 let extracted_dir =
-                    tetsu_download::extract_target_archive(target, &archive, &parent, true)?;
+                    tanso_download::extract_target_archive(target, &archive, &parent, true)?;
 
                 if !args.save_archive {
                     println!("Cleaning up: {}", archive.display());
@@ -148,8 +148,8 @@ fn main() -> anyhow::Result<()> {
     Ok(())
 }
 
-/// Installs the distribution into tetsu's shared installation, where an
-/// application started without `CEF_PATH` finds it (`tetsu_sys::find_cef_dir`).
+/// Installs the distribution into tanso's shared installation, where an
+/// application started without `CEF_PATH` finds it (`tanso_sys::find_cef_dir`).
 fn install(args: &Args) -> anyhow::Result<()> {
     anyhow::ensure!(
         !args.nix && args.archive.is_none(),
@@ -157,14 +157,14 @@ fn install(args: &Args) -> anyhow::Result<()> {
     );
 
     let os_arch = OsAndArch::try_from(args.target.as_str())?;
-    let dir = tetsu_download::cef_install_dir(&args.version, &os_arch)
-        .ok_or(tetsu_download::Error::NoDataDir)?;
+    let dir = tanso_download::cef_install_dir(&args.version, &os_arch)
+        .ok_or(tanso_download::Error::NoDataDir)?;
     if args.force && fs::exists(&dir)? {
         println!("Cleaning up: {}", dir.display());
         fs::remove_dir_all(&dir)?;
     }
 
-    let dir = tetsu_download::install(&args.target, &args.version, &args.mirror_url, true)?;
+    let dir = tanso_download::install(&args.target, &args.version, &args.mirror_url, true)?;
     println!("Installed: {}", dir.display());
 
     Ok(())

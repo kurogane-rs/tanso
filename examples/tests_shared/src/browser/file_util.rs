@@ -3,7 +3,7 @@ use std::{
     io::{Read, Write},
     path::Path,
 };
-use tetsu::*;
+use tanso::*;
 
 fn allow_file_io() -> bool {
     currently_on(ThreadId::UI) == 0 && currently_on(ThreadId::IO) == 0

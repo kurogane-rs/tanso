@@ -1,5 +1,5 @@
 use crate::shared;
-use tetsu::*;
+use tanso::*;
 
 #[unsafe(no_mangle)]
 unsafe extern "C" fn RunWinMain(

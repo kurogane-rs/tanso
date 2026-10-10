@@ -1,11 +1,11 @@
-use tetsu::{args::Args, *};
+use tanso::{args::Args, *};
 
 fn main() {
     let args = Args::new();
 
     #[cfg(target_os = "macos")]
     let _sandbox = {
-        let mut sandbox = tetsu::sandbox::Sandbox::new().expect("cannot load the sandbox");
+        let mut sandbox = tanso::sandbox::Sandbox::new().expect("cannot load the sandbox");
         sandbox
             .initialize(args.as_main_args())
             .expect("cannot enter the sandbox");

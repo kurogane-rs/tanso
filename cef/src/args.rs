@@ -24,7 +24,7 @@ impl Args {
     #[cfg(target_os = "windows")]
     pub fn new() -> Self {
         let main_args = MainArgs {
-            instance: tetsu_sys::HINSTANCE(
+            instance: tanso_sys::HINSTANCE(
                 unsafe {
                     windows_sys::Win32::System::LibraryLoader::GetModuleHandleW(std::ptr::null())
                 }

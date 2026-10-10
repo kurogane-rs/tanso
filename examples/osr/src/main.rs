@@ -1,7 +1,7 @@
 mod webrender;
 
 use std::{cell::RefCell, process::ExitCode, sync::Arc, thread::sleep, time::Duration};
-use tetsu::{args::Args, *};
+use tanso::{args::Args, *};
 use wgpu::{Backends, CurrentSurfaceTexture, util::DeviceExt};
 use winit::{
     application::ApplicationHandler,
@@ -237,7 +237,7 @@ struct App {
 }
 
 struct Browser {
-    browser: tetsu::Browser,
+    browser: tanso::Browser,
     size: std::rc::Rc<RefCell<winit::dpi::LogicalSize<f32>>>,
 }
 
@@ -287,14 +287,14 @@ impl ApplicationHandler for App {
             windowless_frame_rate: 60,
             ..Default::default()
         };
-        let mut context = tetsu::request_context_create_context(
+        let mut context = tanso::request_context_create_context(
             Some(&RequestContextSettings::default()),
             Some(&mut RequestContextHandlerBuilder::build(
                 OsrRequestContextHandler {},
             )),
         );
 
-        let browser = tetsu::browser_host_create_browser_sync(
+        let browser = tanso::browser_host_create_browser_sync(
             Some(&window_info),
             Some(&mut ClientBuilder::build(render_handler)),
             Some(&"https://github.com".into()),
@@ -402,7 +402,7 @@ fn main() -> std::process::ExitCode {
 
         sleep(Duration::from_millis(1000 / 17));
     };
-    tetsu::shutdown();
+    tanso::shutdown();
     ret
 }
 

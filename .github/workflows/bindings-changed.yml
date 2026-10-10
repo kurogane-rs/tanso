@@ -17,7 +17,7 @@ permissions:
 
 jobs:
   update-bindings:
-    if: github.repository == 'kurogane-rs/tetsu'
+    if: github.repository == 'kurogane-rs/tanso'
     uses: ./.github/workflows/update-bindings.yml
     with:
       branch: "dev"

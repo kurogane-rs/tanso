@@ -1,5 +1,5 @@
 [package]
-name = "tetsu-download"
+name = "tanso-download"
 description = "Download and extract pre-built CEF (Chromium Embedded Framework) archives."
 version = "3.0.0"
 
@@ -22,4 +22,4 @@ ureq = { version = "3", features = ["json", "socks-proxy"] }
 fs-err = "3.2.2"
 
 [dev-dependencies]
-tetsu-sys.workspace = true
+tanso-sys.workspace = true

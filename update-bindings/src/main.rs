@@ -5,7 +5,7 @@ extern crate thiserror;
 
 use clap::Parser;
 use std::{fs, io::Read, path::Path, sync::OnceLock};
-use tetsu_download::DEFAULT_TARGET;
+use tanso_download::DEFAULT_TARGET;
 
 #[derive(Debug, Error)]
 pub enum Error {
@@ -38,14 +38,14 @@ mod upgrade;
 fn default_version() -> &'static str {
     static DEFAULT_VERSION: OnceLock<String> = OnceLock::new();
     DEFAULT_VERSION
-        .get_or_init(|| tetsu_download::default_version(env!("CARGO_PKG_VERSION")))
+        .get_or_init(|| tanso_download::default_version(env!("CARGO_PKG_VERSION")))
         .as_str()
 }
 
 fn default_download_url() -> &'static str {
     static DEFAULT_DOWNLOAD_URL: OnceLock<String> = OnceLock::new();
     DEFAULT_DOWNLOAD_URL
-        .get_or_init(tetsu_download::default_download_url)
+        .get_or_init(tanso_download::default_download_url)
         .as_str()
 }
 
@@ -83,7 +83,7 @@ fn main() -> Result<()> {
     sys_bindings.push(&bindings_file);
 
     // Upstream's and bindgen's bindings declare the functions libcef exports;
-    // tetsu calls them through the libcef the application loads
+    // tanso calls them through the libcef the application loads
     if loader::rewrite(&sys_bindings)? {
         println!("Rewritten to load libcef: {}", sys_bindings.display());
     }

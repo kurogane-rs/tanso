@@ -3,7 +3,7 @@ use std::{
     sync::{Arc, Mutex, OnceLock, Weak},
     time::Duration,
 };
-use tetsu::*;
+use tanso::*;
 #[cfg(target_os = "windows")]
 use windows_sys::Win32::Foundation::HWND;
 
