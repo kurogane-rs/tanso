@@ -52,69 +52,6 @@ export CEF_PATH="$HOME/.local/share/cef"
 
 libcef needs no library search path; the application loads it from the directory it finds.
 
-### Run the `cefsimple` Example
-
-`bundle-cef-app` bundles tanso's examples so they run. It is a development tool of this repository; applications ship with their own bundler, such as Kurogane's. This command works on each platform:
-```sh
-cargo run -p bundle-cef-app -- cefsimple -o target/bundle
-```
-
-`-F` (`--features`) enables features of the example's package, such as `-F linux-x11` for cefsimple's X11 code on Linux.
-
-You can configure the name of the macOS helper in the `Cargo.toml` file, as well as a resource directory that will be copied into the bundle in a platform-appropriate location:
-```toml
-[package.metadata.cef.bundle]
-helper_name = "cefsimple_helper"
-resources_path = "resources"
-```
-
-#### Linux
-
-There's an extra `--release` flag to build a much smaller bundle on Linux:
-```sh
-cargo run -p bundle-cef-app -- cefsimple -o target/bundle --release
-./target/bundle/cefsimple
-```
-
-#### macOS
-
-The macOS utility creates an application bundle directory at the target location, you can run it with the `open` command:
-```sh
-cargo run -p bundle-cef-app -- cefsimple -o target/bundle
-open target/bundle/cefsimple.app
-```
-
-On macOS, the `bundle-cef-app` utility also supports several additional bundle options, most of which default to the name of the application (e.g. `cefsimple`):
-```
-Usage: bundle-cef-app [OPTIONS] <NAME>
-
-Arguments:
-  <NAME>
-
-Options:
-  -o, --output <OUTPUT>
-  -i, --identifier <IDENTIFIER>
-  -d, --display-name <DISPLAY_NAME>
-  -r, --region <REGION>              [default: English]
-  -v, --version <VERSION>            [default: 1.0.0]
-  -F, --features <FEATURES>
-  -h, --help                         Print help
-```
-
-The identifier defaults to `rs.kurogane.tanso.<NAME>`.
-
-#### Windows (using PowerShell)
-
-The Windows utility supports the `--release` flag, but it makes much less difference in the binary size than on Linux. It also does not copy the resources directory to the bundle, because the preferred mechanism on Windows is to link binary resources directly into the executable.
-
-The utility writes an executable manifest. A package that builds a cdylib, as cefsimple does, runs in CEF's sandbox: the utility builds the library instead of the executable and copies it beside CEF's `bootstrap.exe`, renamed after the application, so you can run it from there directly:
-```pwsh
-cargo run -p bundle-cef-app -- cefsimple -o ./target/bundle
-./target/bundle/cefsimple.exe
-```
-
-`cargo run -p cefsimple` starts the executable itself, without the sandbox.
-
 ### Loading libcef
 
 The bindings link no libcef. Before any other call into CEF the application finds its CEF and loads it:
@@ -153,7 +90,7 @@ The `tanso-sys` crate can be cross-compiled to `x86_64-pc-windows-msvc` from Lin
 ```sh
 rustup target add x86_64-pc-windows-msvc
 cargo install cargo-xwin
-cargo xwin build --target x86_64-pc-windows-msvc
+cargo xwin build -p tanso --target x86_64-pc-windows-msvc
 ```
 
 Nothing is compiled from C++ and nothing of CEF is linked, so a cross-compiled build needs no CEF distribution. `cargo run -p export-cef-dir -- --target x86_64-pc-windows-msvc <dir>` exports the Windows one to run it with.

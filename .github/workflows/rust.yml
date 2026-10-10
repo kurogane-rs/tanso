@@ -23,13 +23,6 @@ jobs:
     steps:
       - uses: actions/checkout@v7
 
-      - name: Install dependencies
-        run: |
-          ${{ matrix.os == 'ubuntu-latest'
-            && 'sudo apt-get update -q; sudo apt-get install -yq libglib2.0-dev'
-            || 'echo "No additional dependencies."'
-          }}
-
       - name: Check fmt
         run: cargo fmt --check
 
@@ -86,7 +79,7 @@ jobs:
           key: cargo-xwin-sdk-${{ runner.os }}-${{ env.CARGO_XWIN_VERSION }}
 
       - name: Build
-        run: cargo xwin build -p cefsimple --target x86_64-pc-windows-msvc --verbose
+        run: cargo xwin build -p tanso --target x86_64-pc-windows-msvc --verbose
 
   # Kurogane is tanso's acceptance suite: its CI's clippy and tests run on
   # this tanso, through a path patch that lives only in this job

@@ -2,7 +2,6 @@
 resolver = "2"
 
 members = [
-    "bundle-cef-app",
     "download-cef",
     "get-latest",
     "update-bindings",
@@ -10,7 +9,6 @@ members = [
     "sys",
     "cef",
     "tanso-build",
-    "examples/*",
 ]
 
 [workspace.package]
@@ -25,28 +23,20 @@ authors = [
 repository = "https://github.com/kurogane-rs/tanso"
 
 [workspace.dependencies]
-tanso = { path = "cef", default-features = false }
 tanso-sys = { version = "=154.4.0", path = "sys" }
 tanso-download = { version = "3.0", path = "download-cef" }
-tanso-build = { path = "tanso-build" }
 
 anyhow = "1"
 ash = "0.38"
 bindgen = "0.73"
-cargo_metadata = "0.23.1"
 clap = { version = "4", features = ["derive"] }
 convert_case = "0.12"
-glib = "0.22"
-glib-unix = "0.22"
-io-surface = "0.16"
 libc = "0.2"
 libloading = "0.9"
 objc2 = "0.6.3"
-objc2-app-kit = { version = "0.3.2", default-features = false }
 objc2-foundation = "0.3.2"
 objc2-io-surface = "0.3.2"
 objc2-metal = { version = "0.3", features = ["objc2-io-surface"] }
-plist = "1"
 proc-macro2 = "1"
 quote = "1"
 regex = "1"
@@ -58,8 +48,6 @@ thiserror = "2"
 toml_edit = "0.25"
 tracing = "0.1"
 wgpu = "30"
-winres = "0.1"
-x11-dl = "2"
 
 [workspace.dependencies.windows-sys]
 version = "0.61"
