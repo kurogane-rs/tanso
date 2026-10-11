@@ -58599,17 +58599,13 @@ mod tests {
     fn test_resource_mapping() {
         test_init_cef();
 
-        let resource_id =
-            unsafe { sys::cef_id_for_command_id_name(resources::IDC_MANAGE_LINK.as_ptr()) };
-        assert!(resource_id == sys::IDC_MANAGE_LINK || resource_id == -1);
+        let resource_id = id_for_command_id_name(resources::IDC_MANAGE_LINK);
+        assert!(resource_id.is_none_or(|id| id == sys::IDC_MANAGE_LINK));
 
-        let resource_id =
-            unsafe { sys::cef_id_for_pack_resource_name(resources::IDR_BROKENCANVAS.as_ptr()) };
-        assert!(resource_id == sys::IDR_BROKENCANVAS || resource_id == -1);
+        let resource_id = id_for_pack_resource_name(resources::IDR_BROKENCANVAS);
+        assert!(resource_id.is_none_or(|id| id == sys::IDR_BROKENCANVAS));
 
-        let resource_id = unsafe {
-            sys::cef_id_for_pack_string_name(resources::IDS_MINIMUM_UI_FONT_SIZE.as_ptr())
-        };
-        assert!(resource_id == sys::IDS_MINIMUM_UI_FONT_SIZE || resource_id == -1);
+        let resource_id = id_for_pack_string_name(resources::IDS_MINIMUM_UI_FONT_SIZE);
+        assert!(resource_id.is_none_or(|id| id == sys::IDS_MINIMUM_UI_FONT_SIZE));
     }
 }
