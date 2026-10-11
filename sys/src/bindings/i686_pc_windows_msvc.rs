@@ -32887,11 +32887,7 @@ const _: () = {
     ) - 76usize];
     ["Offset of field: _cef_browser_view_delegate_t::get_chrome_toolbar_type"]
         [::std::mem::offset_of!(_cef_browser_view_delegate_t, get_chrome_toolbar_type) - 80usize];
-    ["Offset of field: _cef_browser_view_delegate_t::use_frameless_window_for_picture_in_picture"]
-        [::std::mem::offset_of!(
-            _cef_browser_view_delegate_t,
-            use_frameless_window_for_picture_in_picture
-        ) - 84usize];
+    ["Offset of field: _cef_browser_view_delegate_t::use_frameless_window_for_picture_in_picture"] [:: std :: mem :: offset_of ! (_cef_browser_view_delegate_t , use_frameless_window_for_picture_in_picture) - 84usize] ;
     ["Offset of field: _cef_browser_view_delegate_t::on_gesture_command"]
         [::std::mem::offset_of!(_cef_browser_view_delegate_t, on_gesture_command) - 88usize];
     ["Offset of field: _cef_browser_view_delegate_t::get_browser_runtime_style"]
@@ -32901,12 +32897,7 @@ const _: () = {
         allow_move_for_picture_in_picture
     )
         - 96usize];
-    [
-        "Offset of field: _cef_browser_view_delegate_t::allow_picture_in_picture_without_user_activation",
-    ][::std::mem::offset_of!(
-        _cef_browser_view_delegate_t,
-        allow_picture_in_picture_without_user_activation
-    ) - 100usize];
+    ["Offset of field: _cef_browser_view_delegate_t::allow_picture_in_picture_without_user_activation"] [:: std :: mem :: offset_of ! (_cef_browser_view_delegate_t , allow_picture_in_picture_without_user_activation) - 100usize] ;
 };
 #[doc = "\n Implement this structure to handle BrowserView events. The functions of this\n structure will be called on the browser process UI thread unless otherwise\n indicated.\n\n NOTE: This struct is allocated client-side.\n"]
 pub type cef_browser_view_delegate_t = _cef_browser_view_delegate_t;
