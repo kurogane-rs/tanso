@@ -25401,19 +25401,34 @@ pub fn window_create_top_level(delegate: Option<&mut WindowDelegate>) -> Option<
 }
 
 /// See [`cef_id_for_pack_resource_name`] for more documentation.
+///
+/// Callable from any thread; CEF's mappers run one at a time.
 pub fn id_for_pack_resource_name(name: &std::ffi::CStr) -> Option<::std::os::raw::c_int> {
+    let _one_at_a_time = crate::ID_MAPPERS
+        .lock()
+        .unwrap_or_else(std::sync::PoisonError::into_inner);
     let id = unsafe { cef_id_for_pack_resource_name(name.as_ptr()) };
     (id != -1).then_some(id)
 }
 
 /// See [`cef_id_for_pack_string_name`] for more documentation.
+///
+/// Callable from any thread; CEF's mappers run one at a time.
 pub fn id_for_pack_string_name(name: &std::ffi::CStr) -> Option<::std::os::raw::c_int> {
+    let _one_at_a_time = crate::ID_MAPPERS
+        .lock()
+        .unwrap_or_else(std::sync::PoisonError::into_inner);
     let id = unsafe { cef_id_for_pack_string_name(name.as_ptr()) };
     (id != -1).then_some(id)
 }
 
 /// See [`cef_id_for_command_id_name`] for more documentation.
+///
+/// Callable from any thread; CEF's mappers run one at a time.
 pub fn id_for_command_id_name(name: &std::ffi::CStr) -> Option<::std::os::raw::c_int> {
+    let _one_at_a_time = crate::ID_MAPPERS
+        .lock()
+        .unwrap_or_else(std::sync::PoisonError::into_inner);
     let id = unsafe { cef_id_for_command_id_name(name.as_ptr()) };
     (id != -1).then_some(id)
 }
