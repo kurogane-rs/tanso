@@ -79,7 +79,7 @@ It does nothing on other targets. `tanso_build::WINDOWS_MANIFEST` is the manifes
 
 ### Features of `tanso`
 
-- `resources` (default): the names of Chromium's command and resource IDs, for `tanso_sys::cef_id_for_command_id_name` and its siblings.
+- `resources` (default): the names of Chromium's command and resource IDs, for `tanso::id_for_command_id_name` and its siblings.
 - `wrapper`: Rust ports of CEF's C++ wrapper, such as its message router and resource manager.
 - `accelerated_osr`: imports the textures of accelerated off-screen rendering into `wgpu`.
 

@@ -3620,9 +3620,24 @@ fn make_my_struct() -> {rust_name} {{
 
         for global_fn in self.global_function_declarations.iter() {
             let original_name = global_fn.name.as_str();
-            if original_name.starts_with("cef_id_for_") {
-                // Skip over the cef_id_for_... functions, we'll emit accessors for each ID
-                // separately in write_resources.
+            if let Some(kind) = original_name.strip_prefix("cef_id_for_") {
+                // An ID mapper takes a name of any length and answers -1 for
+                // one this CEF build does not know
+                writeln!(
+                    f,
+                    "
+/// See [`{original_name}`] for more documentation."
+                )?;
+                let name = format_ident!("id_for_{kind}");
+                let original_name = format_ident!("{original_name}");
+                let mapper = quote! {
+                    pub fn #name(name: &std::ffi::CStr) -> Option<::std::os::raw::c_int> {
+                        let id = unsafe { #original_name(name.as_ptr()) };
+                        (id != -1).then_some(id)
+                    }
+                }
+                .to_string();
+                writeln!(f, "{mapper}")?;
                 continue;
             }
 

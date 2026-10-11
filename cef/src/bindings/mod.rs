@@ -122,4 +122,12 @@ mod test {
         assert_eq!(transition.get_raw() & TransitionType::SOURCE_MASK.get_raw(), 0);
         assert_ne!(transition.get_raw() & TransitionType::FORWARD_BACK_FLAG.get_raw(), 0);
     }
+
+    #[test]
+    fn an_id_mapper_knows_this_build_s_names() {
+        test_init_cef();
+
+        assert!(id_for_command_id_name(c"IDC_BACK").is_some());
+        assert_eq!(id_for_command_id_name(c"IDC_NOT_A_COMMAND"), None);
+    }
 }
