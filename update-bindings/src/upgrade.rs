@@ -80,6 +80,8 @@ fn bindgen(target: &str, cef_path: &Path) -> crate::Result<()> {
         .bitfield_enum(".*_mask_t")
         .bitfield_enum(".*_flags_t")
         .bitfield_enum("cef_v8_propertyattribute_t")
+        // A transition is a core type combined with qualifier flags
+        .bitfield_enum("cef_transition_type_t")
         .parse_callbacks(Box::new(OpaqueHandleDerives {
             handles: opaque_copy_handles.clone(),
             matched: Arc::clone(&matched_opaque_copy_handles),

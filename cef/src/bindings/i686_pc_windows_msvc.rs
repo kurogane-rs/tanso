@@ -12681,6 +12681,30 @@ impl From<DragOperationsMask> for cef_drag_operations_mask_t {
         value.0
     }
 }
+impl DragOperationsMask {
+    #[doc = "See [`cef_drag_operations_mask_t::DRAG_OPERATION_NONE`] for more documentation."]
+    pub const NONE: Self = Self(cef_drag_operations_mask_t::DRAG_OPERATION_NONE);
+    #[doc = "See [`cef_drag_operations_mask_t::DRAG_OPERATION_COPY`] for more documentation."]
+    pub const COPY: Self = Self(cef_drag_operations_mask_t::DRAG_OPERATION_COPY);
+    #[doc = "See [`cef_drag_operations_mask_t::DRAG_OPERATION_LINK`] for more documentation."]
+    pub const LINK: Self = Self(cef_drag_operations_mask_t::DRAG_OPERATION_LINK);
+    #[doc = "See [`cef_drag_operations_mask_t::DRAG_OPERATION_GENERIC`] for more documentation."]
+    pub const GENERIC: Self = Self(cef_drag_operations_mask_t::DRAG_OPERATION_GENERIC);
+    #[doc = "See [`cef_drag_operations_mask_t::DRAG_OPERATION_PRIVATE`] for more documentation."]
+    pub const PRIVATE: Self = Self(cef_drag_operations_mask_t::DRAG_OPERATION_PRIVATE);
+    #[doc = "See [`cef_drag_operations_mask_t::DRAG_OPERATION_MOVE`] for more documentation."]
+    pub const MOVE: Self = Self(cef_drag_operations_mask_t::DRAG_OPERATION_MOVE);
+    #[doc = "See [`cef_drag_operations_mask_t::DRAG_OPERATION_DELETE`] for more documentation."]
+    pub const DELETE: Self = Self(cef_drag_operations_mask_t::DRAG_OPERATION_DELETE);
+    #[doc = "See [`cef_drag_operations_mask_t::DRAG_OPERATION_EVERY`] for more documentation."]
+    pub const EVERY: Self = Self(cef_drag_operations_mask_t::DRAG_OPERATION_EVERY);
+}
+impl DragOperationsMask {
+    #[doc = "Get the raw integer representation."]
+    pub fn get_raw(&self) -> ::std::os::raw::c_int {
+        self.0 .0
+    }
+}
 impl Default for DragOperationsMask {
     fn default() -> Self {
         unsafe { std::mem::zeroed() }
@@ -12765,6 +12789,22 @@ impl From<cef_v8_propertyattribute_t> for V8Propertyattribute {
 impl From<V8Propertyattribute> for cef_v8_propertyattribute_t {
     fn from(value: V8Propertyattribute) -> Self {
         value.0
+    }
+}
+impl V8Propertyattribute {
+    #[doc = "See [`cef_v8_propertyattribute_t::V8_PROPERTY_ATTRIBUTE_NONE`] for more documentation."]
+    pub const NONE: Self = Self(cef_v8_propertyattribute_t::V8_PROPERTY_ATTRIBUTE_NONE);
+    #[doc = "See [`cef_v8_propertyattribute_t::V8_PROPERTY_ATTRIBUTE_READONLY`] for more documentation."]
+    pub const READONLY: Self = Self(cef_v8_propertyattribute_t::V8_PROPERTY_ATTRIBUTE_READONLY);
+    #[doc = "See [`cef_v8_propertyattribute_t::V8_PROPERTY_ATTRIBUTE_DONTENUM`] for more documentation."]
+    pub const DONTENUM: Self = Self(cef_v8_propertyattribute_t::V8_PROPERTY_ATTRIBUTE_DONTENUM);
+    #[doc = "See [`cef_v8_propertyattribute_t::V8_PROPERTY_ATTRIBUTE_DONTDELETE`] for more documentation."]
+    pub const DONTDELETE: Self = Self(cef_v8_propertyattribute_t::V8_PROPERTY_ATTRIBUTE_DONTDELETE);
+}
+impl V8Propertyattribute {
+    #[doc = "Get the raw integer representation."]
+    pub fn get_raw(&self) -> ::std::os::raw::c_int {
+        self.0 .0
     }
 }
 impl Default for V8Propertyattribute {
@@ -12974,13 +13014,13 @@ impl TransitionType {
 }
 impl TransitionType {
     #[doc = "Get the raw integer representation."]
-    pub fn get_raw(&self) -> i32 {
-        self.0 as i32
+    pub fn get_raw(&self) -> ::std::os::raw::c_int {
+        self.0 .0
     }
 }
 impl Default for TransitionType {
     fn default() -> Self {
-        Self(cef_transition_type_t::TT_LINK)
+        unsafe { std::mem::zeroed() }
     }
 }
 
@@ -13005,6 +13045,34 @@ impl From<cef_urlrequest_flags_t> for UrlrequestFlags {
 impl From<UrlrequestFlags> for cef_urlrequest_flags_t {
     fn from(value: UrlrequestFlags) -> Self {
         value.0
+    }
+}
+impl UrlrequestFlags {
+    #[doc = "See [`cef_urlrequest_flags_t::UR_FLAG_NONE`] for more documentation."]
+    pub const NONE: Self = Self(cef_urlrequest_flags_t::UR_FLAG_NONE);
+    #[doc = "See [`cef_urlrequest_flags_t::UR_FLAG_SKIP_CACHE`] for more documentation."]
+    pub const SKIP_CACHE: Self = Self(cef_urlrequest_flags_t::UR_FLAG_SKIP_CACHE);
+    #[doc = "See [`cef_urlrequest_flags_t::UR_FLAG_ONLY_FROM_CACHE`] for more documentation."]
+    pub const ONLY_FROM_CACHE: Self = Self(cef_urlrequest_flags_t::UR_FLAG_ONLY_FROM_CACHE);
+    #[doc = "See [`cef_urlrequest_flags_t::UR_FLAG_DISABLE_CACHE`] for more documentation."]
+    pub const DISABLE_CACHE: Self = Self(cef_urlrequest_flags_t::UR_FLAG_DISABLE_CACHE);
+    #[doc = "See [`cef_urlrequest_flags_t::UR_FLAG_ALLOW_STORED_CREDENTIALS`] for more documentation."]
+    pub const ALLOW_STORED_CREDENTIALS: Self =
+        Self(cef_urlrequest_flags_t::UR_FLAG_ALLOW_STORED_CREDENTIALS);
+    #[doc = "See [`cef_urlrequest_flags_t::UR_FLAG_REPORT_UPLOAD_PROGRESS`] for more documentation."]
+    pub const REPORT_UPLOAD_PROGRESS: Self =
+        Self(cef_urlrequest_flags_t::UR_FLAG_REPORT_UPLOAD_PROGRESS);
+    #[doc = "See [`cef_urlrequest_flags_t::UR_FLAG_NO_DOWNLOAD_DATA`] for more documentation."]
+    pub const NO_DOWNLOAD_DATA: Self = Self(cef_urlrequest_flags_t::UR_FLAG_NO_DOWNLOAD_DATA);
+    #[doc = "See [`cef_urlrequest_flags_t::UR_FLAG_NO_RETRY_ON_5XX`] for more documentation."]
+    pub const NO_RETRY_ON_5XX: Self = Self(cef_urlrequest_flags_t::UR_FLAG_NO_RETRY_ON_5XX);
+    #[doc = "See [`cef_urlrequest_flags_t::UR_FLAG_STOP_ON_REDIRECT`] for more documentation."]
+    pub const STOP_ON_REDIRECT: Self = Self(cef_urlrequest_flags_t::UR_FLAG_STOP_ON_REDIRECT);
+}
+impl UrlrequestFlags {
+    #[doc = "Get the raw integer representation."]
+    pub fn get_raw(&self) -> ::std::os::raw::c_int {
+        self.0 .0
     }
 }
 impl Default for UrlrequestFlags {
@@ -13683,6 +13751,49 @@ impl From<EventFlags> for cef_event_flags_t {
         value.0
     }
 }
+impl EventFlags {
+    #[doc = "See [`cef_event_flags_t::EVENTFLAG_NONE`] for more documentation."]
+    pub const NONE: Self = Self(cef_event_flags_t::EVENTFLAG_NONE);
+    #[doc = "See [`cef_event_flags_t::EVENTFLAG_CAPS_LOCK_ON`] for more documentation."]
+    pub const CAPS_LOCK_ON: Self = Self(cef_event_flags_t::EVENTFLAG_CAPS_LOCK_ON);
+    #[doc = "See [`cef_event_flags_t::EVENTFLAG_SHIFT_DOWN`] for more documentation."]
+    pub const SHIFT_DOWN: Self = Self(cef_event_flags_t::EVENTFLAG_SHIFT_DOWN);
+    #[doc = "See [`cef_event_flags_t::EVENTFLAG_CONTROL_DOWN`] for more documentation."]
+    pub const CONTROL_DOWN: Self = Self(cef_event_flags_t::EVENTFLAG_CONTROL_DOWN);
+    #[doc = "See [`cef_event_flags_t::EVENTFLAG_ALT_DOWN`] for more documentation."]
+    pub const ALT_DOWN: Self = Self(cef_event_flags_t::EVENTFLAG_ALT_DOWN);
+    #[doc = "See [`cef_event_flags_t::EVENTFLAG_LEFT_MOUSE_BUTTON`] for more documentation."]
+    pub const LEFT_MOUSE_BUTTON: Self = Self(cef_event_flags_t::EVENTFLAG_LEFT_MOUSE_BUTTON);
+    #[doc = "See [`cef_event_flags_t::EVENTFLAG_MIDDLE_MOUSE_BUTTON`] for more documentation."]
+    pub const MIDDLE_MOUSE_BUTTON: Self = Self(cef_event_flags_t::EVENTFLAG_MIDDLE_MOUSE_BUTTON);
+    #[doc = "See [`cef_event_flags_t::EVENTFLAG_RIGHT_MOUSE_BUTTON`] for more documentation."]
+    pub const RIGHT_MOUSE_BUTTON: Self = Self(cef_event_flags_t::EVENTFLAG_RIGHT_MOUSE_BUTTON);
+    #[doc = "See [`cef_event_flags_t::EVENTFLAG_COMMAND_DOWN`] for more documentation."]
+    pub const COMMAND_DOWN: Self = Self(cef_event_flags_t::EVENTFLAG_COMMAND_DOWN);
+    #[doc = "See [`cef_event_flags_t::EVENTFLAG_NUM_LOCK_ON`] for more documentation."]
+    pub const NUM_LOCK_ON: Self = Self(cef_event_flags_t::EVENTFLAG_NUM_LOCK_ON);
+    #[doc = "See [`cef_event_flags_t::EVENTFLAG_IS_KEY_PAD`] for more documentation."]
+    pub const IS_KEY_PAD: Self = Self(cef_event_flags_t::EVENTFLAG_IS_KEY_PAD);
+    #[doc = "See [`cef_event_flags_t::EVENTFLAG_IS_LEFT`] for more documentation."]
+    pub const IS_LEFT: Self = Self(cef_event_flags_t::EVENTFLAG_IS_LEFT);
+    #[doc = "See [`cef_event_flags_t::EVENTFLAG_IS_RIGHT`] for more documentation."]
+    pub const IS_RIGHT: Self = Self(cef_event_flags_t::EVENTFLAG_IS_RIGHT);
+    #[doc = "See [`cef_event_flags_t::EVENTFLAG_ALTGR_DOWN`] for more documentation."]
+    pub const ALTGR_DOWN: Self = Self(cef_event_flags_t::EVENTFLAG_ALTGR_DOWN);
+    #[doc = "See [`cef_event_flags_t::EVENTFLAG_IS_REPEAT`] for more documentation."]
+    pub const IS_REPEAT: Self = Self(cef_event_flags_t::EVENTFLAG_IS_REPEAT);
+    #[doc = "See [`cef_event_flags_t::EVENTFLAG_PRECISION_SCROLLING_DELTA`] for more documentation."]
+    pub const PRECISION_SCROLLING_DELTA: Self =
+        Self(cef_event_flags_t::EVENTFLAG_PRECISION_SCROLLING_DELTA);
+    #[doc = "See [`cef_event_flags_t::EVENTFLAG_SCROLL_BY_PAGE`] for more documentation."]
+    pub const SCROLL_BY_PAGE: Self = Self(cef_event_flags_t::EVENTFLAG_SCROLL_BY_PAGE);
+}
+impl EventFlags {
+    #[doc = "Get the raw integer representation."]
+    pub fn get_raw(&self) -> ::std::os::raw::c_int {
+        self.0 .0
+    }
+}
 impl Default for EventFlags {
     fn default() -> Self {
         unsafe { std::mem::zeroed() }
@@ -13759,6 +13870,28 @@ impl From<cef_context_menu_type_flags_t> for ContextMenuTypeFlags {
 impl From<ContextMenuTypeFlags> for cef_context_menu_type_flags_t {
     fn from(value: ContextMenuTypeFlags) -> Self {
         value.0
+    }
+}
+impl ContextMenuTypeFlags {
+    #[doc = "See [`cef_context_menu_type_flags_t::CM_TYPEFLAG_NONE`] for more documentation."]
+    pub const NONE: Self = Self(cef_context_menu_type_flags_t::CM_TYPEFLAG_NONE);
+    #[doc = "See [`cef_context_menu_type_flags_t::CM_TYPEFLAG_PAGE`] for more documentation."]
+    pub const PAGE: Self = Self(cef_context_menu_type_flags_t::CM_TYPEFLAG_PAGE);
+    #[doc = "See [`cef_context_menu_type_flags_t::CM_TYPEFLAG_FRAME`] for more documentation."]
+    pub const FRAME: Self = Self(cef_context_menu_type_flags_t::CM_TYPEFLAG_FRAME);
+    #[doc = "See [`cef_context_menu_type_flags_t::CM_TYPEFLAG_LINK`] for more documentation."]
+    pub const LINK: Self = Self(cef_context_menu_type_flags_t::CM_TYPEFLAG_LINK);
+    #[doc = "See [`cef_context_menu_type_flags_t::CM_TYPEFLAG_MEDIA`] for more documentation."]
+    pub const MEDIA: Self = Self(cef_context_menu_type_flags_t::CM_TYPEFLAG_MEDIA);
+    #[doc = "See [`cef_context_menu_type_flags_t::CM_TYPEFLAG_SELECTION`] for more documentation."]
+    pub const SELECTION: Self = Self(cef_context_menu_type_flags_t::CM_TYPEFLAG_SELECTION);
+    #[doc = "See [`cef_context_menu_type_flags_t::CM_TYPEFLAG_EDITABLE`] for more documentation."]
+    pub const EDITABLE: Self = Self(cef_context_menu_type_flags_t::CM_TYPEFLAG_EDITABLE);
+}
+impl ContextMenuTypeFlags {
+    #[doc = "Get the raw integer representation."]
+    pub fn get_raw(&self) -> ::std::os::raw::c_int {
+        self.0 .0
     }
 }
 impl Default for ContextMenuTypeFlags {
@@ -13843,6 +13976,46 @@ impl From<ContextMenuMediaStateFlags> for cef_context_menu_media_state_flags_t {
         value.0
     }
 }
+impl ContextMenuMediaStateFlags {
+    #[doc = "See [`cef_context_menu_media_state_flags_t::CM_MEDIAFLAG_NONE`] for more documentation."]
+    pub const NONE: Self = Self(cef_context_menu_media_state_flags_t::CM_MEDIAFLAG_NONE);
+    #[doc = "See [`cef_context_menu_media_state_flags_t::CM_MEDIAFLAG_IN_ERROR`] for more documentation."]
+    pub const IN_ERROR: Self = Self(cef_context_menu_media_state_flags_t::CM_MEDIAFLAG_IN_ERROR);
+    #[doc = "See [`cef_context_menu_media_state_flags_t::CM_MEDIAFLAG_PAUSED`] for more documentation."]
+    pub const PAUSED: Self = Self(cef_context_menu_media_state_flags_t::CM_MEDIAFLAG_PAUSED);
+    #[doc = "See [`cef_context_menu_media_state_flags_t::CM_MEDIAFLAG_MUTED`] for more documentation."]
+    pub const MUTED: Self = Self(cef_context_menu_media_state_flags_t::CM_MEDIAFLAG_MUTED);
+    #[doc = "See [`cef_context_menu_media_state_flags_t::CM_MEDIAFLAG_LOOP`] for more documentation."]
+    pub const LOOP: Self = Self(cef_context_menu_media_state_flags_t::CM_MEDIAFLAG_LOOP);
+    #[doc = "See [`cef_context_menu_media_state_flags_t::CM_MEDIAFLAG_CAN_SAVE`] for more documentation."]
+    pub const CAN_SAVE: Self = Self(cef_context_menu_media_state_flags_t::CM_MEDIAFLAG_CAN_SAVE);
+    #[doc = "See [`cef_context_menu_media_state_flags_t::CM_MEDIAFLAG_HAS_AUDIO`] for more documentation."]
+    pub const HAS_AUDIO: Self = Self(cef_context_menu_media_state_flags_t::CM_MEDIAFLAG_HAS_AUDIO);
+    #[doc = "See [`cef_context_menu_media_state_flags_t::CM_MEDIAFLAG_CAN_TOGGLE_CONTROLS`] for more documentation."]
+    pub const CAN_TOGGLE_CONTROLS: Self =
+        Self(cef_context_menu_media_state_flags_t::CM_MEDIAFLAG_CAN_TOGGLE_CONTROLS);
+    #[doc = "See [`cef_context_menu_media_state_flags_t::CM_MEDIAFLAG_CONTROLS`] for more documentation."]
+    pub const CONTROLS: Self = Self(cef_context_menu_media_state_flags_t::CM_MEDIAFLAG_CONTROLS);
+    #[doc = "See [`cef_context_menu_media_state_flags_t::CM_MEDIAFLAG_CAN_PRINT`] for more documentation."]
+    pub const CAN_PRINT: Self = Self(cef_context_menu_media_state_flags_t::CM_MEDIAFLAG_CAN_PRINT);
+    #[doc = "See [`cef_context_menu_media_state_flags_t::CM_MEDIAFLAG_CAN_ROTATE`] for more documentation."]
+    pub const CAN_ROTATE: Self =
+        Self(cef_context_menu_media_state_flags_t::CM_MEDIAFLAG_CAN_ROTATE);
+    #[doc = "See [`cef_context_menu_media_state_flags_t::CM_MEDIAFLAG_CAN_PICTURE_IN_PICTURE`] for more documentation."]
+    pub const CAN_PICTURE_IN_PICTURE: Self =
+        Self(cef_context_menu_media_state_flags_t::CM_MEDIAFLAG_CAN_PICTURE_IN_PICTURE);
+    #[doc = "See [`cef_context_menu_media_state_flags_t::CM_MEDIAFLAG_PICTURE_IN_PICTURE`] for more documentation."]
+    pub const PICTURE_IN_PICTURE: Self =
+        Self(cef_context_menu_media_state_flags_t::CM_MEDIAFLAG_PICTURE_IN_PICTURE);
+    #[doc = "See [`cef_context_menu_media_state_flags_t::CM_MEDIAFLAG_CAN_LOOP`] for more documentation."]
+    pub const CAN_LOOP: Self = Self(cef_context_menu_media_state_flags_t::CM_MEDIAFLAG_CAN_LOOP);
+}
+impl ContextMenuMediaStateFlags {
+    #[doc = "Get the raw integer representation."]
+    pub fn get_raw(&self) -> ::std::os::raw::c_int {
+        self.0 .0
+    }
+}
 impl Default for ContextMenuMediaStateFlags {
     fn default() -> Self {
         unsafe { std::mem::zeroed() }
@@ -13872,6 +14045,37 @@ impl From<ContextMenuEditStateFlags> for cef_context_menu_edit_state_flags_t {
         value.0
     }
 }
+impl ContextMenuEditStateFlags {
+    #[doc = "See [`cef_context_menu_edit_state_flags_t::CM_EDITFLAG_NONE`] for more documentation."]
+    pub const NONE: Self = Self(cef_context_menu_edit_state_flags_t::CM_EDITFLAG_NONE);
+    #[doc = "See [`cef_context_menu_edit_state_flags_t::CM_EDITFLAG_CAN_UNDO`] for more documentation."]
+    pub const CAN_UNDO: Self = Self(cef_context_menu_edit_state_flags_t::CM_EDITFLAG_CAN_UNDO);
+    #[doc = "See [`cef_context_menu_edit_state_flags_t::CM_EDITFLAG_CAN_REDO`] for more documentation."]
+    pub const CAN_REDO: Self = Self(cef_context_menu_edit_state_flags_t::CM_EDITFLAG_CAN_REDO);
+    #[doc = "See [`cef_context_menu_edit_state_flags_t::CM_EDITFLAG_CAN_CUT`] for more documentation."]
+    pub const CAN_CUT: Self = Self(cef_context_menu_edit_state_flags_t::CM_EDITFLAG_CAN_CUT);
+    #[doc = "See [`cef_context_menu_edit_state_flags_t::CM_EDITFLAG_CAN_COPY`] for more documentation."]
+    pub const CAN_COPY: Self = Self(cef_context_menu_edit_state_flags_t::CM_EDITFLAG_CAN_COPY);
+    #[doc = "See [`cef_context_menu_edit_state_flags_t::CM_EDITFLAG_CAN_PASTE`] for more documentation."]
+    pub const CAN_PASTE: Self = Self(cef_context_menu_edit_state_flags_t::CM_EDITFLAG_CAN_PASTE);
+    #[doc = "See [`cef_context_menu_edit_state_flags_t::CM_EDITFLAG_CAN_DELETE`] for more documentation."]
+    pub const CAN_DELETE: Self = Self(cef_context_menu_edit_state_flags_t::CM_EDITFLAG_CAN_DELETE);
+    #[doc = "See [`cef_context_menu_edit_state_flags_t::CM_EDITFLAG_CAN_SELECT_ALL`] for more documentation."]
+    pub const CAN_SELECT_ALL: Self =
+        Self(cef_context_menu_edit_state_flags_t::CM_EDITFLAG_CAN_SELECT_ALL);
+    #[doc = "See [`cef_context_menu_edit_state_flags_t::CM_EDITFLAG_CAN_TRANSLATE`] for more documentation."]
+    pub const CAN_TRANSLATE: Self =
+        Self(cef_context_menu_edit_state_flags_t::CM_EDITFLAG_CAN_TRANSLATE);
+    #[doc = "See [`cef_context_menu_edit_state_flags_t::CM_EDITFLAG_CAN_EDIT_RICHLY`] for more documentation."]
+    pub const CAN_EDIT_RICHLY: Self =
+        Self(cef_context_menu_edit_state_flags_t::CM_EDITFLAG_CAN_EDIT_RICHLY);
+}
+impl ContextMenuEditStateFlags {
+    #[doc = "Get the raw integer representation."]
+    pub fn get_raw(&self) -> ::std::os::raw::c_int {
+        self.0 .0
+    }
+}
 impl Default for ContextMenuEditStateFlags {
     fn default() -> Self {
         unsafe { std::mem::zeroed() }
@@ -13899,6 +14103,25 @@ impl From<cef_quick_menu_edit_state_flags_t> for QuickMenuEditStateFlags {
 impl From<QuickMenuEditStateFlags> for cef_quick_menu_edit_state_flags_t {
     fn from(value: QuickMenuEditStateFlags) -> Self {
         value.0
+    }
+}
+impl QuickMenuEditStateFlags {
+    #[doc = "See [`cef_quick_menu_edit_state_flags_t::QM_EDITFLAG_NONE`] for more documentation."]
+    pub const NONE: Self = Self(cef_quick_menu_edit_state_flags_t::QM_EDITFLAG_NONE);
+    #[doc = "See [`cef_quick_menu_edit_state_flags_t::QM_EDITFLAG_CAN_ELLIPSIS`] for more documentation."]
+    pub const CAN_ELLIPSIS: Self =
+        Self(cef_quick_menu_edit_state_flags_t::QM_EDITFLAG_CAN_ELLIPSIS);
+    #[doc = "See [`cef_quick_menu_edit_state_flags_t::QM_EDITFLAG_CAN_CUT`] for more documentation."]
+    pub const CAN_CUT: Self = Self(cef_quick_menu_edit_state_flags_t::QM_EDITFLAG_CAN_CUT);
+    #[doc = "See [`cef_quick_menu_edit_state_flags_t::QM_EDITFLAG_CAN_COPY`] for more documentation."]
+    pub const CAN_COPY: Self = Self(cef_quick_menu_edit_state_flags_t::QM_EDITFLAG_CAN_COPY);
+    #[doc = "See [`cef_quick_menu_edit_state_flags_t::QM_EDITFLAG_CAN_PASTE`] for more documentation."]
+    pub const CAN_PASTE: Self = Self(cef_quick_menu_edit_state_flags_t::QM_EDITFLAG_CAN_PASTE);
+}
+impl QuickMenuEditStateFlags {
+    #[doc = "Get the raw integer representation."]
+    pub fn get_raw(&self) -> ::std::os::raw::c_int {
+        self.0 .0
     }
 }
 impl Default for QuickMenuEditStateFlags {
@@ -16470,6 +16693,24 @@ impl From<cef_touch_handle_state_flags_t> for TouchHandleStateFlags {
 impl From<TouchHandleStateFlags> for cef_touch_handle_state_flags_t {
     fn from(value: TouchHandleStateFlags) -> Self {
         value.0
+    }
+}
+impl TouchHandleStateFlags {
+    #[doc = "See [`cef_touch_handle_state_flags_t::CEF_THS_FLAG_NONE`] for more documentation."]
+    pub const NONE: Self = Self(cef_touch_handle_state_flags_t::CEF_THS_FLAG_NONE);
+    #[doc = "See [`cef_touch_handle_state_flags_t::CEF_THS_FLAG_ENABLED`] for more documentation."]
+    pub const ENABLED: Self = Self(cef_touch_handle_state_flags_t::CEF_THS_FLAG_ENABLED);
+    #[doc = "See [`cef_touch_handle_state_flags_t::CEF_THS_FLAG_ORIENTATION`] for more documentation."]
+    pub const ORIENTATION: Self = Self(cef_touch_handle_state_flags_t::CEF_THS_FLAG_ORIENTATION);
+    #[doc = "See [`cef_touch_handle_state_flags_t::CEF_THS_FLAG_ORIGIN`] for more documentation."]
+    pub const ORIGIN: Self = Self(cef_touch_handle_state_flags_t::CEF_THS_FLAG_ORIGIN);
+    #[doc = "See [`cef_touch_handle_state_flags_t::CEF_THS_FLAG_ALPHA`] for more documentation."]
+    pub const ALPHA: Self = Self(cef_touch_handle_state_flags_t::CEF_THS_FLAG_ALPHA);
+}
+impl TouchHandleStateFlags {
+    #[doc = "Get the raw integer representation."]
+    pub fn get_raw(&self) -> ::std::os::raw::c_int {
+        self.0 .0
     }
 }
 impl Default for TouchHandleStateFlags {

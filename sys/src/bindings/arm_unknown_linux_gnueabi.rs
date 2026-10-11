@@ -18691,60 +18691,86 @@ pub enum cef_resource_type_t {
     #[doc = "\n A sub-frame service worker navigation preload request.\n"]
     RT_NUM_VALUES = 21,
 }
-#[repr(u32)]
-#[non_exhaustive]
+impl cef_transition_type_t {
+    #[doc = "\n Source is a link click or the JavaScript window.open function. This is\n also the default value for requests like sub-resource loads that are not\n navigations.\n"]
+    pub const TT_LINK: cef_transition_type_t = cef_transition_type_t(0);
+    #[doc = "\n Source is some other \"explicit\" navigation. This is the default value for\n navigations where the actual type is unknown. See also\n TT_DIRECT_LOAD_FLAG.\n"]
+    pub const TT_EXPLICIT: cef_transition_type_t = cef_transition_type_t(1);
+    #[doc = "\n User got to this page through a suggestion in the UI (for example, via the\n destinations page). Chrome style only.\n"]
+    pub const TT_AUTO_BOOKMARK: cef_transition_type_t = cef_transition_type_t(2);
+    #[doc = "\n Source is a subframe navigation. This is any content that is automatically\n loaded in a non-toplevel frame. For example, if a page consists of several\n frames containing ads, those ad URLs will have this transition type.\n The user may not even realize the content in these pages is a separate\n frame, so may not care about the URL.\n"]
+    pub const TT_AUTO_SUBFRAME: cef_transition_type_t = cef_transition_type_t(3);
+    #[doc = "\n Source is a subframe navigation explicitly requested by the user that will\n generate new navigation entries in the back/forward list. These are\n probably more important than frames that were automatically loaded in\n the background because the user probably cares about the fact that this\n link was loaded.\n"]
+    pub const TT_MANUAL_SUBFRAME: cef_transition_type_t = cef_transition_type_t(4);
+    #[doc = "\n User got to this page by typing in the URL bar and selecting an entry\n that did not look like a URL.  For example, a match might have the URL\n of a Google search result page, but appear like \"Search Google for ...\".\n These are not quite the same as EXPLICIT navigations because the user\n didn't type or see the destination URL. Chrome style only.\n See also TT_KEYWORD.\n"]
+    pub const TT_GENERATED: cef_transition_type_t = cef_transition_type_t(5);
+    #[doc = "\n This is a toplevel navigation. This is any content that is automatically\n loaded in a toplevel frame.  For example, opening a tab to show the ASH\n screen saver, opening the devtools window, opening the NTP after the safe\n browsing warning, opening web-based dialog boxes are examples of\n AUTO_TOPLEVEL navigations. Chrome style only.\n"]
+    pub const TT_AUTO_TOPLEVEL: cef_transition_type_t = cef_transition_type_t(6);
+    #[doc = "\n Source is a form submission by the user. NOTE: In some situations\n submitting a form does not result in this transition type. This can happen\n if the form uses a script to submit the contents.\n"]
+    pub const TT_FORM_SUBMIT: cef_transition_type_t = cef_transition_type_t(7);
+    #[doc = "\n Source is a \"reload\" of the page via the Reload function or by re-visiting\n the same URL. NOTE: This is distinct from the concept of whether a\n particular load uses \"reload semantics\" (i.e. bypasses cached data).\n"]
+    pub const TT_RELOAD: cef_transition_type_t = cef_transition_type_t(8);
+    #[doc = "\n The url was generated from a replaceable keyword other than the default\n search provider. If the user types a keyword (which also applies to\n tab-to-search) in the omnibox this qualifier is applied to the transition\n type of the generated url. TemplateURLModel then may generate an\n additional visit with a transition type of TT_KEYWORD_GENERATED against\n the url 'http://' + keyword. For example, if you do a tab-to-search\n against wikipedia the generated url has a transition qualifer of\n TT_KEYWORD, and TemplateURLModel generates a visit for 'wikipedia.org'\n with a transition type of TT_KEYWORD_GENERATED. Chrome style only.\n"]
+    pub const TT_KEYWORD: cef_transition_type_t = cef_transition_type_t(9);
+    #[doc = "\n Corresponds to a visit generated for a keyword. See description of\n TT_KEYWORD for more details. Chrome style only.\n"]
+    pub const TT_KEYWORD_GENERATED: cef_transition_type_t = cef_transition_type_t(10);
+    #[doc = "\n Corresponds to a visit generated for a keyword. See description of\n TT_KEYWORD for more details. Chrome style only.\n"]
+    pub const TT_NUM_VALUES: cef_transition_type_t = cef_transition_type_t(11);
+    #[doc = "\n General mask defining the bits used for the source values.\n"]
+    pub const TT_SOURCE_MASK: cef_transition_type_t = cef_transition_type_t(255);
+    #[doc = "\n Attempted to visit a URL but was blocked.\n"]
+    pub const TT_BLOCKED_FLAG: cef_transition_type_t = cef_transition_type_t(8388608);
+    #[doc = "\n Used the Forward or Back function to navigate among browsing history.\n Will be ORed to the transition type for the original load.\n"]
+    pub const TT_FORWARD_BACK_FLAG: cef_transition_type_t = cef_transition_type_t(16777216);
+    #[doc = "\n Loaded a URL directly via CreateBrowser, LoadURL or LoadRequest.\n"]
+    pub const TT_DIRECT_LOAD_FLAG: cef_transition_type_t = cef_transition_type_t(33554432);
+    #[doc = "\n User is navigating to the home page. Chrome style only.\n"]
+    pub const TT_HOME_PAGE_FLAG: cef_transition_type_t = cef_transition_type_t(67108864);
+    #[doc = "\n The transition originated from an external application; the exact\n definition of this is embedder dependent. Chrome style only.\n"]
+    pub const TT_FROM_API_FLAG: cef_transition_type_t = cef_transition_type_t(134217728);
+    #[doc = "\n The beginning of a navigation chain.\n"]
+    pub const TT_CHAIN_START_FLAG: cef_transition_type_t = cef_transition_type_t(268435456);
+    #[doc = "\n The last transition in a redirect chain.\n"]
+    pub const TT_CHAIN_END_FLAG: cef_transition_type_t = cef_transition_type_t(536870912);
+    #[doc = "\n Redirects caused by JavaScript or a meta refresh tag on the page.\n"]
+    pub const TT_CLIENT_REDIRECT_FLAG: cef_transition_type_t = cef_transition_type_t(1073741824);
+    #[doc = "\n Redirects sent from the server by HTTP headers.\n"]
+    pub const TT_SERVER_REDIRECT_FLAG: cef_transition_type_t = cef_transition_type_t(2147483648);
+    #[doc = "\n Used to test whether a transition involves a redirect.\n"]
+    pub const TT_IS_REDIRECT_MASK: cef_transition_type_t = cef_transition_type_t(3221225472);
+    #[doc = "\n General mask defining the bits used for the qualifiers.\n"]
+    pub const TT_QUALIFIER_MASK: cef_transition_type_t = cef_transition_type_t(4294967040);
+}
+impl ::std::ops::BitOr<cef_transition_type_t> for cef_transition_type_t {
+    type Output = Self;
+    #[inline]
+    fn bitor(self, other: Self) -> Self {
+        cef_transition_type_t(self.0 | other.0)
+    }
+}
+impl ::std::ops::BitOrAssign for cef_transition_type_t {
+    #[inline]
+    fn bitor_assign(&mut self, rhs: cef_transition_type_t) {
+        self.0 |= rhs.0;
+    }
+}
+impl ::std::ops::BitAnd<cef_transition_type_t> for cef_transition_type_t {
+    type Output = Self;
+    #[inline]
+    fn bitand(self, other: Self) -> Self {
+        cef_transition_type_t(self.0 & other.0)
+    }
+}
+impl ::std::ops::BitAndAssign for cef_transition_type_t {
+    #[inline]
+    fn bitand_assign(&mut self, rhs: cef_transition_type_t) {
+        self.0 &= rhs.0;
+    }
+}
+#[repr(transparent)]
 #[doc = "\n Transition type for a request. Made up of one source value and 0 or more\n qualifiers.\n"]
 #[derive(Debug, Copy, Clone, Hash, PartialEq, Eq)]
-pub enum cef_transition_type_t {
-    #[doc = "\n Source is a link click or the JavaScript window.open function. This is\n also the default value for requests like sub-resource loads that are not\n navigations.\n"]
-    TT_LINK = 0,
-    #[doc = "\n Source is some other \"explicit\" navigation. This is the default value for\n navigations where the actual type is unknown. See also\n TT_DIRECT_LOAD_FLAG.\n"]
-    TT_EXPLICIT = 1,
-    #[doc = "\n User got to this page through a suggestion in the UI (for example, via the\n destinations page). Chrome style only.\n"]
-    TT_AUTO_BOOKMARK = 2,
-    #[doc = "\n Source is a subframe navigation. This is any content that is automatically\n loaded in a non-toplevel frame. For example, if a page consists of several\n frames containing ads, those ad URLs will have this transition type.\n The user may not even realize the content in these pages is a separate\n frame, so may not care about the URL.\n"]
-    TT_AUTO_SUBFRAME = 3,
-    #[doc = "\n Source is a subframe navigation explicitly requested by the user that will\n generate new navigation entries in the back/forward list. These are\n probably more important than frames that were automatically loaded in\n the background because the user probably cares about the fact that this\n link was loaded.\n"]
-    TT_MANUAL_SUBFRAME = 4,
-    #[doc = "\n User got to this page by typing in the URL bar and selecting an entry\n that did not look like a URL.  For example, a match might have the URL\n of a Google search result page, but appear like \"Search Google for ...\".\n These are not quite the same as EXPLICIT navigations because the user\n didn't type or see the destination URL. Chrome style only.\n See also TT_KEYWORD.\n"]
-    TT_GENERATED = 5,
-    #[doc = "\n This is a toplevel navigation. This is any content that is automatically\n loaded in a toplevel frame.  For example, opening a tab to show the ASH\n screen saver, opening the devtools window, opening the NTP after the safe\n browsing warning, opening web-based dialog boxes are examples of\n AUTO_TOPLEVEL navigations. Chrome style only.\n"]
-    TT_AUTO_TOPLEVEL = 6,
-    #[doc = "\n Source is a form submission by the user. NOTE: In some situations\n submitting a form does not result in this transition type. This can happen\n if the form uses a script to submit the contents.\n"]
-    TT_FORM_SUBMIT = 7,
-    #[doc = "\n Source is a \"reload\" of the page via the Reload function or by re-visiting\n the same URL. NOTE: This is distinct from the concept of whether a\n particular load uses \"reload semantics\" (i.e. bypasses cached data).\n"]
-    TT_RELOAD = 8,
-    #[doc = "\n The url was generated from a replaceable keyword other than the default\n search provider. If the user types a keyword (which also applies to\n tab-to-search) in the omnibox this qualifier is applied to the transition\n type of the generated url. TemplateURLModel then may generate an\n additional visit with a transition type of TT_KEYWORD_GENERATED against\n the url 'http://' + keyword. For example, if you do a tab-to-search\n against wikipedia the generated url has a transition qualifer of\n TT_KEYWORD, and TemplateURLModel generates a visit for 'wikipedia.org'\n with a transition type of TT_KEYWORD_GENERATED. Chrome style only.\n"]
-    TT_KEYWORD = 9,
-    #[doc = "\n Corresponds to a visit generated for a keyword. See description of\n TT_KEYWORD for more details. Chrome style only.\n"]
-    TT_KEYWORD_GENERATED = 10,
-    #[doc = "\n Corresponds to a visit generated for a keyword. See description of\n TT_KEYWORD for more details. Chrome style only.\n"]
-    TT_NUM_VALUES = 11,
-    #[doc = "\n General mask defining the bits used for the source values.\n"]
-    TT_SOURCE_MASK = 255,
-    #[doc = "\n Attempted to visit a URL but was blocked.\n"]
-    TT_BLOCKED_FLAG = 8388608,
-    #[doc = "\n Used the Forward or Back function to navigate among browsing history.\n Will be ORed to the transition type for the original load.\n"]
-    TT_FORWARD_BACK_FLAG = 16777216,
-    #[doc = "\n Loaded a URL directly via CreateBrowser, LoadURL or LoadRequest.\n"]
-    TT_DIRECT_LOAD_FLAG = 33554432,
-    #[doc = "\n User is navigating to the home page. Chrome style only.\n"]
-    TT_HOME_PAGE_FLAG = 67108864,
-    #[doc = "\n The transition originated from an external application; the exact\n definition of this is embedder dependent. Chrome style only.\n"]
-    TT_FROM_API_FLAG = 134217728,
-    #[doc = "\n The beginning of a navigation chain.\n"]
-    TT_CHAIN_START_FLAG = 268435456,
-    #[doc = "\n The last transition in a redirect chain.\n"]
-    TT_CHAIN_END_FLAG = 536870912,
-    #[doc = "\n Redirects caused by JavaScript or a meta refresh tag on the page.\n"]
-    TT_CLIENT_REDIRECT_FLAG = 1073741824,
-    #[doc = "\n Redirects sent from the server by HTTP headers.\n"]
-    TT_SERVER_REDIRECT_FLAG = 2147483648,
-    #[doc = "\n Used to test whether a transition involves a redirect.\n"]
-    TT_IS_REDIRECT_MASK = 3221225472,
-    #[doc = "\n General mask defining the bits used for the qualifiers.\n"]
-    TT_QUALIFIER_MASK = 4294967040,
-}
+pub struct cef_transition_type_t(pub ::std::os::raw::c_uint);
 impl cef_urlrequest_flags_t {
     #[doc = "\n Default behavior.\n"]
     pub const UR_FLAG_NONE: cef_urlrequest_flags_t = cef_urlrequest_flags_t(0);

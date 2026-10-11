@@ -114,4 +114,12 @@ mod test {
             CefString::from(&extra_info.string(Some(&test_key))).to_string()
         );
     }
+
+    #[test]
+    fn a_transition_holds_its_source_and_qualifiers() {
+        let forward = TransitionType::LINK.get_raw() | TransitionType::FORWARD_BACK_FLAG.get_raw();
+        let transition = TransitionType::from(sys::cef_transition_type_t(forward));
+        assert_eq!(transition.get_raw() & TransitionType::SOURCE_MASK.get_raw(), 0);
+        assert_ne!(transition.get_raw() & TransitionType::FORWARD_BACK_FLAG.get_raw(), 0);
+    }
 }

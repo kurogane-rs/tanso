@@ -49,6 +49,10 @@ struct TypeAliasRef<'a> {
 struct EnumRef<'a> {
     name: String,
     ty: Option<&'a syn::ItemEnum>,
+    /// The field of a flag set, bindgen's bitfield struct
+    flags: Option<&'a syn::Type>,
+    /// An enum's variants or a flag set's associated constants, in order
+    values: Vec<String>,
 }
 
 struct FieldRef<'a> {
@@ -3459,9 +3463,9 @@ fn make_my_struct() -> {rust_name} {{
             writeln!(f, "\n/// See [`{name}`] for more documentation.")?;
             let name_ident = format_ident!("{name}");
             let rust_name = format_ident!("{rust_name}");
-            let declare_values = e.ty.and_then(|ty| {
-                let values: Vec<_> = ty.variants.iter().map(|v| v.ident.to_string()).collect();
-                let values: Vec<Vec<_>> = values
+            let declare_values = {
+                let values: Vec<Vec<_>> = e
+                    .values
                     .iter()
                     .map(|value| value.split("_").collect())
                     .collect();
@@ -3522,6 +3526,16 @@ fn make_my_struct() -> {rust_name} {{
                             #(#values)*
                         }
                     })
+                }
+            };
+            let impl_flags_repr = e.flags.map(|repr| {
+                quote! {
+                    impl #rust_name {
+                        #[doc = "Get the raw integer representation."]
+                        pub fn get_raw(&self) -> #repr {
+                            self.0.0
+                        }
+                    }
                 }
             });
             let impl_raw_repr = e.ty.and_then(|ty| {
@@ -3587,6 +3601,7 @@ fn make_my_struct() -> {rust_name} {{
                 #declare_values
 
                 #impl_raw_repr
+                #impl_flags_repr
 
                 impl Default for #rust_name {
                     fn default() -> Self {
@@ -3706,6 +3721,29 @@ impl Display for ParseTree<'_> {
 
 impl<'a> From<&'a syn::File> for ParseTree<'a> {
     fn from(value: &'a syn::File) -> Self {
+        // A flag set's values are the associated constants of its inherent impl
+        let mut flag_values: BTreeMap<String, Vec<String>> = BTreeMap::new();
+        for item in &value.items {
+            let syn::Item::Impl(item_impl) = item else {
+                continue;
+            };
+            let syn::Type::Path(self_ty) = item_impl.self_ty.as_ref() else {
+                continue;
+            };
+            let Some(name) = self_ty.path.get_ident() else {
+                continue;
+            };
+            if item_impl.trait_.is_some() {
+                continue;
+            }
+            flag_values.entry(name.to_string()).or_default().extend(
+                item_impl.items.iter().filter_map(|item| match item {
+                    syn::ImplItem::Const(constant) => Some(constant.ident.to_string()),
+                    _ => None,
+                }),
+            );
+        }
+
         let mut tree = Self::default();
 
         tree.type_aliases = value
@@ -3727,12 +3765,19 @@ impl<'a> From<&'a syn::File> for ParseTree<'a> {
                 syn::Item::Enum(e) => Some(EnumRef {
                     name: e.ident.to_string(),
                     ty: Some(e),
+                    flags: None,
+                    values: e.variants.iter().map(|v| v.ident.to_string()).collect(),
                 }),
                 syn::Item::Struct(item_struct) => match &item_struct.fields {
-                    syn::Fields::Unnamed(fields) if fields.unnamed.len() == 1 => Some(EnumRef {
-                        name: item_struct.ident.to_string(),
-                        ty: None,
-                    }),
+                    syn::Fields::Unnamed(fields) if fields.unnamed.len() == 1 => {
+                        let name = item_struct.ident.to_string();
+                        Some(EnumRef {
+                            values: flag_values.remove(&name).unwrap_or_default(),
+                            name,
+                            ty: None,
+                            flags: fields.unnamed.first().map(|field| &field.ty),
+                        })
+                    }
                     _ => None,
                 },
                 _ => None,
