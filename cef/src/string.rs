@@ -253,6 +253,18 @@ where
     }
 }
 
+impl<T> CefStringData<T> {
+    /// Gives a string without storage an empty one of its own for CEF to
+    /// write through.
+    fn make_writable(&mut self) {
+        if matches!(self, Self::Borrowed(None) | Self::Clear(None)) {
+            // SAFETY: this module builds `CefStringData` over CEF's three string
+            // structs alone, and all zeroes is the empty string of each
+            *self = Self::Clear(Some(unsafe { mem::zeroed() }));
+        }
+    }
+}
+
 impl<T> Default for CefStringData<T> {
     fn default() -> Self {
         Self::Borrowed(None)
@@ -362,6 +374,8 @@ impl From<&CefStringUtf8> for *const _cef_string_utf8_t {
 
 impl From<&mut CefStringUtf8> for *mut _cef_string_utf8_t {
     fn from(value: &mut CefStringUtf8) -> Self {
+        // CEF writes an out-parameter through this pointer
+        value.0.make_writable();
         let data: Option<&mut _cef_string_utf8_t> = (&mut value.0).into();
         data.map(ptr::from_mut).unwrap_or(ptr::null_mut())
     }
@@ -549,6 +563,8 @@ impl From<&CefStringUtf16> for *const _cef_string_utf16_t {
 
 impl From<&mut CefStringUtf16> for *mut _cef_string_utf16_t {
     fn from(value: &mut CefStringUtf16) -> Self {
+        // CEF writes an out-parameter through this pointer
+        value.0.make_writable();
         let data: Option<&mut _cef_string_utf16_t> = (&mut value.0).into();
         data.map(ptr::from_mut).unwrap_or(ptr::null_mut())
     }
@@ -710,6 +726,8 @@ impl From<&CefStringWide> for *const _cef_string_wide_t {
 
 impl From<&mut CefStringWide> for *mut _cef_string_wide_t {
     fn from(value: &mut CefStringWide) -> Self {
+        // CEF writes an out-parameter through this pointer
+        value.0.make_writable();
         let data: Option<&mut _cef_string_wide_t> = (&mut value.0).into();
         data.map(ptr::from_mut).unwrap_or(ptr::null_mut())
     }
@@ -1349,6 +1367,18 @@ mod test {
 
         let values: Vec<_> = list.into_iter().collect();
         assert_eq!(values, vec!["foo", "bar", "baz"]);
+    }
+
+    #[test]
+    fn a_default_string_receives_an_out_parameter() {
+        ensure_dll_loaded();
+
+        let mut list = CefStringList::new();
+        list.append("foo");
+
+        let mut value = CefString::default();
+        assert_eq!(string_list_value(Some(&mut list), 0, Some(&mut value)), 1);
+        assert_eq!(value.to_string(), "foo");
     }
 
     #[test]
