@@ -14977,7 +14977,7 @@ pub trait ImplMenuModel: Clone + Sized + Rc {
     ) -> ::std::os::raw::c_int;
     #[doc = "See [`_cef_menu_model_t::set_visible_at`] for more documentation."]
     fn set_visible_at(&self, index: usize, visible: ::std::os::raw::c_int)
-    -> ::std::os::raw::c_int;
+        -> ::std::os::raw::c_int;
     #[doc = "See [`_cef_menu_model_t::is_enabled`] for more documentation."]
     fn is_enabled(&self, command_id: ::std::os::raw::c_int) -> ::std::os::raw::c_int;
     #[doc = "See [`_cef_menu_model_t::is_enabled_at`] for more documentation."]
@@ -14990,7 +14990,7 @@ pub trait ImplMenuModel: Clone + Sized + Rc {
     ) -> ::std::os::raw::c_int;
     #[doc = "See [`_cef_menu_model_t::set_enabled_at`] for more documentation."]
     fn set_enabled_at(&self, index: usize, enabled: ::std::os::raw::c_int)
-    -> ::std::os::raw::c_int;
+        -> ::std::os::raw::c_int;
     #[doc = "See [`_cef_menu_model_t::is_checked`] for more documentation."]
     fn is_checked(&self, command_id: ::std::os::raw::c_int) -> ::std::os::raw::c_int;
     #[doc = "See [`_cef_menu_model_t::is_checked_at`] for more documentation."]
@@ -15003,7 +15003,7 @@ pub trait ImplMenuModel: Clone + Sized + Rc {
     ) -> ::std::os::raw::c_int;
     #[doc = "See [`_cef_menu_model_t::set_checked_at`] for more documentation."]
     fn set_checked_at(&self, index: usize, checked: ::std::os::raw::c_int)
-    -> ::std::os::raw::c_int;
+        -> ::std::os::raw::c_int;
     #[doc = "See [`_cef_menu_model_t::has_accelerator`] for more documentation."]
     fn has_accelerator(&self, command_id: ::std::os::raw::c_int) -> ::std::os::raw::c_int;
     #[doc = "See [`_cef_menu_model_t::has_accelerator_at`] for more documentation."]
@@ -59780,19 +59780,34 @@ pub fn window_create_top_level(delegate: Option<&mut WindowDelegate>) -> Option<
 }
 
 /// See [`cef_id_for_pack_resource_name`] for more documentation.
+///
+/// Callable from any thread; CEF's mappers run one at a time.
 pub fn id_for_pack_resource_name(name: &std::ffi::CStr) -> Option<::std::os::raw::c_int> {
+    let _one_at_a_time = crate::ID_MAPPERS
+        .lock()
+        .unwrap_or_else(std::sync::PoisonError::into_inner);
     let id = unsafe { cef_id_for_pack_resource_name(name.as_ptr()) };
     (id != -1).then_some(id)
 }
 
 /// See [`cef_id_for_pack_string_name`] for more documentation.
+///
+/// Callable from any thread; CEF's mappers run one at a time.
 pub fn id_for_pack_string_name(name: &std::ffi::CStr) -> Option<::std::os::raw::c_int> {
+    let _one_at_a_time = crate::ID_MAPPERS
+        .lock()
+        .unwrap_or_else(std::sync::PoisonError::into_inner);
     let id = unsafe { cef_id_for_pack_string_name(name.as_ptr()) };
     (id != -1).then_some(id)
 }
 
 /// See [`cef_id_for_command_id_name`] for more documentation.
+///
+/// Callable from any thread; CEF's mappers run one at a time.
 pub fn id_for_command_id_name(name: &std::ffi::CStr) -> Option<::std::os::raw::c_int> {
+    let _one_at_a_time = crate::ID_MAPPERS
+        .lock()
+        .unwrap_or_else(std::sync::PoisonError::into_inner);
     let id = unsafe { cef_id_for_command_id_name(name.as_ptr()) };
     (id != -1).then_some(id)
 }
