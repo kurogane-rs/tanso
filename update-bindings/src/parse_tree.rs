@@ -3622,16 +3622,20 @@ fn make_my_struct() -> {rust_name} {{
             let original_name = global_fn.name.as_str();
             if let Some(kind) = original_name.strip_prefix("cef_id_for_") {
                 // An ID mapper takes a name of any length and answers -1 for
-                // one this CEF build does not know
+                // one this CEF build does not know; CEF's mappers run one at a
+                // time (see `ID_MAPPERS`)
+                writeln!(f, "\n/// See [`{original_name}`] for more documentation.")?;
                 writeln!(
                     f,
-                    "
-/// See [`{original_name}`] for more documentation."
+                    "///\n/// Callable from any thread; CEF's mappers run one at a time."
                 )?;
                 let name = format_ident!("id_for_{kind}");
                 let original_name = format_ident!("{original_name}");
                 let mapper = quote! {
                     pub fn #name(name: &std::ffi::CStr) -> Option<::std::os::raw::c_int> {
+                        let _one_at_a_time = crate::ID_MAPPERS
+                            .lock()
+                            .unwrap_or_else(std::sync::PoisonError::into_inner);
                         let id = unsafe { #original_name(name.as_ptr()) };
                         (id != -1).then_some(id)
                     }

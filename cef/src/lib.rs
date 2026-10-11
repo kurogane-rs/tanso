@@ -36,6 +36,11 @@ pub use tanso_sys as sys;
 ))]
 compile_error!("accelerated_osr not supported on this platform");
 
+/// Held around every call to CEF's ID mappers. They share tables CEF fills on
+/// first use and two threads calling them at once can crash (seen on macOS).
+/// The lock guards no Rust data; a poisoned lock is taken as it is.
+static ID_MAPPERS: std::sync::Mutex<()> = std::sync::Mutex::new(());
+
 pub const SEEK_SET: i32 = 0;
 pub const SEEK_CUR: i32 = 1;
 pub const SEEK_END: i32 = 2;

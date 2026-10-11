@@ -126,15 +126,15 @@ mod tests {{
     }
 
     fn write_assert(f: &mut Formatter<'_>, resource: &Resource) -> fmt::Result {
-        let cef_fn = resource.cef_fn();
+        let mapper = resource.cef_fn().trim_start_matches("cef_");
         let sys_name = resource.sys_name();
         let name = resource.name();
 
         writeln!(
             f,
             r#"
-    let resource_id = unsafe {{ sys::{cef_fn}(resources::{name}.as_ptr()) }};
-    assert!(resource_id == sys::{sys_name} || resource_id == -1);"#
+    let resource_id = {mapper}(resources::{name});
+    assert!(resource_id.is_none_or(|id| id == sys::{sys_name}));"#
         )
     }
 }

@@ -130,4 +130,21 @@ mod test {
         assert!(id_for_command_id_name(c"IDC_BACK").is_some());
         assert_eq!(id_for_command_id_name(c"IDC_NOT_A_COMMAND"), None);
     }
+
+    #[test]
+    fn the_id_mappers_take_calls_from_several_threads() {
+        test_init_cef();
+
+        std::thread::scope(|scope| {
+            for _ in 0..4 {
+                scope.spawn(|| {
+                    for _ in 0..100 {
+                        assert!(id_for_command_id_name(c"IDC_BACK").is_some());
+                        let _ = id_for_pack_resource_name(c"IDR_BROKENCANVAS");
+                        let _ = id_for_pack_string_name(c"IDS_WEB_FONT_FAMILY");
+                    }
+                });
+            }
+        });
+    }
 }
