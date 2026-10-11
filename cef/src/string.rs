@@ -826,14 +826,13 @@ enum CefStringCollection<T> {
     Free(Option<NonNull<T>>),
 }
 
-impl<T> Clone for CefStringCollection<T>
-where
-    T: Copy,
-{
-    fn clone(&self) -> Self {
-        let data: Option<&T> = self.into();
-        let data = data.map(ptr::from_ref).unwrap_or(ptr::null());
-        data.into()
+impl<T> CefStringCollection<T> {
+    /// The CEF collection this value refers to, if any.
+    fn handle(&self) -> Option<NonNull<T>> {
+        match self {
+            Self::BorrowedMut(handle) | Self::Free(handle) => *handle,
+            Self::Borrowed(_) => None,
+        }
     }
 }
 
@@ -881,7 +880,6 @@ impl<'a, T> From<&'a mut CefStringCollection<T>> for Option<&'a mut T> {
 }
 
 /// See [_cef_string_list_t] for more documentation.
-#[derive(Clone)]
 pub struct CefStringList(CefStringCollection<_cef_string_list_t>);
 
 impl CefStringList {
@@ -900,6 +898,17 @@ impl CefStringList {
         let value = CefString::from(value);
         unsafe { tanso_sys::cef_string_list_append(list, (&value).into()) };
         true
+    }
+}
+
+/// A clone owns a copy of the list.
+impl Clone for CefStringList {
+    fn clone(&self) -> Self {
+        let copy = self.0.handle().and_then(|list| {
+            // SAFETY: `list` is the live CEF list `self` refers to
+            NonNull::new(unsafe { tanso_sys::cef_string_list_copy(list.as_ptr()) })
+        });
+        Self(CefStringCollection::Free(copy))
     }
 }
 
@@ -1014,7 +1023,6 @@ impl Debug for CefStringList {
 }
 
 /// See [_cef_string_map_t] for more documentation.
-#[derive(Clone)]
 pub struct CefStringMap(CefStringCollection<_cef_string_map_t>);
 
 impl CefStringMap {
@@ -1033,6 +1041,32 @@ impl CefStringMap {
         let key = CefString::from(key);
         let value = CefString::from(value);
         unsafe { tanso_sys::cef_string_map_append(map, (&key).into(), (&value).into()) != 0 }
+    }
+}
+
+/// A clone owns a copy of the map, built by appending each pair to a new
+/// one (CEF has no copy function for maps).
+impl Clone for CefStringMap {
+    fn clone(&self) -> Self {
+        let Some(map) = self.0.handle() else {
+            return Self(CefStringCollection::Free(None));
+        };
+        let mut copy = Self::new();
+        let target: *mut _cef_string_map_t = (&mut copy).into();
+        // SAFETY: `map` is the live CEF map `self` refers to and `target` the
+        // one `copy` owns; each key and value is a string this loop owns
+        unsafe {
+            for i in 0..tanso_sys::cef_string_map_size(map.as_ptr()) {
+                let mut key = CefString::default();
+                let mut value = CefString::default();
+                if tanso_sys::cef_string_map_key(map.as_ptr(), i, (&mut key).into()) != 0
+                    && tanso_sys::cef_string_map_value(map.as_ptr(), i, (&mut value).into()) != 0
+                {
+                    tanso_sys::cef_string_map_append(target, (&key).into(), (&value).into());
+                }
+            }
+        }
+        copy
     }
 }
 
@@ -1161,7 +1195,6 @@ impl Debug for CefStringMap {
 }
 
 /// See [_cef_string_multimap_t] for more documentation.
-#[derive(Clone)]
 pub struct CefStringMultimap(CefStringCollection<_cef_string_multimap_t>);
 
 impl CefStringMultimap {
@@ -1183,6 +1216,33 @@ impl CefStringMultimap {
     }
 }
 
+/// A clone owns a copy of the multimap, built by appending each pair to a new
+/// one (CEF has no copy function for multimaps).
+impl Clone for CefStringMultimap {
+    fn clone(&self) -> Self {
+        let Some(map) = self.0.handle() else {
+            return Self(CefStringCollection::Free(None));
+        };
+        let mut copy = Self::new();
+        let target: *mut _cef_string_multimap_t = (&mut copy).into();
+        // SAFETY: `map` is the live CEF multimap `self` refers to and `target`
+        // the one `copy` owns; each key and value is a string this loop owns
+        unsafe {
+            for i in 0..tanso_sys::cef_string_multimap_size(map.as_ptr()) {
+                let mut key = CefString::default();
+                let mut value = CefString::default();
+                if tanso_sys::cef_string_multimap_key(map.as_ptr(), i, (&mut key).into()) != 0
+                    && tanso_sys::cef_string_multimap_value(map.as_ptr(), i, (&mut value).into())
+                        != 0
+                {
+                    tanso_sys::cef_string_multimap_append(target, (&key).into(), (&value).into());
+                }
+            }
+        }
+        copy
+    }
+}
+
 impl Default for CefStringMultimap {
     fn default() -> Self {
         Self::new()
@@ -1193,7 +1253,7 @@ impl Drop for CefStringMultimap {
     fn drop(&mut self) {
         unsafe {
             if let CefStringCollection::Free(Some(map)) = &mut self.0 {
-                tanso_sys::cef_string_multimap_clear(map.as_ptr());
+                tanso_sys::cef_string_multimap_free(map.as_ptr());
             }
         }
     }
@@ -1379,6 +1439,50 @@ mod test {
         let mut value = CefString::default();
         assert_eq!(string_list_value(Some(&mut list), 0, Some(&mut value)), 1);
         assert_eq!(value.to_string(), "foo");
+    }
+
+    #[test]
+    fn a_cloned_list_owns_its_strings() {
+        ensure_dll_loaded();
+
+        let mut list = CefStringList::new();
+        list.append("foo");
+        list.append("bar");
+        let copy = list.clone();
+        drop(list);
+
+        assert_eq!(copy.into_iter().collect::<Vec<_>>(), vec!["foo", "bar"]);
+    }
+
+    #[test]
+    fn a_cloned_map_owns_its_pairs() {
+        ensure_dll_loaded();
+
+        let mut map = CefStringMap::new();
+        map.append("a", "1");
+        map.append("b", "2");
+        let copy = map.clone();
+        drop(map);
+
+        let pairs = vec![("a".into(), "1".into()), ("b".into(), "2".into())];
+        assert_eq!(copy.into_iter().collect::<Vec<(String, String)>>(), pairs);
+    }
+
+    #[test]
+    fn a_cloned_multimap_owns_its_pairs() {
+        ensure_dll_loaded();
+
+        let mut map = CefStringMultimap::new();
+        map.append("a", "1");
+        map.append("a", "2");
+        let copy = map.clone();
+        drop(map);
+
+        let entries = vec![("a".into(), vec!["1".into(), "2".into()])];
+        assert_eq!(
+            copy.into_iter().collect::<Vec<(String, Vec<String>)>>(),
+            entries
+        );
     }
 
     #[test]
