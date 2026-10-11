@@ -200,18 +200,13 @@ impl From<*const _cef_string_utf16_t> for CefStringUserfreeWide {
                     return None;
                 }
                 let slice = slice::from_raw_parts(value.str_, value.length);
-                NonNull::new(tanso_sys::cef_string_userfree_wide_alloc()).and_then(|data| {
-                    if tanso_sys::cef_string_utf16_to_wide(
+                NonNull::new(tanso_sys::cef_string_userfree_wide_alloc()).inspect(|data| {
+                    // CEF writes its best result whether or not the input is valid
+                    tanso_sys::cef_string_utf16_to_wide(
                         slice.as_ptr().cast(),
                         slice.len(),
                         data.as_ptr(),
-                    ) == 0
-                    {
-                        tanso_sys::cef_string_userfree_wide_free(data.as_ptr());
-                        None
-                    } else {
-                        Some(data)
-                    }
+                    );
                 })
             })
         }))
@@ -236,6 +231,46 @@ impl Drop for CefStringUserfreeWide {
     }
 }
 
+/// CEF's three string structs.
+trait CefStr {
+    /// The empty string, all zeroes.
+    fn empty() -> Self;
+}
+
+impl CefStr for _cef_string_utf8_t {
+    fn empty() -> Self {
+        // SAFETY: a null buffer, a zero length and no destructor is CEF's empty
+        // string
+        unsafe { mem::zeroed() }
+    }
+}
+
+impl CefStr for _cef_string_utf16_t {
+    fn empty() -> Self {
+        // SAFETY: a null buffer, a zero length and no destructor is CEF's empty
+        // string
+        unsafe { mem::zeroed() }
+    }
+}
+
+impl CefStr for _cef_string_wide_t {
+    fn empty() -> Self {
+        // SAFETY: a null buffer, a zero length and no destructor is CEF's empty
+        // string
+        unsafe { mem::zeroed() }
+    }
+}
+
+/// The output of one of CEF's string conversions.
+///
+/// CEF writes its best result whatever it reports about the input's
+/// validity, so the output is kept either way and freed with its string.
+fn converted<T: CefStr>(convert: impl FnOnce(*mut T)) -> T {
+    let mut data = T::empty();
+    convert(&mut data);
+    data
+}
+
 enum CefStringData<T> {
     Borrowed(Option<T>),
     BorrowedMut(Option<NonNull<T>>),
@@ -253,14 +288,12 @@ where
     }
 }
 
-impl<T> CefStringData<T> {
+impl<T: CefStr> CefStringData<T> {
     /// Gives a string without storage an empty one of its own for CEF to
     /// write through.
     fn make_writable(&mut self) {
         if matches!(self, Self::Borrowed(None) | Self::Clear(None)) {
-            // SAFETY: this module builds `CefStringData` over CEF's three string
-            // structs alone, and all zeroes is the empty string of each
-            *self = Self::Clear(Some(unsafe { mem::zeroed() }));
+            *self = Self::Clear(Some(T::empty()));
         }
     }
 }
@@ -398,16 +431,9 @@ impl From<CefStringUtf8> for _cef_string_utf8_t {
 }
 
 impl CefStringUtf8 {
+    /// The string as a `str`, `None` when it is empty or not valid UTF-8.
     pub fn as_str(&self) -> Option<&str> {
-        let data: Option<&_cef_string_utf8_t> = (&self.0).into();
-        let (str_, length) = data.map(|value| (value.str_, value.length))?;
-        if str_.is_null() || length == 0 {
-            return None;
-        }
-        Some(unsafe {
-            let slice = slice::from_raw_parts(str_.cast(), length);
-            std::str::from_utf8_unchecked(slice)
-        })
+        std::str::from_utf8(self.as_slice()?).ok()
     }
 
     pub fn as_slice(&self) -> Option<&[u8]> {
@@ -435,48 +461,35 @@ impl CefStringUtf8 {
 
 impl From<&CefStringUtf16> for CefStringUtf8 {
     fn from(value: &CefStringUtf16) -> Self {
-        Self(CefStringData::Clear(unsafe {
-            value.as_slice().and_then(|value| {
-                let mut data = mem::zeroed();
-                if tanso_sys::cef_string_utf16_to_utf8(
-                    value.as_ptr().cast(),
-                    value.len(),
-                    &mut data,
-                ) == 0
-                {
-                    None
-                } else {
-                    Some(data)
-                }
+        Self(CefStringData::Clear(value.as_slice().map(|value| {
+            converted(|data| {
+                // SAFETY: `value` is a live slice and `data` an empty string CEF fills
+                unsafe {
+                    tanso_sys::cef_string_utf16_to_utf8(value.as_ptr().cast(), value.len(), data)
+                };
             })
-        }))
+        })))
     }
 }
 
 impl From<&CefStringWide> for CefStringUtf8 {
     fn from(value: &CefStringWide) -> Self {
-        Self(CefStringData::Clear(unsafe {
-            value.as_slice().and_then(|value| {
-                let mut data = mem::zeroed();
-                if tanso_sys::cef_string_wide_to_utf8(value.as_ptr().cast(), value.len(), &mut data)
-                    == 0
-                {
-                    None
-                } else {
-                    Some(data)
-                }
+        Self(CefStringData::Clear(value.as_slice().map(|value| {
+            converted(|data| {
+                // SAFETY: `value` is a live slice and `data` an empty string CEF fills
+                unsafe {
+                    tanso_sys::cef_string_wide_to_utf8(value.as_ptr().cast(), value.len(), data)
+                };
             })
-        }))
+        })))
     }
 }
 
+/// Bytes that are not valid UTF-8 show as U+FFFD.
 impl Display for CefStringUtf8 {
     fn fmt(&self, f: &mut Formatter) -> fmt::Result {
-        if let Some(value) = self.as_str() {
-            write!(f, "{value}")
-        } else {
-            Ok(())
-        }
+        let value = self.as_slice().unwrap_or_default();
+        write!(f, "{}", String::from_utf8_lossy(value))
     }
 }
 
@@ -498,16 +511,12 @@ impl Drop for CefStringUtf16 {
 
 impl From<&str> for CefStringUtf16 {
     fn from(value: &str) -> Self {
-        Self(CefStringData::Clear(unsafe {
-            let mut data = mem::zeroed();
-            if tanso_sys::cef_string_utf8_to_utf16(value.as_ptr().cast(), value.len(), &mut data)
-                == 0
-            {
-                None
-            } else {
-                Some(data)
-            }
-        }))
+        Self(CefStringData::Clear(Some(converted(|data| {
+            // SAFETY: `value` is a live str and `data` an empty string CEF fills
+            unsafe {
+                tanso_sys::cef_string_utf8_to_utf16(value.as_ptr().cast(), value.len(), data)
+            };
+        }))))
     }
 }
 
@@ -533,7 +542,6 @@ impl From<&CefStringUserfreeUtf16> for CefStringUtf16 {
         Self(CefStringData::Clear(value.and_then(|value| unsafe {
             let mut data = mem::zeroed();
             if tanso_sys::cef_string_utf16_set(value.str_, value.length, &mut data, 1) == 0 {
-                eprintln!("Invalid UTF-16 string");
                 None
             } else {
                 Some(data)
@@ -611,41 +619,27 @@ impl CefStringUtf16 {
 
 impl From<&CefStringUtf8> for CefStringUtf16 {
     fn from(value: &CefStringUtf8) -> Self {
-        Self(CefStringData::Clear(unsafe {
-            value.as_str().and_then(|value| {
-                let mut data = mem::zeroed();
-                if tanso_sys::cef_string_utf8_to_utf16(
-                    value.as_ptr().cast(),
-                    value.len(),
-                    &mut data,
-                ) == 0
-                {
-                    None
-                } else {
-                    Some(data)
-                }
+        Self(CefStringData::Clear(value.as_str().map(|value| {
+            converted(|data| {
+                // SAFETY: `value` is a live slice and `data` an empty string CEF fills
+                unsafe {
+                    tanso_sys::cef_string_utf8_to_utf16(value.as_ptr().cast(), value.len(), data)
+                };
             })
-        }))
+        })))
     }
 }
 
 impl From<&CefStringWide> for CefStringUtf16 {
     fn from(value: &CefStringWide) -> Self {
-        Self(CefStringData::Clear(unsafe {
-            value.as_slice().and_then(|value| {
-                let mut data = mem::zeroed();
-                if tanso_sys::cef_string_wide_to_utf16(
-                    value.as_ptr().cast(),
-                    value.len(),
-                    &mut data,
-                ) == 0
-                {
-                    None
-                } else {
-                    Some(data)
-                }
+        Self(CefStringData::Clear(value.as_slice().map(|value| {
+            converted(|data| {
+                // SAFETY: `value` is a live slice and `data` an empty string CEF fills
+                unsafe {
+                    tanso_sys::cef_string_wide_to_utf16(value.as_ptr().cast(), value.len(), data)
+                };
             })
-        }))
+        })))
     }
 }
 
@@ -678,16 +672,10 @@ impl Drop for CefStringWide {
 
 impl From<&str> for CefStringWide {
     fn from(value: &str) -> Self {
-        Self(CefStringData::Clear(unsafe {
-            let mut data = mem::zeroed();
-            if tanso_sys::cef_string_utf8_to_wide(value.as_ptr().cast(), value.len(), &mut data)
-                == 0
-            {
-                None
-            } else {
-                Some(data)
-            }
-        }))
+        Self(CefStringData::Clear(Some(converted(|data| {
+            // SAFETY: `value` is a live str and `data` an empty string CEF fills
+            unsafe { tanso_sys::cef_string_utf8_to_wide(value.as_ptr().cast(), value.len(), data) };
+        }))))
     }
 }
 
@@ -774,38 +762,27 @@ impl CefStringWide {
 
 impl From<&CefStringUtf8> for CefStringWide {
     fn from(value: &CefStringUtf8) -> Self {
-        Self(CefStringData::Clear(unsafe {
-            value.as_str().and_then(|value| {
-                let mut data = mem::zeroed();
-                if tanso_sys::cef_string_utf8_to_wide(value.as_ptr().cast(), value.len(), &mut data)
-                    == 0
-                {
-                    None
-                } else {
-                    Some(data)
-                }
+        Self(CefStringData::Clear(value.as_str().map(|value| {
+            converted(|data| {
+                // SAFETY: `value` is a live slice and `data` an empty string CEF fills
+                unsafe {
+                    tanso_sys::cef_string_utf8_to_wide(value.as_ptr().cast(), value.len(), data)
+                };
             })
-        }))
+        })))
     }
 }
 
 impl From<&CefStringUtf16> for CefStringWide {
     fn from(value: &CefStringUtf16) -> Self {
-        Self(CefStringData::Clear(unsafe {
-            value.as_slice().and_then(|value| {
-                let mut data = mem::zeroed();
-                if tanso_sys::cef_string_utf16_to_wide(
-                    value.as_ptr().cast(),
-                    value.len(),
-                    &mut data,
-                ) == 0
-                {
-                    None
-                } else {
-                    Some(data)
-                }
+        Self(CefStringData::Clear(value.as_slice().map(|value| {
+            converted(|data| {
+                // SAFETY: `value` is a live slice and `data` an empty string CEF fills
+                unsafe {
+                    tanso_sys::cef_string_utf16_to_wide(value.as_ptr().cast(), value.len(), data)
+                };
             })
-        }))
+        })))
     }
 }
 
@@ -1483,6 +1460,25 @@ mod test {
             copy.into_iter().collect::<Vec<(String, Vec<String>)>>(),
             entries
         );
+    }
+
+    #[test]
+    fn a_conversion_keeps_cef_best_effort_output() {
+        ensure_dll_loaded();
+
+        let text = CefStringUtf16::from(&[u16::from(b'a'), 0xd800, u16::from(b'b')][..]);
+        assert_eq!(CefStringUtf8::from(&text).to_string(), "a\u{fffd}b");
+    }
+
+    #[test]
+    fn invalid_utf8_is_no_str() {
+        ensure_dll_loaded();
+
+        let bytes = [b'a', 0xff, b'b'].map(|byte| byte as std::os::raw::c_char);
+        let mut value = CefStringUtf8::from("placeholder");
+        assert_eq!(string_utf8_set(Some(&bytes[..]), Some(&mut value), 1), 1);
+        assert_eq!(value.as_str(), None);
+        assert_eq!(value.to_string(), "a\u{fffd}b");
     }
 
     #[test]
