@@ -129,6 +129,10 @@ static LOADING: Mutex<()> = Mutex::new(());
 /// were generated from. Loading the same path again does nothing; another
 /// path once one is loaded is an error, since a process runs one CEF.
 ///
+/// On macOS a framework dyld mapped at launch, as an application that links
+/// it at launch has, counts as loaded. Loading takes that image when it is the
+/// file `path` names and refuses any other.
+///
 /// # Safety
 ///
 /// Opening the library runs its initializers.
@@ -145,10 +149,7 @@ pub unsafe fn load_libcef(path: &Path) -> Result<(), LoadError> {
         });
     }
 
-    let library = unsafe { open(path) }.map_err(|source| LoadError::Open {
-        path: path.to_owned(),
-        source,
-    })?;
+    let library = unsafe { open(path) }?;
     let functions = LibcefFunctions::resolve(&library)?;
     if let Err(found) = unsafe { check_build(&functions) } {
         // Its initializers ran, so it stays mapped rather than being unloaded
@@ -233,30 +234,106 @@ fn not_loaded() -> ! {
     panic!("libcef is not loaded; call tanso_sys::load_libcef before any other CEF function")
 }
 
+/// The error for a library at `path` that would not open.
+fn open_failed(path: &Path) -> impl FnOnce(libloading::Error) -> LoadError + '_ {
+    move |source| LoadError::Open {
+        path: path.to_owned(),
+        source,
+    }
+}
+
 #[cfg(target_os = "windows")]
-unsafe fn open(path: &Path) -> Result<Library, libloading::Error> {
+unsafe fn open(path: &Path) -> Result<Library, LoadError> {
     use libloading::os::windows;
 
     // libcef's own DLLs (chrome_elf.dll and the rest) load from its directory
     unsafe { windows::Library::load_with_flags(path, windows::LOAD_WITH_ALTERED_SEARCH_PATH) }
         .map(|library| Library(library.into()))
+        .map_err(open_failed(path))
 }
 
 #[cfg(target_os = "linux")]
-unsafe fn open(path: &Path) -> Result<Library, libloading::Error> {
+unsafe fn open(path: &Path) -> Result<Library, LoadError> {
     use libloading::os::unix;
 
     unsafe { unix::Library::open(Some(path), unix::RTLD_NOW | unix::RTLD_LOCAL) }
         .map(|library| Library(library.into()))
+        .map_err(open_failed(path))
+}
+
+/// Opens the framework at `path`, or the image of it dyld mapped at launch.
+/// A framework dyld mapped from another file is an error, as the process
+/// already runs that CEF.
+#[cfg(target_os = "macos")]
+unsafe fn open(path: &Path) -> Result<Library, LoadError> {
+    use libloading::os::unix;
+
+    let mapped = macos::mapped_framework();
+    let file = match &mapped {
+        Some(mapped) if macos::same_file(mapped, path) => mapped.as_path(),
+        Some(mapped) => {
+            return Err(LoadError::AlreadyLoaded {
+                loaded: mapped.clone(),
+                requested: path.to_owned(),
+            })
+        }
+        None => path,
+    };
+
+    // Lazily bound, as CEF's own framework loader opens it
+    unsafe { unix::Library::open(Some(file), unix::RTLD_LAZY | unix::RTLD_LOCAL) }
+        .map(|library| Library(library.into()))
+        .map_err(open_failed(path))
 }
 
 #[cfg(target_os = "macos")]
-unsafe fn open(path: &Path) -> Result<Library, libloading::Error> {
-    use libloading::os::unix;
+mod macos {
+    use std::{
+        ffi::{c_char, CStr, OsStr},
+        os::unix::{ffi::OsStrExt, fs::MetadataExt},
+        path::{Path, PathBuf},
+    };
 
-    // Lazily bound, as CEF's own framework loader opens it
-    unsafe { unix::Library::open(Some(path), unix::RTLD_LAZY | unix::RTLD_LOCAL) }
-        .map(|library| Library(library.into()))
+    use crate::LIBCEF_FILE;
+
+    extern "C" {
+        fn _dyld_image_count() -> u32;
+        fn _dyld_get_image_name(image_index: u32) -> *const c_char;
+    }
+
+    /// The CEF framework dyld has mapped into the process, as it does at
+    /// launch for an executable that links it.
+    pub(super) fn mapped_framework() -> Option<PathBuf> {
+        // SAFETY: reads the length of dyld's image list
+        let count = unsafe { _dyld_image_count() };
+        let images = (0..count).filter_map(|index| {
+            // SAFETY: an index past the list's end, as after an unload, gives null
+            let name = unsafe { _dyld_get_image_name(index) };
+            (!name.is_null()).then(|| {
+                // SAFETY: an image's name is a C string that lives as the image does
+                let name = unsafe { CStr::from_ptr(name) };
+                PathBuf::from(OsStr::from_bytes(name.to_bytes()))
+            })
+        });
+
+        framework_image(images)
+    }
+
+    /// The first of `images` that is a CEF framework's binary.
+    pub(super) fn framework_image(images: impl IntoIterator<Item = PathBuf>) -> Option<PathBuf> {
+        images
+            .into_iter()
+            .find(|image| image.ends_with(LIBCEF_FILE))
+    }
+
+    /// Whether `a` and `b` name one file, through whatever links or `..`
+    /// either path takes.
+    pub(super) fn same_file(a: &Path, b: &Path) -> bool {
+        match (std::fs::metadata(a), std::fs::metadata(b)) {
+            (Ok(a), Ok(b)) => a.dev() == b.dev() && a.ino() == b.ino(),
+            _ => false,
+        }
+    }
 }
 
 #[cfg(test)]
@@ -289,5 +366,39 @@ mod tests {
             bindings_version()
         );
         assert!(commit.chars().all(|c| c.is_ascii_hexdigit()));
+    }
+
+    #[test]
+    #[cfg(target_os = "macos")]
+    fn the_mapped_framework_is_the_image_of_a_cef_framework_binary() {
+        let framework = "/A.app/Contents/Frameworks/A Helper.app/Contents/MacOS/../../../\
+                         Chromium Embedded Framework.framework/Chromium Embedded Framework";
+        let images = [
+            "/usr/lib/libSystem.B.dylib",
+            "/A.app/Contents/Frameworks/Chromium Embedded Framework.framework/Libraries/libEGL.dylib",
+            framework,
+        ]
+        .map(PathBuf::from);
+
+        assert_eq!(
+            macos::framework_image(images.clone()),
+            Some(PathBuf::from(framework))
+        );
+        assert_eq!(macos::framework_image(images[..2].to_vec()), None);
+    }
+
+    #[test]
+    #[cfg(target_os = "macos")]
+    fn one_file_is_the_same_through_any_path_to_it() {
+        let exe = std::env::current_exe().unwrap();
+        let dir = exe.parent().unwrap();
+        let through_parent = dir
+            .join("..")
+            .join(dir.file_name().unwrap())
+            .join(exe.file_name().unwrap());
+
+        assert!(macos::same_file(&exe, &through_parent));
+        assert!(!macos::same_file(&exe, Path::new("/bin/sh")));
+        assert!(!macos::same_file(&exe, &dir.join("missing")));
     }
 }
