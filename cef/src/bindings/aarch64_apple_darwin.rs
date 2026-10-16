@@ -20872,14 +20872,21 @@ mod impl_cef_life_span_handler_t {
             arg_extra_info,
             arg_no_javascript_access,
         );
-        if let (Some(out_client), Some(wrap_client)) = (unsafe { out_client.as_mut() }, wrap_client)
-        {
-            *out_client = wrap_client.wrap_result();
+        if let Some(out_client) = unsafe { out_client.as_mut() } {
+            match wrap_client {
+                Some(wrap_client) if wrap_client.get_raw() == *out_client => drop(wrap_client),
+                Some(wrap_client) => *out_client = wrap_client.wrap_result(),
+                None => *out_client = std::ptr::null_mut(),
+            }
         }
-        if let (Some(out_extra_info), Some(wrap_extra_info)) =
-            (unsafe { out_extra_info.as_mut() }, wrap_extra_info)
-        {
-            *out_extra_info = wrap_extra_info.wrap_result();
+        if let Some(out_extra_info) = unsafe { out_extra_info.as_mut() } {
+            match wrap_extra_info {
+                Some(wrap_extra_info) if wrap_extra_info.get_raw() == *out_extra_info => {
+                    drop(wrap_extra_info)
+                }
+                Some(wrap_extra_info) => *out_extra_info = wrap_extra_info.wrap_result(),
+                None => *out_extra_info = std::ptr::null_mut(),
+            }
         }
         result
     }
@@ -20977,14 +20984,21 @@ mod impl_cef_life_span_handler_t {
             arg_extra_info,
             arg_use_default_window,
         );
-        if let (Some(out_client), Some(wrap_client)) = (unsafe { out_client.as_mut() }, wrap_client)
-        {
-            *out_client = wrap_client.wrap_result();
+        if let Some(out_client) = unsafe { out_client.as_mut() } {
+            match wrap_client {
+                Some(wrap_client) if wrap_client.get_raw() == *out_client => drop(wrap_client),
+                Some(wrap_client) => *out_client = wrap_client.wrap_result(),
+                None => *out_client = std::ptr::null_mut(),
+            }
         }
-        if let (Some(out_extra_info), Some(wrap_extra_info)) =
-            (unsafe { out_extra_info.as_mut() }, wrap_extra_info)
-        {
-            *out_extra_info = wrap_extra_info.wrap_result();
+        if let Some(out_extra_info) = unsafe { out_extra_info.as_mut() } {
+            match wrap_extra_info {
+                Some(wrap_extra_info) if wrap_extra_info.get_raw() == *out_extra_info => {
+                    drop(wrap_extra_info)
+                }
+                Some(wrap_extra_info) => *out_extra_info = wrap_extra_info.wrap_result(),
+                None => *out_extra_info = std::ptr::null_mut(),
+            }
         }
     }
     extern "C" fn on_after_created<I: ImplLifeSpanHandler, R: Rc>(
@@ -21112,6 +21126,7 @@ impl ImplLifeSpanHandler for LifeSpanHandler {
                             (Some(arg), std::ptr::from_mut(&mut ptr))
                         })
                         .unwrap_or((None, std::ptr::null_mut()));
+                    let before_client = ptr;
                     let mut arg_settings = arg_settings.cloned().map(|arg| arg.into());
                     let arg_settings = arg_settings
                         .as_mut()
@@ -21128,6 +21143,7 @@ impl ImplLifeSpanHandler for LifeSpanHandler {
                             (Some(arg), std::ptr::from_mut(&mut ptr))
                         })
                         .unwrap_or((None, std::ptr::null_mut()));
+                    let before_extra_info = ptr;
                     let arg_no_javascript_access = arg_no_javascript_access
                         .map(std::ptr::from_mut)
                         .unwrap_or(std::ptr::null_mut());
@@ -21149,16 +21165,20 @@ impl ImplLifeSpanHandler for LifeSpanHandler {
                     );
                     if let (Some(out_client), Some(arg_client)) = (out_client, arg_client.as_ref())
                     {
-                        *out_client = arg_client
-                            .as_mut()
-                            .map(|arg| std::ptr::from_mut(arg).wrap_result());
+                        if *arg_client != before_client {
+                            *out_client = arg_client
+                                .as_mut()
+                                .map(|arg| std::ptr::from_mut(arg).wrap_result());
+                        }
                     }
                     if let (Some(out_extra_info), Some(arg_extra_info)) =
                         (out_extra_info, arg_extra_info.as_ref())
                     {
-                        *out_extra_info = arg_extra_info
-                            .as_mut()
-                            .map(|arg| std::ptr::from_mut(arg).wrap_result());
+                        if *arg_extra_info != before_extra_info {
+                            *out_extra_info = arg_extra_info
+                                .as_mut()
+                                .map(|arg| std::ptr::from_mut(arg).wrap_result());
+                        }
                     }
                     result.wrap_result()
                 })
@@ -21233,6 +21253,7 @@ impl ImplLifeSpanHandler for LifeSpanHandler {
                         (Some(arg), std::ptr::from_mut(&mut ptr))
                     })
                     .unwrap_or((None, std::ptr::null_mut()));
+                let before_client = ptr;
                 let mut arg_settings = arg_settings.cloned().map(|arg| arg.into());
                 let arg_settings = arg_settings
                     .as_mut()
@@ -21249,6 +21270,7 @@ impl ImplLifeSpanHandler for LifeSpanHandler {
                         (Some(arg), std::ptr::from_mut(&mut ptr))
                     })
                     .unwrap_or((None, std::ptr::null_mut()));
+                let before_extra_info = ptr;
                 let arg_use_default_window = arg_use_default_window
                     .map(std::ptr::from_mut)
                     .unwrap_or(std::ptr::null_mut());
@@ -21262,16 +21284,20 @@ impl ImplLifeSpanHandler for LifeSpanHandler {
                     arg_use_default_window,
                 );
                 if let (Some(out_client), Some(arg_client)) = (out_client, arg_client.as_ref()) {
-                    *out_client = arg_client
-                        .as_mut()
-                        .map(|arg| std::ptr::from_mut(arg).wrap_result());
+                    if *arg_client != before_client {
+                        *out_client = arg_client
+                            .as_mut()
+                            .map(|arg| std::ptr::from_mut(arg).wrap_result());
+                    }
                 }
                 if let (Some(out_extra_info), Some(arg_extra_info)) =
                     (out_extra_info, arg_extra_info.as_ref())
                 {
-                    *out_extra_info = arg_extra_info
-                        .as_mut()
-                        .map(|arg| std::ptr::from_mut(arg).wrap_result());
+                    if *arg_extra_info != before_extra_info {
+                        *out_extra_info = arg_extra_info
+                            .as_mut()
+                            .map(|arg| std::ptr::from_mut(arg).wrap_result());
+                    }
                 }
             }
         }
@@ -29845,6 +29871,7 @@ impl ImplV8Context for V8Context {
                             (Some(arg), std::ptr::from_mut(&mut ptr))
                         })
                         .unwrap_or((None, std::ptr::null_mut()));
+                    let before_retval = ptr;
                     let out_exception = arg_exception;
                     let mut ptr = std::ptr::null_mut();
                     let (out_exception, arg_exception) = out_exception
@@ -29856,6 +29883,7 @@ impl ImplV8Context for V8Context {
                             (Some(arg), std::ptr::from_mut(&mut ptr))
                         })
                         .unwrap_or((None, std::ptr::null_mut()));
+                    let before_exception = ptr;
                     let result = f(
                         arg_self_,
                         arg_code,
@@ -29866,16 +29894,20 @@ impl ImplV8Context for V8Context {
                     );
                     if let (Some(out_retval), Some(arg_retval)) = (out_retval, arg_retval.as_ref())
                     {
-                        *out_retval = arg_retval
-                            .as_mut()
-                            .map(|arg| std::ptr::from_mut(arg).wrap_result());
+                        if *arg_retval != before_retval {
+                            *out_retval = arg_retval
+                                .as_mut()
+                                .map(|arg| std::ptr::from_mut(arg).wrap_result());
+                        }
                     }
                     if let (Some(out_exception), Some(arg_exception)) =
                         (out_exception, arg_exception.as_ref())
                     {
-                        *out_exception = arg_exception
-                            .as_mut()
-                            .map(|arg| std::ptr::from_mut(arg).wrap_result());
+                        if *arg_exception != before_exception {
+                            *out_exception = arg_exception
+                                .as_mut()
+                                .map(|arg| std::ptr::from_mut(arg).wrap_result());
+                        }
                     }
                     result.wrap_result()
                 })
@@ -30038,9 +30070,12 @@ mod impl_cef_v8_handler_t {
             arg_retval,
             arg_exception,
         );
-        if let (Some(out_retval), Some(wrap_retval)) = (unsafe { out_retval.as_mut() }, wrap_retval)
-        {
-            *out_retval = wrap_retval.wrap_result();
+        if let Some(out_retval) = unsafe { out_retval.as_mut() } {
+            match wrap_retval {
+                Some(wrap_retval) if wrap_retval.get_raw() == *out_retval => drop(wrap_retval),
+                Some(wrap_retval) => *out_retval = wrap_retval.wrap_result(),
+                None => *out_retval = std::ptr::null_mut(),
+            }
         }
         result
     }
@@ -30105,6 +30140,7 @@ impl ImplV8Handler for V8Handler {
                             (Some(arg), std::ptr::from_mut(&mut ptr))
                         })
                         .unwrap_or((None, std::ptr::null_mut()));
+                    let before_retval = ptr;
                     let arg_exception = arg_exception
                         .map(|arg| arg.into_raw())
                         .unwrap_or(std::ptr::null_mut());
@@ -30119,9 +30155,11 @@ impl ImplV8Handler for V8Handler {
                     );
                     if let (Some(out_retval), Some(arg_retval)) = (out_retval, arg_retval.as_ref())
                     {
-                        *out_retval = arg_retval
-                            .as_mut()
-                            .map(|arg| std::ptr::from_mut(arg).wrap_result());
+                        if *arg_retval != before_retval {
+                            *out_retval = arg_retval
+                                .as_mut()
+                                .map(|arg| std::ptr::from_mut(arg).wrap_result());
+                        }
                     }
                     result.wrap_result()
                 })
@@ -30262,9 +30300,12 @@ mod impl_cef_v8_accessor_t {
             arg_retval,
             arg_exception,
         );
-        if let (Some(out_retval), Some(wrap_retval)) = (unsafe { out_retval.as_mut() }, wrap_retval)
-        {
-            *out_retval = wrap_retval.wrap_result();
+        if let Some(out_retval) = unsafe { out_retval.as_mut() } {
+            match wrap_retval {
+                Some(wrap_retval) if wrap_retval.get_raw() == *out_retval => drop(wrap_retval),
+                Some(wrap_retval) => *out_retval = wrap_retval.wrap_result(),
+                None => *out_retval = std::ptr::null_mut(),
+            }
         }
         result
     }
@@ -30340,15 +30381,18 @@ impl ImplV8Accessor for V8Accessor {
                             (Some(arg), std::ptr::from_mut(&mut ptr))
                         })
                         .unwrap_or((None, std::ptr::null_mut()));
+                    let before_retval = ptr;
                     let arg_exception = arg_exception
                         .map(|arg| arg.into_raw())
                         .unwrap_or(std::ptr::null_mut());
                     let result = f(arg_self_, arg_name, arg_object, arg_retval, arg_exception);
                     if let (Some(out_retval), Some(arg_retval)) = (out_retval, arg_retval.as_ref())
                     {
-                        *out_retval = arg_retval
-                            .as_mut()
-                            .map(|arg| std::ptr::from_mut(arg).wrap_result());
+                        if *arg_retval != before_retval {
+                            *out_retval = arg_retval
+                                .as_mut()
+                                .map(|arg| std::ptr::from_mut(arg).wrap_result());
+                        }
                     }
                     result.wrap_result()
                 })
@@ -30549,9 +30593,12 @@ mod impl_cef_v8_interceptor_t {
             arg_retval,
             arg_exception,
         );
-        if let (Some(out_retval), Some(wrap_retval)) = (unsafe { out_retval.as_mut() }, wrap_retval)
-        {
-            *out_retval = wrap_retval.wrap_result();
+        if let Some(out_retval) = unsafe { out_retval.as_mut() } {
+            match wrap_retval {
+                Some(wrap_retval) if wrap_retval.get_raw() == *out_retval => drop(wrap_retval),
+                Some(wrap_retval) => *out_retval = wrap_retval.wrap_result(),
+                None => *out_retval = std::ptr::null_mut(),
+            }
         }
         result
     }
@@ -30591,9 +30638,12 @@ mod impl_cef_v8_interceptor_t {
             arg_retval,
             arg_exception,
         );
-        if let (Some(out_retval), Some(wrap_retval)) = (unsafe { out_retval.as_mut() }, wrap_retval)
-        {
-            *out_retval = wrap_retval.wrap_result();
+        if let Some(out_retval) = unsafe { out_retval.as_mut() } {
+            match wrap_retval {
+                Some(wrap_retval) if wrap_retval.get_raw() == *out_retval => drop(wrap_retval),
+                Some(wrap_retval) => *out_retval = wrap_retval.wrap_result(),
+                None => *out_retval = std::ptr::null_mut(),
+            }
         }
         result
     }
@@ -30700,15 +30750,18 @@ impl ImplV8Interceptor for V8Interceptor {
                             (Some(arg), std::ptr::from_mut(&mut ptr))
                         })
                         .unwrap_or((None, std::ptr::null_mut()));
+                    let before_retval = ptr;
                     let arg_exception = arg_exception
                         .map(|arg| arg.into_raw())
                         .unwrap_or(std::ptr::null_mut());
                     let result = f(arg_self_, arg_name, arg_object, arg_retval, arg_exception);
                     if let (Some(out_retval), Some(arg_retval)) = (out_retval, arg_retval.as_ref())
                     {
-                        *out_retval = arg_retval
-                            .as_mut()
-                            .map(|arg| std::ptr::from_mut(arg).wrap_result());
+                        if *arg_retval != before_retval {
+                            *out_retval = arg_retval
+                                .as_mut()
+                                .map(|arg| std::ptr::from_mut(arg).wrap_result());
+                        }
                     }
                     result.wrap_result()
                 })
@@ -30746,15 +30799,18 @@ impl ImplV8Interceptor for V8Interceptor {
                             (Some(arg), std::ptr::from_mut(&mut ptr))
                         })
                         .unwrap_or((None, std::ptr::null_mut()));
+                    let before_retval = ptr;
                     let arg_exception = arg_exception
                         .map(|arg| arg.into_raw())
                         .unwrap_or(std::ptr::null_mut());
                     let result = f(arg_self_, arg_index, arg_object, arg_retval, arg_exception);
                     if let (Some(out_retval), Some(arg_retval)) = (out_retval, arg_retval.as_ref())
                     {
-                        *out_retval = arg_retval
-                            .as_mut()
-                            .map(|arg| std::ptr::from_mut(arg).wrap_result());
+                        if *arg_retval != before_retval {
+                            *out_retval = arg_retval
+                                .as_mut()
+                                .map(|arg| std::ptr::from_mut(arg).wrap_result());
+                        }
                     }
                     result.wrap_result()
                 })

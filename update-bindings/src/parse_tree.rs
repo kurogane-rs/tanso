@@ -446,6 +446,7 @@ impl SignatureRef<'_> {
                     .then(|| {
                         match modifiers {
                             [TypeModifier::MutPtr, TypeModifier::MutPtr] => {
+                                let before_name = format_ident!("before_{name}");
                                 Some(quote! {
                                     let #out_name = #arg_name;
                                     let mut ptr = std::ptr::null_mut();
@@ -458,6 +459,7 @@ impl SignatureRef<'_> {
                                             (Some(arg), std::ptr::from_mut(&mut ptr))
                                         })
                                         .unwrap_or((None, std::ptr::null_mut()));
+                                    let #before_name = ptr;
                                 })
                             }
                             _ => {
@@ -787,9 +789,14 @@ impl SignatureRef<'_> {
                     [TypeModifier::MutPtr, TypeModifier::MutPtr] if tree.root(&ty_string) == BASE_REF_COUNTED => {
                         let arg_name = format_ident!("arg_{name}");
                         let out_name = format_ident!("out_{name}");
+                        let before_name = format_ident!("before_{name}");
+                        // CEF took the reference added for the call and hands one
+                        // back only for a changed pointer
                         Some(quote! {
                             if let (Some(#out_name), Some(#arg_name)) = (#out_name, #arg_name.as_ref()) {
-                                *#out_name = #arg_name.as_mut().map(|arg| std::ptr::from_mut(arg).wrap_result());
+                                if *#arg_name != #before_name {
+                                    *#out_name = #arg_name.as_mut().map(|arg| std::ptr::from_mut(arg).wrap_result());
+                                }
                             }
                         })
                     }
@@ -1184,9 +1191,15 @@ impl SignatureRef<'_> {
                     [TypeModifier::MutPtr, TypeModifier::MutPtr] if tree.root(&ty_string) == BASE_REF_COUNTED => {
                         let out_name = format_ident!("out_{name}");
                         let wrap_name = format_ident!("wrap_{name}");
+                        // CEF passes the value with a reference for the call and
+                        // takes a reference back only for a changed pointer
                         Some(quote! {
-                            if let (Some(#out_name), Some(#wrap_name)) = (unsafe { #out_name.as_mut() }, #wrap_name) {
-                                *#out_name = #wrap_name.wrap_result();
+                            if let Some(#out_name) = unsafe { #out_name.as_mut() } {
+                                match #wrap_name {
+                                    Some(#wrap_name) if #wrap_name.get_raw() == *#out_name => drop(#wrap_name),
+                                    Some(#wrap_name) => *#out_name = #wrap_name.wrap_result(),
+                                    None => *#out_name = std::ptr::null_mut(),
+                                }
                             }
                         })
                     }
