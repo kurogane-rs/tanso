@@ -85,6 +85,8 @@ struct FnArgRef<'a> {
 
 struct SignatureRef<'a> {
     name: String,
+    /// Calling convention bindgen declared, `stdcall` on 32-bit Windows
+    abi: String,
     inputs: Vec<FnArgRef<'a>>,
     output: Option<&'a syn::Type>,
     merged_params: OnceCell<Vec<MergedParam>>,
@@ -1374,9 +1376,13 @@ impl<'a> TryFrom<&'a syn::Field> for SignatureRef<'a> {
         else {
             return Err(Unrecognized::FieldType);
         };
-        if abi.value() != "C" {
-            return Err(Unrecognized::FieldType);
-        }
+        // A convention the trampolines cannot take would drop the method
+        // unnoticed
+        assert!(
+            matches!(abi.value().as_str(), "C" | "stdcall"),
+            "{name} uses the calling convention {:?}",
+            abi.value()
+        );
 
         let inputs = inputs
             .iter()
@@ -1394,6 +1400,7 @@ impl<'a> TryFrom<&'a syn::Field> for SignatureRef<'a> {
 
         Ok(Self {
             name,
+            abi: abi.value(),
             inputs,
             output,
             merged_params: Default::default(),
@@ -2594,6 +2601,7 @@ fn make_my_struct() -> {rust_name} {{
                 }
                 _ => None,
             });
+            let abi = &m.abi;
             let original_output = m.output.map(|ty| self.resolve_type_aliases(ty));
             let output = original_output.as_ref().map(|output| {
                 quote! { -> #output }
@@ -2636,7 +2644,7 @@ fn make_my_struct() -> {rust_name} {{
             }
 
             quote! {
-                extern "C" fn #name<I: #impl_trait, R: Rc>(#(#args),*) #output {
+                extern #abi fn #name<I: #impl_trait, R: Rc>(#(#args),*) #output {
                     #wrapped_args
                     #call_impl
                     #unwrapped_args
@@ -3148,6 +3156,7 @@ fn make_my_struct() -> {rust_name} {{
                     }
                     _ => None,
                 });
+                let abi = &m.abi;
                 let original_output = m.output.map(|ty| self.resolve_type_aliases(ty));
                 let output = original_output.as_ref().map(|output| {
                     quote! { -> #output }
@@ -3190,7 +3199,7 @@ fn make_my_struct() -> {rust_name} {{
                 }
 
                 quote! {
-                    extern "C" fn #name<I: #impl_trait, R: Rc>(#(#args),*) #output {
+                    extern #abi fn #name<I: #impl_trait, R: Rc>(#(#args),*) #output {
                         #wrapped_args
                         #call_impl
                         #unwrapped_args
@@ -3916,6 +3925,8 @@ impl<'a> From<&'a syn::File> for ParseTree<'a> {
                      ..
                  }| SignatureRef {
                     name: ident.to_string(),
+                    // libcef's exports, all of the C convention
+                    abi: "C".to_owned(),
                     inputs: inputs
                         .iter()
                         .map(|arg| match arg {

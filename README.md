@@ -10,6 +10,7 @@ tanso began as a fork of [cef-rs](https://github.com/tauri-apps/cef-rs) and fixe
 | ------ | ----- | ----- | ------- |
 | x86_64 | ✅    | ✅    | ✅      |
 | ARM64  | ✅    | ✅    | ✅      |
+| x86    |       |       | ✅      |
 
 ## Usage
 

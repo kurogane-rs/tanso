@@ -341,40 +341,60 @@ impl<T, I> RcImpl<T, I> {
     }
 }
 
-extern "C" fn add_ref<T, I>(this: *mut cef_base_ref_counted_t) {
-    let obj = RcImpl::<T, I>::get(this.cast());
+/// Defines a function for a `cef_base_ref_counted_t` slot in the calling
+/// convention of CEF's callbacks, `stdcall` on 32-bit Windows and C elsewhere
+macro_rules! ref_count_callback {
+    ($vis:vis fn $name:ident($this:ident: $this_ty:ty) $(-> $ret:ty)? $body:block) => {
+        #[cfg(all(target_os = "windows", target_arch = "x86"))]
+        $vis extern "stdcall" fn $name<T, I>($this: $this_ty) $(-> $ret)? $body
 
-    obj.ref_count.fetch_add(1, Ordering::Relaxed);
+        #[cfg(not(all(target_os = "windows", target_arch = "x86")))]
+        $vis extern "C" fn $name<T, I>($this: $this_ty) $(-> $ret)? $body
+    };
 }
 
-extern "C" fn has_one_ref<T, I>(this: *mut cef_base_ref_counted_t) -> i32 {
-    let obj = RcImpl::<T, I>::get(this.cast());
+ref_count_callback! {
+    fn add_ref(this: *mut cef_base_ref_counted_t) {
+        let obj = RcImpl::<T, I>::get(this.cast());
 
-    if obj.ref_count.load(Ordering::Relaxed) == 1 {
-        1
-    } else {
-        0
+        obj.ref_count.fetch_add(1, Ordering::Relaxed);
     }
 }
 
-extern "C" fn has_at_least_one_ref<T, I>(this: *mut cef_base_ref_counted_t) -> i32 {
-    let obj = RcImpl::<T, I>::get(this.cast());
+ref_count_callback! {
+    fn has_one_ref(this: *mut cef_base_ref_counted_t) -> i32 {
+        let obj = RcImpl::<T, I>::get(this.cast());
 
-    if obj.ref_count.load(Ordering::Relaxed) >= 1 {
-        1
-    } else {
-        0
+        if obj.ref_count.load(Ordering::Relaxed) == 1 {
+            1
+        } else {
+            0
+        }
     }
 }
 
-pub extern "C" fn release<T, I>(this: *mut cef_base_ref_counted_t) -> i32 {
-    let obj = RcImpl::<T, I>::get(this.cast());
+ref_count_callback! {
+    fn has_at_least_one_ref(this: *mut cef_base_ref_counted_t) -> i32 {
+        let obj = RcImpl::<T, I>::get(this.cast());
 
-    if obj.ref_count.fetch_sub(1, Ordering::Release) != 1 {
-        0
-    } else {
-        fence(Ordering::Acquire);
-        let _: Box<RcImpl<T, I>> = unsafe { Box::from_raw(this.cast()) };
-        1
+        if obj.ref_count.load(Ordering::Relaxed) >= 1 {
+            1
+        } else {
+            0
+        }
+    }
+}
+
+ref_count_callback! {
+    pub fn release(this: *mut cef_base_ref_counted_t) -> i32 {
+        let obj = RcImpl::<T, I>::get(this.cast());
+
+        if obj.ref_count.fetch_sub(1, Ordering::Release) != 1 {
+            0
+        } else {
+            fence(Ordering::Acquire);
+            let _: Box<RcImpl<T, I>> = unsafe { Box::from_raw(this.cast()) };
+            1
+        }
     }
 }
