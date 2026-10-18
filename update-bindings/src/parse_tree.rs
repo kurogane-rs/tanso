@@ -2643,12 +2643,19 @@ fn make_my_struct() -> {rust_name} {{
                 call_impl = quote! { let result = #call_impl; };
             }
 
+            // A panic must not unwind across the C ABI into CEF. Catch it at
+            // the boundary and abort, which is defined where an unwind is not.
             quote! {
                 extern #abi fn #name<I: #impl_trait, R: Rc>(#(#args),*) #output {
-                    #wrapped_args
-                    #call_impl
-                    #unwrapped_args
-                    #forward_output
+                    match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+                        #wrapped_args
+                        #call_impl
+                        #unwrapped_args
+                        #forward_output
+                    })) {
+                        Ok(value) => value,
+                        Err(_) => std::process::abort(),
+                    }
                 }
             }
         });
@@ -3198,12 +3205,20 @@ fn make_my_struct() -> {rust_name} {{
                     call_impl = quote! { let result = #call_impl; };
                 }
 
+                // A panic must not unwind across the C ABI into CEF. Catch it
+                // at the boundary and abort, which is defined where an unwind
+                // is not.
                 quote! {
                     extern #abi fn #name<I: #impl_trait, R: Rc>(#(#args),*) #output {
-                        #wrapped_args
-                        #call_impl
-                        #unwrapped_args
-                        #forward_output
+                        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+                            #wrapped_args
+                            #call_impl
+                            #unwrapped_args
+                            #forward_output
+                        })) {
+                            Ok(value) => value,
+                            Err(_) => std::process::abort(),
+                        }
                     }
                 }
             });

@@ -3620,23 +3620,36 @@ mod impl_cef_accessibility_handler_t {
         self_: *mut _cef_accessibility_handler_t,
         value: *mut _cef_value_t,
     ) {
-        let (arg_self_, arg_value) = (self_, value);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_value =
-            unsafe { arg_value.as_mut() }.map(|arg| Value(unsafe { RefGuard::from_raw(arg) }));
-        let arg_value = arg_value.as_mut();
-        ImplAccessibilityHandler::on_accessibility_tree_change(&arg_self_.interface, arg_value)
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_value) = (self_, value);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_value =
+                unsafe { arg_value.as_mut() }.map(|arg| Value(unsafe { RefGuard::from_raw(arg) }));
+            let arg_value = arg_value.as_mut();
+            ImplAccessibilityHandler::on_accessibility_tree_change(&arg_self_.interface, arg_value)
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn on_accessibility_location_change<I: ImplAccessibilityHandler, R: Rc>(
         self_: *mut _cef_accessibility_handler_t,
         value: *mut _cef_value_t,
     ) {
-        let (arg_self_, arg_value) = (self_, value);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_value =
-            unsafe { arg_value.as_mut() }.map(|arg| Value(unsafe { RefGuard::from_raw(arg) }));
-        let arg_value = arg_value.as_mut();
-        ImplAccessibilityHandler::on_accessibility_location_change(&arg_self_.interface, arg_value)
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_value) = (self_, value);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_value =
+                unsafe { arg_value.as_mut() }.map(|arg| Value(unsafe { RefGuard::from_raw(arg) }));
+            let arg_value = arg_value.as_mut();
+            ImplAccessibilityHandler::on_accessibility_location_change(
+                &arg_self_.interface,
+                arg_value,
+            )
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
 }
 impl ImplAccessibilityHandler for AccessibilityHandler {
@@ -3786,19 +3799,25 @@ mod impl_cef_dev_tools_message_observer_t {
         message: *const ::std::os::raw::c_void,
         message_size: usize,
     ) -> ::std::os::raw::c_int {
-        let (arg_self_, arg_browser, arg_message, arg_message_size) =
-            (self_, browser, message, message_size);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_browser =
-            unsafe { arg_browser.as_mut() }.map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
-        let arg_browser = arg_browser.as_mut();
-        let arg_message = (!arg_message.is_null() && arg_message_size > 0)
-            .then(|| unsafe { std::slice::from_raw_parts(arg_message.cast(), arg_message_size) });
-        ImplDevToolsMessageObserver::on_dev_tools_message(
-            &arg_self_.interface,
-            arg_browser,
-            arg_message,
-        )
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_browser, arg_message, arg_message_size) =
+                (self_, browser, message, message_size);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_browser = unsafe { arg_browser.as_mut() }
+                .map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
+            let arg_browser = arg_browser.as_mut();
+            let arg_message = (!arg_message.is_null() && arg_message_size > 0).then(|| unsafe {
+                std::slice::from_raw_parts(arg_message.cast(), arg_message_size)
+            });
+            ImplDevToolsMessageObserver::on_dev_tools_message(
+                &arg_self_.interface,
+                arg_browser,
+                arg_message,
+            )
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn on_dev_tools_method_result<I: ImplDevToolsMessageObserver, R: Rc>(
         self_: *mut _cef_dev_tools_message_observer_t,
@@ -3808,23 +3827,28 @@ mod impl_cef_dev_tools_message_observer_t {
         result: *const ::std::os::raw::c_void,
         result_size: usize,
     ) {
-        let (arg_self_, arg_browser, arg_message_id, arg_success, arg_result, arg_result_size) =
-            (self_, browser, message_id, success, result, result_size);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_browser =
-            unsafe { arg_browser.as_mut() }.map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
-        let arg_browser = arg_browser.as_mut();
-        let arg_message_id = arg_message_id.into_raw();
-        let arg_success = arg_success.into_raw();
-        let arg_result = (!arg_result.is_null() && arg_result_size > 0)
-            .then(|| unsafe { std::slice::from_raw_parts(arg_result.cast(), arg_result_size) });
-        ImplDevToolsMessageObserver::on_dev_tools_method_result(
-            &arg_self_.interface,
-            arg_browser,
-            arg_message_id,
-            arg_success,
-            arg_result,
-        )
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_browser, arg_message_id, arg_success, arg_result, arg_result_size) =
+                (self_, browser, message_id, success, result, result_size);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_browser = unsafe { arg_browser.as_mut() }
+                .map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
+            let arg_browser = arg_browser.as_mut();
+            let arg_message_id = arg_message_id.into_raw();
+            let arg_success = arg_success.into_raw();
+            let arg_result = (!arg_result.is_null() && arg_result_size > 0)
+                .then(|| unsafe { std::slice::from_raw_parts(arg_result.cast(), arg_result_size) });
+            ImplDevToolsMessageObserver::on_dev_tools_method_result(
+                &arg_self_.interface,
+                arg_browser,
+                arg_message_id,
+                arg_success,
+                arg_result,
+            )
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn on_dev_tools_event<I: ImplDevToolsMessageObserver, R: Rc>(
         self_: *mut _cef_dev_tools_message_observer_t,
@@ -3833,48 +3857,69 @@ mod impl_cef_dev_tools_message_observer_t {
         params: *const ::std::os::raw::c_void,
         params_size: usize,
     ) {
-        let (arg_self_, arg_browser, arg_method, arg_params, arg_params_size) =
-            (self_, browser, method, params, params_size);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_browser =
-            unsafe { arg_browser.as_mut() }.map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
-        let arg_browser = arg_browser.as_mut();
-        let arg_method = if arg_method.is_null() {
-            None
-        } else {
-            Some(arg_method.into())
-        };
-        let arg_method = arg_method.as_ref();
-        let arg_params = (!arg_params.is_null() && arg_params_size > 0)
-            .then(|| unsafe { std::slice::from_raw_parts(arg_params.cast(), arg_params_size) });
-        ImplDevToolsMessageObserver::on_dev_tools_event(
-            &arg_self_.interface,
-            arg_browser,
-            arg_method,
-            arg_params,
-        )
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_browser, arg_method, arg_params, arg_params_size) =
+                (self_, browser, method, params, params_size);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_browser = unsafe { arg_browser.as_mut() }
+                .map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
+            let arg_browser = arg_browser.as_mut();
+            let arg_method = if arg_method.is_null() {
+                None
+            } else {
+                Some(arg_method.into())
+            };
+            let arg_method = arg_method.as_ref();
+            let arg_params = (!arg_params.is_null() && arg_params_size > 0)
+                .then(|| unsafe { std::slice::from_raw_parts(arg_params.cast(), arg_params_size) });
+            ImplDevToolsMessageObserver::on_dev_tools_event(
+                &arg_self_.interface,
+                arg_browser,
+                arg_method,
+                arg_params,
+            )
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn on_dev_tools_agent_attached<I: ImplDevToolsMessageObserver, R: Rc>(
         self_: *mut _cef_dev_tools_message_observer_t,
         browser: *mut _cef_browser_t,
     ) {
-        let (arg_self_, arg_browser) = (self_, browser);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_browser =
-            unsafe { arg_browser.as_mut() }.map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
-        let arg_browser = arg_browser.as_mut();
-        ImplDevToolsMessageObserver::on_dev_tools_agent_attached(&arg_self_.interface, arg_browser)
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_browser) = (self_, browser);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_browser = unsafe { arg_browser.as_mut() }
+                .map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
+            let arg_browser = arg_browser.as_mut();
+            ImplDevToolsMessageObserver::on_dev_tools_agent_attached(
+                &arg_self_.interface,
+                arg_browser,
+            )
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn on_dev_tools_agent_detached<I: ImplDevToolsMessageObserver, R: Rc>(
         self_: *mut _cef_dev_tools_message_observer_t,
         browser: *mut _cef_browser_t,
     ) {
-        let (arg_self_, arg_browser) = (self_, browser);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_browser =
-            unsafe { arg_browser.as_mut() }.map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
-        let arg_browser = arg_browser.as_mut();
-        ImplDevToolsMessageObserver::on_dev_tools_agent_detached(&arg_self_.interface, arg_browser)
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_browser) = (self_, browser);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_browser = unsafe { arg_browser.as_mut() }
+                .map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
+            let arg_browser = arg_browser.as_mut();
+            ImplDevToolsMessageObserver::on_dev_tools_agent_detached(
+                &arg_self_.interface,
+                arg_browser,
+            )
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
 }
 impl ImplDevToolsMessageObserver for DevToolsMessageObserver {
@@ -4590,42 +4635,67 @@ mod impl_cef_read_handler_t {
         size: usize,
         n: usize,
     ) -> usize {
-        let (arg_self_, arg_ptr, arg_size, arg_n) = (self_, ptr, size, n);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let arg_ptr = arg_ptr.cast();
-        let arg_size = arg_size.into_raw();
-        let arg_n = arg_n.into_raw();
-        ImplReadHandler::read(&arg_self_.interface, arg_ptr, arg_size, arg_n)
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_ptr, arg_size, arg_n) = (self_, ptr, size, n);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let arg_ptr = arg_ptr.cast();
+            let arg_size = arg_size.into_raw();
+            let arg_n = arg_n.into_raw();
+            ImplReadHandler::read(&arg_self_.interface, arg_ptr, arg_size, arg_n)
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn seek<I: ImplReadHandler, R: Rc>(
         self_: *mut _cef_read_handler_t,
         offset: i64,
         whence: ::std::os::raw::c_int,
     ) -> ::std::os::raw::c_int {
-        let (arg_self_, arg_offset, arg_whence) = (self_, offset, whence);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let arg_offset = arg_offset.into_raw();
-        let arg_whence = arg_whence.into_raw();
-        ImplReadHandler::seek(&arg_self_.interface, arg_offset, arg_whence)
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_offset, arg_whence) = (self_, offset, whence);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let arg_offset = arg_offset.into_raw();
+            let arg_whence = arg_whence.into_raw();
+            ImplReadHandler::seek(&arg_self_.interface, arg_offset, arg_whence)
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn tell<I: ImplReadHandler, R: Rc>(self_: *mut _cef_read_handler_t) -> i64 {
-        let arg_self_ = self_;
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        ImplReadHandler::tell(&arg_self_.interface)
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let arg_self_ = self_;
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            ImplReadHandler::tell(&arg_self_.interface)
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn eof<I: ImplReadHandler, R: Rc>(
         self_: *mut _cef_read_handler_t,
     ) -> ::std::os::raw::c_int {
-        let arg_self_ = self_;
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        ImplReadHandler::eof(&arg_self_.interface)
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let arg_self_ = self_;
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            ImplReadHandler::eof(&arg_self_.interface)
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn may_block<I: ImplReadHandler, R: Rc>(
         self_: *mut _cef_read_handler_t,
     ) -> ::std::os::raw::c_int {
-        let arg_self_ = self_;
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        ImplReadHandler::may_block(&arg_self_.interface)
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let arg_self_ = self_;
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            ImplReadHandler::may_block(&arg_self_.interface)
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
 }
 impl ImplReadHandler for ReadHandler {
@@ -4911,42 +4981,67 @@ mod impl_cef_write_handler_t {
         size: usize,
         n: usize,
     ) -> usize {
-        let (arg_self_, arg_ptr, arg_size, arg_n) = (self_, ptr, size, n);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let arg_ptr = arg_ptr.cast();
-        let arg_size = arg_size.into_raw();
-        let arg_n = arg_n.into_raw();
-        ImplWriteHandler::write(&arg_self_.interface, arg_ptr, arg_size, arg_n)
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_ptr, arg_size, arg_n) = (self_, ptr, size, n);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let arg_ptr = arg_ptr.cast();
+            let arg_size = arg_size.into_raw();
+            let arg_n = arg_n.into_raw();
+            ImplWriteHandler::write(&arg_self_.interface, arg_ptr, arg_size, arg_n)
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn seek<I: ImplWriteHandler, R: Rc>(
         self_: *mut _cef_write_handler_t,
         offset: i64,
         whence: ::std::os::raw::c_int,
     ) -> ::std::os::raw::c_int {
-        let (arg_self_, arg_offset, arg_whence) = (self_, offset, whence);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let arg_offset = arg_offset.into_raw();
-        let arg_whence = arg_whence.into_raw();
-        ImplWriteHandler::seek(&arg_self_.interface, arg_offset, arg_whence)
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_offset, arg_whence) = (self_, offset, whence);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let arg_offset = arg_offset.into_raw();
+            let arg_whence = arg_whence.into_raw();
+            ImplWriteHandler::seek(&arg_self_.interface, arg_offset, arg_whence)
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn tell<I: ImplWriteHandler, R: Rc>(self_: *mut _cef_write_handler_t) -> i64 {
-        let arg_self_ = self_;
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        ImplWriteHandler::tell(&arg_self_.interface)
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let arg_self_ = self_;
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            ImplWriteHandler::tell(&arg_self_.interface)
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn flush<I: ImplWriteHandler, R: Rc>(
         self_: *mut _cef_write_handler_t,
     ) -> ::std::os::raw::c_int {
-        let arg_self_ = self_;
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        ImplWriteHandler::flush(&arg_self_.interface)
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let arg_self_ = self_;
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            ImplWriteHandler::flush(&arg_self_.interface)
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn may_block<I: ImplWriteHandler, R: Rc>(
         self_: *mut _cef_write_handler_t,
     ) -> ::std::os::raw::c_int {
-        let arg_self_ = self_;
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        ImplWriteHandler::may_block(&arg_self_.interface)
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let arg_self_ = self_;
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            ImplWriteHandler::may_block(&arg_self_.interface)
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
 }
 impl ImplWriteHandler for WriteHandler {
@@ -5648,12 +5743,17 @@ mod impl_cef_domvisitor_t {
         self_: *mut _cef_domvisitor_t,
         document: *mut _cef_domdocument_t,
     ) {
-        let (arg_self_, arg_document) = (self_, document);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_document = unsafe { arg_document.as_mut() }
-            .map(|arg| Domdocument(unsafe { RefGuard::from_raw(arg) }));
-        let arg_document = arg_document.as_mut();
-        ImplDomvisitor::visit(&arg_self_.interface, arg_document)
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_document) = (self_, document);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_document = unsafe { arg_document.as_mut() }
+                .map(|arg| Domdocument(unsafe { RefGuard::from_raw(arg) }));
+            let arg_document = arg_document.as_mut();
+            ImplDomvisitor::visit(&arg_self_.interface, arg_document)
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
 }
 impl ImplDomvisitor for Domvisitor {
@@ -7453,15 +7553,20 @@ mod impl_cef_string_visitor_t {
         self_: *mut _cef_string_visitor_t,
         string: *const cef_string_t,
     ) {
-        let (arg_self_, arg_string) = (self_, string);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let arg_string = if arg_string.is_null() {
-            None
-        } else {
-            Some(arg_string.into())
-        };
-        let arg_string = arg_string.as_ref();
-        ImplCefStringVisitor::visit(&arg_self_.interface, arg_string)
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_string) = (self_, string);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let arg_string = if arg_string.is_null() {
+                None
+            } else {
+                Some(arg_string.into())
+            };
+            let arg_string = arg_string.as_ref();
+            ImplCefStringVisitor::visit(&arg_self_.interface, arg_string)
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
 }
 impl ImplCefStringVisitor for CefStringVisitor {
@@ -8824,9 +8929,14 @@ mod impl_cef_completion_callback_t {
     extern "C" fn on_complete<I: ImplCompletionCallback, R: Rc>(
         self_: *mut _cef_completion_callback_t,
     ) {
-        let arg_self_ = self_;
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        ImplCompletionCallback::on_complete(&arg_self_.interface)
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let arg_self_ = self_;
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            ImplCompletionCallback::on_complete(&arg_self_.interface)
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
 }
 impl ImplCompletionCallback for CompletionCallback {
@@ -9124,32 +9234,37 @@ mod impl_cef_cookie_visitor_t {
         total: ::std::os::raw::c_int,
         delete_cookie: *mut ::std::os::raw::c_int,
     ) -> ::std::os::raw::c_int {
-        let (arg_self_, arg_cookie, arg_count, arg_total, arg_delete_cookie) =
-            (self_, cookie, count, total, delete_cookie);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let arg_cookie = if arg_cookie.is_null() {
-            None
-        } else {
-            Some(WrapParamRef::<Cookie, _>::from(arg_cookie))
-        };
-        let arg_cookie = arg_cookie.as_ref().map(|arg| arg.as_ref());
-        let arg_count = arg_count.into_raw();
-        let arg_total = arg_total.into_raw();
-        let mut arg_delete_cookie = if arg_delete_cookie.is_null() {
-            None
-        } else {
-            Some(WrapParamRef::<::std::os::raw::c_int, _>::from(
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_cookie, arg_count, arg_total, arg_delete_cookie) =
+                (self_, cookie, count, total, delete_cookie);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let arg_cookie = if arg_cookie.is_null() {
+                None
+            } else {
+                Some(WrapParamRef::<Cookie, _>::from(arg_cookie))
+            };
+            let arg_cookie = arg_cookie.as_ref().map(|arg| arg.as_ref());
+            let arg_count = arg_count.into_raw();
+            let arg_total = arg_total.into_raw();
+            let mut arg_delete_cookie = if arg_delete_cookie.is_null() {
+                None
+            } else {
+                Some(WrapParamRef::<::std::os::raw::c_int, _>::from(
+                    arg_delete_cookie,
+                ))
+            };
+            let arg_delete_cookie = arg_delete_cookie.as_mut().map(|arg| arg.as_mut());
+            ImplCookieVisitor::visit(
+                &arg_self_.interface,
+                arg_cookie,
+                arg_count,
+                arg_total,
                 arg_delete_cookie,
-            ))
-        };
-        let arg_delete_cookie = arg_delete_cookie.as_mut().map(|arg| arg.as_mut());
-        ImplCookieVisitor::visit(
-            &arg_self_.interface,
-            arg_cookie,
-            arg_count,
-            arg_total,
-            arg_delete_cookie,
-        )
+            )
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
 }
 impl ImplCookieVisitor for CookieVisitor {
@@ -9265,10 +9380,15 @@ mod impl_cef_set_cookie_callback_t {
         self_: *mut _cef_set_cookie_callback_t,
         success: ::std::os::raw::c_int,
     ) {
-        let (arg_self_, arg_success) = (self_, success);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let arg_success = arg_success.into_raw();
-        ImplSetCookieCallback::on_complete(&arg_self_.interface, arg_success)
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_success) = (self_, success);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let arg_success = arg_success.into_raw();
+            ImplSetCookieCallback::on_complete(&arg_self_.interface, arg_success)
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
 }
 impl ImplSetCookieCallback for SetCookieCallback {
@@ -9363,10 +9483,15 @@ mod impl_cef_delete_cookies_callback_t {
         self_: *mut _cef_delete_cookies_callback_t,
         num_deleted: ::std::os::raw::c_int,
     ) {
-        let (arg_self_, arg_num_deleted) = (self_, num_deleted);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let arg_num_deleted = arg_num_deleted.into_raw();
-        ImplDeleteCookiesCallback::on_complete(&arg_self_.interface, arg_num_deleted)
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_num_deleted) = (self_, num_deleted);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let arg_num_deleted = arg_num_deleted.into_raw();
+            ImplDeleteCookiesCallback::on_complete(&arg_self_.interface, arg_num_deleted)
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
 }
 impl ImplDeleteCookiesCallback for DeleteCookiesCallback {
@@ -9622,59 +9747,75 @@ mod impl_cef_media_observer_t {
         sinks_count: usize,
         sinks: *const *mut _cef_media_sink_t,
     ) {
-        let (arg_self_, arg_sinks_count, arg_sinks) = (self_, sinks_count, sinks);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let vec_sinks = unsafe { arg_sinks.as_ref() }.map(|arg| {
-            let arg =
-                unsafe { std::slice::from_raw_parts(std::ptr::from_ref(arg), arg_sinks_count) };
-            arg.iter()
-                .map(|arg| {
-                    if arg.is_null() {
-                        None
-                    } else {
-                        Some(MediaSink(unsafe { RefGuard::from_raw(*arg) }))
-                    }
-                })
-                .collect::<Vec<_>>()
-        });
-        let arg_sinks = vec_sinks.as_deref();
-        ImplMediaObserver::on_sinks(&arg_self_.interface, arg_sinks)
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_sinks_count, arg_sinks) = (self_, sinks_count, sinks);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let vec_sinks = unsafe { arg_sinks.as_ref() }.map(|arg| {
+                let arg =
+                    unsafe { std::slice::from_raw_parts(std::ptr::from_ref(arg), arg_sinks_count) };
+                arg.iter()
+                    .map(|arg| {
+                        if arg.is_null() {
+                            None
+                        } else {
+                            Some(MediaSink(unsafe { RefGuard::from_raw(*arg) }))
+                        }
+                    })
+                    .collect::<Vec<_>>()
+            });
+            let arg_sinks = vec_sinks.as_deref();
+            ImplMediaObserver::on_sinks(&arg_self_.interface, arg_sinks)
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn on_routes<I: ImplMediaObserver, R: Rc>(
         self_: *mut _cef_media_observer_t,
         routes_count: usize,
         routes: *const *mut _cef_media_route_t,
     ) {
-        let (arg_self_, arg_routes_count, arg_routes) = (self_, routes_count, routes);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let vec_routes = unsafe { arg_routes.as_ref() }.map(|arg| {
-            let arg =
-                unsafe { std::slice::from_raw_parts(std::ptr::from_ref(arg), arg_routes_count) };
-            arg.iter()
-                .map(|arg| {
-                    if arg.is_null() {
-                        None
-                    } else {
-                        Some(MediaRoute(unsafe { RefGuard::from_raw(*arg) }))
-                    }
-                })
-                .collect::<Vec<_>>()
-        });
-        let arg_routes = vec_routes.as_deref();
-        ImplMediaObserver::on_routes(&arg_self_.interface, arg_routes)
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_routes_count, arg_routes) = (self_, routes_count, routes);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let vec_routes = unsafe { arg_routes.as_ref() }.map(|arg| {
+                let arg = unsafe {
+                    std::slice::from_raw_parts(std::ptr::from_ref(arg), arg_routes_count)
+                };
+                arg.iter()
+                    .map(|arg| {
+                        if arg.is_null() {
+                            None
+                        } else {
+                            Some(MediaRoute(unsafe { RefGuard::from_raw(*arg) }))
+                        }
+                    })
+                    .collect::<Vec<_>>()
+            });
+            let arg_routes = vec_routes.as_deref();
+            ImplMediaObserver::on_routes(&arg_self_.interface, arg_routes)
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn on_route_state_changed<I: ImplMediaObserver, R: Rc>(
         self_: *mut _cef_media_observer_t,
         route: *mut _cef_media_route_t,
         state: cef_media_route_connection_state_t,
     ) {
-        let (arg_self_, arg_route, arg_state) = (self_, route, state);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_route =
-            unsafe { arg_route.as_mut() }.map(|arg| MediaRoute(unsafe { RefGuard::from_raw(arg) }));
-        let arg_route = arg_route.as_mut();
-        let arg_state = arg_state.into_raw();
-        ImplMediaObserver::on_route_state_changed(&arg_self_.interface, arg_route, arg_state)
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_route, arg_state) = (self_, route, state);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_route = unsafe { arg_route.as_mut() }
+                .map(|arg| MediaRoute(unsafe { RefGuard::from_raw(arg) }));
+            let arg_route = arg_route.as_mut();
+            let arg_state = arg_state.into_raw();
+            ImplMediaObserver::on_route_state_changed(&arg_self_.interface, arg_route, arg_state)
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn on_route_message_received<I: ImplMediaObserver, R: Rc>(
         self_: *mut _cef_media_observer_t,
@@ -9682,15 +9823,25 @@ mod impl_cef_media_observer_t {
         message: *const ::std::os::raw::c_void,
         message_size: usize,
     ) {
-        let (arg_self_, arg_route, arg_message, arg_message_size) =
-            (self_, route, message, message_size);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_route =
-            unsafe { arg_route.as_mut() }.map(|arg| MediaRoute(unsafe { RefGuard::from_raw(arg) }));
-        let arg_route = arg_route.as_mut();
-        let arg_message = (!arg_message.is_null() && arg_message_size > 0)
-            .then(|| unsafe { std::slice::from_raw_parts(arg_message.cast(), arg_message_size) });
-        ImplMediaObserver::on_route_message_received(&arg_self_.interface, arg_route, arg_message)
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_route, arg_message, arg_message_size) =
+                (self_, route, message, message_size);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_route = unsafe { arg_route.as_mut() }
+                .map(|arg| MediaRoute(unsafe { RefGuard::from_raw(arg) }));
+            let arg_route = arg_route.as_mut();
+            let arg_message = (!arg_message.is_null() && arg_message_size > 0).then(|| unsafe {
+                std::slice::from_raw_parts(arg_message.cast(), arg_message_size)
+            });
+            ImplMediaObserver::on_route_message_received(
+                &arg_self_.interface,
+                arg_route,
+                arg_message,
+            )
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
 }
 impl ImplMediaObserver for MediaObserver {
@@ -10021,24 +10172,29 @@ mod impl_cef_media_route_create_callback_t {
         error: *const cef_string_t,
         route: *mut _cef_media_route_t,
     ) {
-        let (arg_self_, arg_result, arg_error, arg_route) = (self_, result, error, route);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let arg_result = arg_result.into_raw();
-        let arg_error = if arg_error.is_null() {
-            None
-        } else {
-            Some(arg_error.into())
-        };
-        let arg_error = arg_error.as_ref();
-        let mut arg_route =
-            unsafe { arg_route.as_mut() }.map(|arg| MediaRoute(unsafe { RefGuard::from_raw(arg) }));
-        let arg_route = arg_route.as_mut();
-        ImplMediaRouteCreateCallback::on_media_route_create_finished(
-            &arg_self_.interface,
-            arg_result,
-            arg_error,
-            arg_route,
-        )
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_result, arg_error, arg_route) = (self_, result, error, route);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let arg_result = arg_result.into_raw();
+            let arg_error = if arg_error.is_null() {
+                None
+            } else {
+                Some(arg_error.into())
+            };
+            let arg_error = arg_error.as_ref();
+            let mut arg_route = unsafe { arg_route.as_mut() }
+                .map(|arg| MediaRoute(unsafe { RefGuard::from_raw(arg) }));
+            let arg_route = arg_route.as_mut();
+            ImplMediaRouteCreateCallback::on_media_route_create_finished(
+                &arg_self_.interface,
+                arg_result,
+                arg_error,
+                arg_route,
+            )
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
 }
 impl ImplMediaRouteCreateCallback for MediaRouteCreateCallback {
@@ -10301,20 +10457,25 @@ mod impl_cef_media_sink_device_info_callback_t {
         self_: *mut _cef_media_sink_device_info_callback_t,
         device_info: *const _cef_media_sink_device_info_t,
     ) {
-        let (arg_self_, arg_device_info) = (self_, device_info);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let arg_device_info = if arg_device_info.is_null() {
-            None
-        } else {
-            Some(WrapParamRef::<MediaSinkDeviceInfo, _>::from(
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_device_info) = (self_, device_info);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let arg_device_info = if arg_device_info.is_null() {
+                None
+            } else {
+                Some(WrapParamRef::<MediaSinkDeviceInfo, _>::from(
+                    arg_device_info,
+                ))
+            };
+            let arg_device_info = arg_device_info.as_ref().map(|arg| arg.as_ref());
+            ImplMediaSinkDeviceInfoCallback::on_media_sink_device_info(
+                &arg_self_.interface,
                 arg_device_info,
-            ))
-        };
-        let arg_device_info = arg_device_info.as_ref().map(|arg| arg.as_ref());
-        ImplMediaSinkDeviceInfoCallback::on_media_sink_device_info(
-            &arg_self_.interface,
-            arg_device_info,
-        )
+            )
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
 }
 impl ImplMediaSinkDeviceInfoCallback for MediaSinkDeviceInfoCallback {
@@ -10486,18 +10647,27 @@ mod impl_cef_preference_registrar_t {
         name: *const cef_string_t,
         default_value: *mut _cef_value_t,
     ) -> ::std::os::raw::c_int {
-        let (arg_self_, arg_name, arg_default_value) = (self_, name, default_value);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let arg_name = if arg_name.is_null() {
-            None
-        } else {
-            Some(arg_name.into())
-        };
-        let arg_name = arg_name.as_ref();
-        let mut arg_default_value = unsafe { arg_default_value.as_mut() }
-            .map(|arg| Value(unsafe { RefGuard::from_raw(arg) }));
-        let arg_default_value = arg_default_value.as_mut();
-        ImplPreferenceRegistrar::add_preference(&arg_self_.interface, arg_name, arg_default_value)
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_name, arg_default_value) = (self_, name, default_value);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let arg_name = if arg_name.is_null() {
+                None
+            } else {
+                Some(arg_name.into())
+            };
+            let arg_name = arg_name.as_ref();
+            let mut arg_default_value = unsafe { arg_default_value.as_mut() }
+                .map(|arg| Value(unsafe { RefGuard::from_raw(arg) }));
+            let arg_default_value = arg_default_value.as_mut();
+            ImplPreferenceRegistrar::add_preference(
+                &arg_self_.interface,
+                arg_name,
+                arg_default_value,
+            )
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
 }
 impl ImplPreferenceRegistrar for PreferenceRegistrar {
@@ -10594,15 +10764,20 @@ mod impl_cef_preference_observer_t {
         self_: *mut _cef_preference_observer_t,
         name: *const cef_string_t,
     ) {
-        let (arg_self_, arg_name) = (self_, name);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let arg_name = if arg_name.is_null() {
-            None
-        } else {
-            Some(arg_name.into())
-        };
-        let arg_name = arg_name.as_ref();
-        ImplPreferenceObserver::on_preference_changed(&arg_self_.interface, arg_name)
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_name) = (self_, name);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let arg_name = if arg_name.is_null() {
+                None
+            } else {
+                Some(arg_name.into())
+            };
+            let arg_name = arg_name.as_ref();
+            ImplPreferenceObserver::on_preference_changed(&arg_self_.interface, arg_name)
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
 }
 impl ImplPreferenceObserver for PreferenceObserver {
@@ -10891,20 +11066,25 @@ mod impl_cef_resolve_callback_t {
         result: cef_errorcode_t,
         resolved_ips: *mut _cef_string_list_t,
     ) {
-        let (arg_self_, arg_result, arg_resolved_ips) = (self_, result, resolved_ips);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let arg_result = arg_result.into_raw();
-        let mut arg_resolved_ips = if arg_resolved_ips.is_null() {
-            None
-        } else {
-            Some(arg_resolved_ips.into())
-        };
-        let arg_resolved_ips = arg_resolved_ips.as_mut();
-        ImplResolveCallback::on_resolve_completed(
-            &arg_self_.interface,
-            arg_result,
-            arg_resolved_ips,
-        )
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_result, arg_resolved_ips) = (self_, result, resolved_ips);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let arg_result = arg_result.into_raw();
+            let mut arg_resolved_ips = if arg_resolved_ips.is_null() {
+                None
+            } else {
+                Some(arg_resolved_ips.into())
+            };
+            let arg_resolved_ips = arg_resolved_ips.as_mut();
+            ImplResolveCallback::on_resolve_completed(
+                &arg_self_.interface,
+                arg_result,
+                arg_resolved_ips,
+            )
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
 }
 impl ImplResolveCallback for ResolveCallback {
@@ -11007,28 +11187,33 @@ mod impl_cef_setting_observer_t {
         top_level_url: *const cef_string_t,
         content_type: cef_content_setting_types_t,
     ) {
-        let (arg_self_, arg_requesting_url, arg_top_level_url, arg_content_type) =
-            (self_, requesting_url, top_level_url, content_type);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let arg_requesting_url = if arg_requesting_url.is_null() {
-            None
-        } else {
-            Some(arg_requesting_url.into())
-        };
-        let arg_requesting_url = arg_requesting_url.as_ref();
-        let arg_top_level_url = if arg_top_level_url.is_null() {
-            None
-        } else {
-            Some(arg_top_level_url.into())
-        };
-        let arg_top_level_url = arg_top_level_url.as_ref();
-        let arg_content_type = arg_content_type.into_raw();
-        ImplSettingObserver::on_setting_changed(
-            &arg_self_.interface,
-            arg_requesting_url,
-            arg_top_level_url,
-            arg_content_type,
-        )
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_requesting_url, arg_top_level_url, arg_content_type) =
+                (self_, requesting_url, top_level_url, content_type);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let arg_requesting_url = if arg_requesting_url.is_null() {
+                None
+            } else {
+                Some(arg_requesting_url.into())
+            };
+            let arg_requesting_url = arg_requesting_url.as_ref();
+            let arg_top_level_url = if arg_top_level_url.is_null() {
+                None
+            } else {
+                Some(arg_top_level_url.into())
+            };
+            let arg_top_level_url = arg_top_level_url.as_ref();
+            let arg_content_type = arg_content_type.into_raw();
+            ImplSettingObserver::on_setting_changed(
+                &arg_self_.interface,
+                arg_requesting_url,
+                arg_top_level_url,
+                arg_content_type,
+            )
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
 }
 impl ImplSettingObserver for SettingObserver {
@@ -12095,15 +12280,23 @@ mod impl_cef_run_file_dialog_callback_t {
         self_: *mut _cef_run_file_dialog_callback_t,
         file_paths: *mut _cef_string_list_t,
     ) {
-        let (arg_self_, arg_file_paths) = (self_, file_paths);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_file_paths = if arg_file_paths.is_null() {
-            None
-        } else {
-            Some(arg_file_paths.into())
-        };
-        let arg_file_paths = arg_file_paths.as_mut();
-        ImplRunFileDialogCallback::on_file_dialog_dismissed(&arg_self_.interface, arg_file_paths)
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_file_paths) = (self_, file_paths);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_file_paths = if arg_file_paths.is_null() {
+                None
+            } else {
+                Some(arg_file_paths.into())
+            };
+            let arg_file_paths = arg_file_paths.as_mut();
+            ImplRunFileDialogCallback::on_file_dialog_dismissed(
+                &arg_self_.interface,
+                arg_file_paths,
+            )
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
 }
 impl ImplRunFileDialogCallback for RunFileDialogCallback {
@@ -12212,22 +12405,27 @@ mod impl_cef_navigation_entry_visitor_t {
         index: ::std::os::raw::c_int,
         total: ::std::os::raw::c_int,
     ) -> ::std::os::raw::c_int {
-        let (arg_self_, arg_entry, arg_current, arg_index, arg_total) =
-            (self_, entry, current, index, total);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_entry = unsafe { arg_entry.as_mut() }
-            .map(|arg| NavigationEntry(unsafe { RefGuard::from_raw(arg) }));
-        let arg_entry = arg_entry.as_mut();
-        let arg_current = arg_current.into_raw();
-        let arg_index = arg_index.into_raw();
-        let arg_total = arg_total.into_raw();
-        ImplNavigationEntryVisitor::visit(
-            &arg_self_.interface,
-            arg_entry,
-            arg_current,
-            arg_index,
-            arg_total,
-        )
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_entry, arg_current, arg_index, arg_total) =
+                (self_, entry, current, index, total);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_entry = unsafe { arg_entry.as_mut() }
+                .map(|arg| NavigationEntry(unsafe { RefGuard::from_raw(arg) }));
+            let arg_entry = arg_entry.as_mut();
+            let arg_current = arg_current.into_raw();
+            let arg_index = arg_index.into_raw();
+            let arg_total = arg_total.into_raw();
+            ImplNavigationEntryVisitor::visit(
+                &arg_self_.interface,
+                arg_entry,
+                arg_current,
+                arg_index,
+                arg_total,
+            )
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
 }
 impl ImplNavigationEntryVisitor for NavigationEntryVisitor {
@@ -12336,16 +12534,21 @@ mod impl_cef_pdf_print_callback_t {
         path: *const cef_string_t,
         ok: ::std::os::raw::c_int,
     ) {
-        let (arg_self_, arg_path, arg_ok) = (self_, path, ok);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let arg_path = if arg_path.is_null() {
-            None
-        } else {
-            Some(arg_path.into())
-        };
-        let arg_path = arg_path.as_ref();
-        let arg_ok = arg_ok.into_raw();
-        ImplPdfPrintCallback::on_pdf_print_finished(&arg_self_.interface, arg_path, arg_ok)
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_path, arg_ok) = (self_, path, ok);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let arg_path = if arg_path.is_null() {
+                None
+            } else {
+                Some(arg_path.into())
+            };
+            let arg_path = arg_path.as_ref();
+            let arg_ok = arg_ok.into_raw();
+            ImplPdfPrintCallback::on_pdf_print_finished(&arg_self_.interface, arg_path, arg_ok)
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
 }
 impl ImplPdfPrintCallback for PdfPrintCallback {
@@ -12451,25 +12654,30 @@ mod impl_cef_download_image_callback_t {
         http_status_code: ::std::os::raw::c_int,
         image: *mut _cef_image_t,
     ) {
-        let (arg_self_, arg_image_url, arg_http_status_code, arg_image) =
-            (self_, image_url, http_status_code, image);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let arg_image_url = if arg_image_url.is_null() {
-            None
-        } else {
-            Some(arg_image_url.into())
-        };
-        let arg_image_url = arg_image_url.as_ref();
-        let arg_http_status_code = arg_http_status_code.into_raw();
-        let mut arg_image =
-            unsafe { arg_image.as_mut() }.map(|arg| Image(unsafe { RefGuard::from_raw(arg) }));
-        let arg_image = arg_image.as_mut();
-        ImplDownloadImageCallback::on_download_image_finished(
-            &arg_self_.interface,
-            arg_image_url,
-            arg_http_status_code,
-            arg_image,
-        )
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_image_url, arg_http_status_code, arg_image) =
+                (self_, image_url, http_status_code, image);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let arg_image_url = if arg_image_url.is_null() {
+                None
+            } else {
+                Some(arg_image_url.into())
+            };
+            let arg_image_url = arg_image_url.as_ref();
+            let arg_http_status_code = arg_http_status_code.into_raw();
+            let mut arg_image =
+                unsafe { arg_image.as_mut() }.map(|arg| Image(unsafe { RefGuard::from_raw(arg) }));
+            let arg_image = arg_image.as_mut();
+            ImplDownloadImageCallback::on_download_image_finished(
+                &arg_self_.interface,
+                arg_image_url,
+                arg_http_status_code,
+                arg_image,
+            )
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
 }
 impl ImplDownloadImageCallback for DownloadImageCallback {
@@ -13942,18 +14150,23 @@ mod impl_cef_audio_handler_t {
         browser: *mut _cef_browser_t,
         params: *mut _cef_audio_parameters_t,
     ) -> ::std::os::raw::c_int {
-        let (arg_self_, arg_browser, arg_params) = (self_, browser, params);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_browser =
-            unsafe { arg_browser.as_mut() }.map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
-        let arg_browser = arg_browser.as_mut();
-        let mut arg_params = if arg_params.is_null() {
-            None
-        } else {
-            Some(WrapParamRef::<AudioParameters, _>::from(arg_params))
-        };
-        let arg_params = arg_params.as_mut().map(|arg| arg.as_mut());
-        ImplAudioHandler::audio_parameters(&arg_self_.interface, arg_browser, arg_params)
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_browser, arg_params) = (self_, browser, params);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_browser = unsafe { arg_browser.as_mut() }
+                .map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
+            let arg_browser = arg_browser.as_mut();
+            let mut arg_params = if arg_params.is_null() {
+                None
+            } else {
+                Some(WrapParamRef::<AudioParameters, _>::from(arg_params))
+            };
+            let arg_params = arg_params.as_mut().map(|arg| arg.as_mut());
+            ImplAudioHandler::audio_parameters(&arg_self_.interface, arg_browser, arg_params)
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn on_audio_stream_started<I: ImplAudioHandler, R: Rc>(
         self_: *mut _cef_audio_handler_t,
@@ -13961,24 +14174,30 @@ mod impl_cef_audio_handler_t {
         params: *const _cef_audio_parameters_t,
         channels: ::std::os::raw::c_int,
     ) {
-        let (arg_self_, arg_browser, arg_params, arg_channels) = (self_, browser, params, channels);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_browser =
-            unsafe { arg_browser.as_mut() }.map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
-        let arg_browser = arg_browser.as_mut();
-        let arg_params = if arg_params.is_null() {
-            None
-        } else {
-            Some(WrapParamRef::<AudioParameters, _>::from(arg_params))
-        };
-        let arg_params = arg_params.as_ref().map(|arg| arg.as_ref());
-        let arg_channels = arg_channels.into_raw();
-        ImplAudioHandler::on_audio_stream_started(
-            &arg_self_.interface,
-            arg_browser,
-            arg_params,
-            arg_channels,
-        )
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_browser, arg_params, arg_channels) =
+                (self_, browser, params, channels);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_browser = unsafe { arg_browser.as_mut() }
+                .map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
+            let arg_browser = arg_browser.as_mut();
+            let arg_params = if arg_params.is_null() {
+                None
+            } else {
+                Some(WrapParamRef::<AudioParameters, _>::from(arg_params))
+            };
+            let arg_params = arg_params.as_ref().map(|arg| arg.as_ref());
+            let arg_channels = arg_channels.into_raw();
+            ImplAudioHandler::on_audio_stream_started(
+                &arg_self_.interface,
+                arg_browser,
+                arg_params,
+                arg_channels,
+            )
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn on_audio_stream_packet<I: ImplAudioHandler, R: Rc>(
         self_: *mut _cef_audio_handler_t,
@@ -13987,51 +14206,66 @@ mod impl_cef_audio_handler_t {
         frames: ::std::os::raw::c_int,
         pts: i64,
     ) {
-        let (arg_self_, arg_browser, arg_data, arg_frames, arg_pts) =
-            (self_, browser, data, frames, pts);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_browser =
-            unsafe { arg_browser.as_mut() }.map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
-        let arg_browser = arg_browser.as_mut();
-        let arg_data = arg_data.into_raw();
-        let arg_frames = arg_frames.into_raw();
-        let arg_pts = arg_pts.into_raw();
-        ImplAudioHandler::on_audio_stream_packet(
-            &arg_self_.interface,
-            arg_browser,
-            arg_data,
-            arg_frames,
-            arg_pts,
-        )
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_browser, arg_data, arg_frames, arg_pts) =
+                (self_, browser, data, frames, pts);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_browser = unsafe { arg_browser.as_mut() }
+                .map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
+            let arg_browser = arg_browser.as_mut();
+            let arg_data = arg_data.into_raw();
+            let arg_frames = arg_frames.into_raw();
+            let arg_pts = arg_pts.into_raw();
+            ImplAudioHandler::on_audio_stream_packet(
+                &arg_self_.interface,
+                arg_browser,
+                arg_data,
+                arg_frames,
+                arg_pts,
+            )
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn on_audio_stream_stopped<I: ImplAudioHandler, R: Rc>(
         self_: *mut _cef_audio_handler_t,
         browser: *mut _cef_browser_t,
     ) {
-        let (arg_self_, arg_browser) = (self_, browser);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_browser =
-            unsafe { arg_browser.as_mut() }.map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
-        let arg_browser = arg_browser.as_mut();
-        ImplAudioHandler::on_audio_stream_stopped(&arg_self_.interface, arg_browser)
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_browser) = (self_, browser);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_browser = unsafe { arg_browser.as_mut() }
+                .map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
+            let arg_browser = arg_browser.as_mut();
+            ImplAudioHandler::on_audio_stream_stopped(&arg_self_.interface, arg_browser)
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn on_audio_stream_error<I: ImplAudioHandler, R: Rc>(
         self_: *mut _cef_audio_handler_t,
         browser: *mut _cef_browser_t,
         message: *const cef_string_t,
     ) {
-        let (arg_self_, arg_browser, arg_message) = (self_, browser, message);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_browser =
-            unsafe { arg_browser.as_mut() }.map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
-        let arg_browser = arg_browser.as_mut();
-        let arg_message = if arg_message.is_null() {
-            None
-        } else {
-            Some(arg_message.into())
-        };
-        let arg_message = arg_message.as_ref();
-        ImplAudioHandler::on_audio_stream_error(&arg_self_.interface, arg_browser, arg_message)
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_browser, arg_message) = (self_, browser, message);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_browser = unsafe { arg_browser.as_mut() }
+                .map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
+            let arg_browser = arg_browser.as_mut();
+            let arg_message = if arg_message.is_null() {
+                None
+            } else {
+                Some(arg_message.into())
+            };
+            let arg_message = arg_message.as_ref();
+            ImplAudioHandler::on_audio_stream_error(&arg_self_.interface, arg_browser, arg_message)
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
 }
 impl ImplAudioHandler for AudioHandler {
@@ -14265,72 +14499,103 @@ mod impl_cef_command_handler_t {
         command_id: ::std::os::raw::c_int,
         disposition: cef_window_open_disposition_t,
     ) -> ::std::os::raw::c_int {
-        let (arg_self_, arg_browser, arg_command_id, arg_disposition) =
-            (self_, browser, command_id, disposition);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_browser =
-            unsafe { arg_browser.as_mut() }.map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
-        let arg_browser = arg_browser.as_mut();
-        let arg_command_id = arg_command_id.into_raw();
-        let arg_disposition = arg_disposition.into_raw();
-        ImplCommandHandler::on_chrome_command(
-            &arg_self_.interface,
-            arg_browser,
-            arg_command_id,
-            arg_disposition,
-        )
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_browser, arg_command_id, arg_disposition) =
+                (self_, browser, command_id, disposition);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_browser = unsafe { arg_browser.as_mut() }
+                .map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
+            let arg_browser = arg_browser.as_mut();
+            let arg_command_id = arg_command_id.into_raw();
+            let arg_disposition = arg_disposition.into_raw();
+            ImplCommandHandler::on_chrome_command(
+                &arg_self_.interface,
+                arg_browser,
+                arg_command_id,
+                arg_disposition,
+            )
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn is_chrome_app_menu_item_visible<I: ImplCommandHandler, R: Rc>(
         self_: *mut _cef_command_handler_t,
         browser: *mut _cef_browser_t,
         command_id: ::std::os::raw::c_int,
     ) -> ::std::os::raw::c_int {
-        let (arg_self_, arg_browser, arg_command_id) = (self_, browser, command_id);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_browser =
-            unsafe { arg_browser.as_mut() }.map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
-        let arg_browser = arg_browser.as_mut();
-        let arg_command_id = arg_command_id.into_raw();
-        ImplCommandHandler::is_chrome_app_menu_item_visible(
-            &arg_self_.interface,
-            arg_browser,
-            arg_command_id,
-        )
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_browser, arg_command_id) = (self_, browser, command_id);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_browser = unsafe { arg_browser.as_mut() }
+                .map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
+            let arg_browser = arg_browser.as_mut();
+            let arg_command_id = arg_command_id.into_raw();
+            ImplCommandHandler::is_chrome_app_menu_item_visible(
+                &arg_self_.interface,
+                arg_browser,
+                arg_command_id,
+            )
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn is_chrome_app_menu_item_enabled<I: ImplCommandHandler, R: Rc>(
         self_: *mut _cef_command_handler_t,
         browser: *mut _cef_browser_t,
         command_id: ::std::os::raw::c_int,
     ) -> ::std::os::raw::c_int {
-        let (arg_self_, arg_browser, arg_command_id) = (self_, browser, command_id);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_browser =
-            unsafe { arg_browser.as_mut() }.map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
-        let arg_browser = arg_browser.as_mut();
-        let arg_command_id = arg_command_id.into_raw();
-        ImplCommandHandler::is_chrome_app_menu_item_enabled(
-            &arg_self_.interface,
-            arg_browser,
-            arg_command_id,
-        )
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_browser, arg_command_id) = (self_, browser, command_id);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_browser = unsafe { arg_browser.as_mut() }
+                .map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
+            let arg_browser = arg_browser.as_mut();
+            let arg_command_id = arg_command_id.into_raw();
+            ImplCommandHandler::is_chrome_app_menu_item_enabled(
+                &arg_self_.interface,
+                arg_browser,
+                arg_command_id,
+            )
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn is_chrome_page_action_icon_visible<I: ImplCommandHandler, R: Rc>(
         self_: *mut _cef_command_handler_t,
         icon_type: cef_chrome_page_action_icon_type_t,
     ) -> ::std::os::raw::c_int {
-        let (arg_self_, arg_icon_type) = (self_, icon_type);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let arg_icon_type = arg_icon_type.into_raw();
-        ImplCommandHandler::is_chrome_page_action_icon_visible(&arg_self_.interface, arg_icon_type)
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_icon_type) = (self_, icon_type);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let arg_icon_type = arg_icon_type.into_raw();
+            ImplCommandHandler::is_chrome_page_action_icon_visible(
+                &arg_self_.interface,
+                arg_icon_type,
+            )
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn is_chrome_toolbar_button_visible<I: ImplCommandHandler, R: Rc>(
         self_: *mut _cef_command_handler_t,
         button_type: cef_chrome_toolbar_button_type_t,
     ) -> ::std::os::raw::c_int {
-        let (arg_self_, arg_button_type) = (self_, button_type);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let arg_button_type = arg_button_type.into_raw();
-        ImplCommandHandler::is_chrome_toolbar_button_visible(&arg_self_.interface, arg_button_type)
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_button_type) = (self_, button_type);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let arg_button_type = arg_button_type.into_raw();
+            ImplCommandHandler::is_chrome_toolbar_button_visible(
+                &arg_self_.interface,
+                arg_button_type,
+            )
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
 }
 impl ImplCommandHandler for CommandHandler {
@@ -14561,116 +14826,151 @@ mod impl_cef_menu_model_delegate_t {
         command_id: ::std::os::raw::c_int,
         event_flags: cef_event_flags_t,
     ) {
-        let (arg_self_, arg_menu_model, arg_command_id, arg_event_flags) =
-            (self_, menu_model, command_id, event_flags);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_menu_model = unsafe { arg_menu_model.as_mut() }
-            .map(|arg| MenuModel(unsafe { RefGuard::from_raw(arg) }));
-        let arg_menu_model = arg_menu_model.as_mut();
-        let arg_command_id = arg_command_id.into_raw();
-        let arg_event_flags = arg_event_flags.into_raw();
-        ImplMenuModelDelegate::execute_command(
-            &arg_self_.interface,
-            arg_menu_model,
-            arg_command_id,
-            arg_event_flags,
-        )
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_menu_model, arg_command_id, arg_event_flags) =
+                (self_, menu_model, command_id, event_flags);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_menu_model = unsafe { arg_menu_model.as_mut() }
+                .map(|arg| MenuModel(unsafe { RefGuard::from_raw(arg) }));
+            let arg_menu_model = arg_menu_model.as_mut();
+            let arg_command_id = arg_command_id.into_raw();
+            let arg_event_flags = arg_event_flags.into_raw();
+            ImplMenuModelDelegate::execute_command(
+                &arg_self_.interface,
+                arg_menu_model,
+                arg_command_id,
+                arg_event_flags,
+            )
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn mouse_outside_menu<I: ImplMenuModelDelegate, R: Rc>(
         self_: *mut _cef_menu_model_delegate_t,
         menu_model: *mut _cef_menu_model_t,
         screen_point: *const _cef_point_t,
     ) {
-        let (arg_self_, arg_menu_model, arg_screen_point) = (self_, menu_model, screen_point);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_menu_model = unsafe { arg_menu_model.as_mut() }
-            .map(|arg| MenuModel(unsafe { RefGuard::from_raw(arg) }));
-        let arg_menu_model = arg_menu_model.as_mut();
-        let arg_screen_point = if arg_screen_point.is_null() {
-            None
-        } else {
-            Some(WrapParamRef::<Point, _>::from(arg_screen_point))
-        };
-        let arg_screen_point = arg_screen_point.as_ref().map(|arg| arg.as_ref());
-        ImplMenuModelDelegate::mouse_outside_menu(
-            &arg_self_.interface,
-            arg_menu_model,
-            arg_screen_point,
-        )
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_menu_model, arg_screen_point) = (self_, menu_model, screen_point);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_menu_model = unsafe { arg_menu_model.as_mut() }
+                .map(|arg| MenuModel(unsafe { RefGuard::from_raw(arg) }));
+            let arg_menu_model = arg_menu_model.as_mut();
+            let arg_screen_point = if arg_screen_point.is_null() {
+                None
+            } else {
+                Some(WrapParamRef::<Point, _>::from(arg_screen_point))
+            };
+            let arg_screen_point = arg_screen_point.as_ref().map(|arg| arg.as_ref());
+            ImplMenuModelDelegate::mouse_outside_menu(
+                &arg_self_.interface,
+                arg_menu_model,
+                arg_screen_point,
+            )
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn unhandled_open_submenu<I: ImplMenuModelDelegate, R: Rc>(
         self_: *mut _cef_menu_model_delegate_t,
         menu_model: *mut _cef_menu_model_t,
         is_rtl: ::std::os::raw::c_int,
     ) {
-        let (arg_self_, arg_menu_model, arg_is_rtl) = (self_, menu_model, is_rtl);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_menu_model = unsafe { arg_menu_model.as_mut() }
-            .map(|arg| MenuModel(unsafe { RefGuard::from_raw(arg) }));
-        let arg_menu_model = arg_menu_model.as_mut();
-        let arg_is_rtl = arg_is_rtl.into_raw();
-        ImplMenuModelDelegate::unhandled_open_submenu(
-            &arg_self_.interface,
-            arg_menu_model,
-            arg_is_rtl,
-        )
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_menu_model, arg_is_rtl) = (self_, menu_model, is_rtl);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_menu_model = unsafe { arg_menu_model.as_mut() }
+                .map(|arg| MenuModel(unsafe { RefGuard::from_raw(arg) }));
+            let arg_menu_model = arg_menu_model.as_mut();
+            let arg_is_rtl = arg_is_rtl.into_raw();
+            ImplMenuModelDelegate::unhandled_open_submenu(
+                &arg_self_.interface,
+                arg_menu_model,
+                arg_is_rtl,
+            )
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn unhandled_close_submenu<I: ImplMenuModelDelegate, R: Rc>(
         self_: *mut _cef_menu_model_delegate_t,
         menu_model: *mut _cef_menu_model_t,
         is_rtl: ::std::os::raw::c_int,
     ) {
-        let (arg_self_, arg_menu_model, arg_is_rtl) = (self_, menu_model, is_rtl);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_menu_model = unsafe { arg_menu_model.as_mut() }
-            .map(|arg| MenuModel(unsafe { RefGuard::from_raw(arg) }));
-        let arg_menu_model = arg_menu_model.as_mut();
-        let arg_is_rtl = arg_is_rtl.into_raw();
-        ImplMenuModelDelegate::unhandled_close_submenu(
-            &arg_self_.interface,
-            arg_menu_model,
-            arg_is_rtl,
-        )
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_menu_model, arg_is_rtl) = (self_, menu_model, is_rtl);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_menu_model = unsafe { arg_menu_model.as_mut() }
+                .map(|arg| MenuModel(unsafe { RefGuard::from_raw(arg) }));
+            let arg_menu_model = arg_menu_model.as_mut();
+            let arg_is_rtl = arg_is_rtl.into_raw();
+            ImplMenuModelDelegate::unhandled_close_submenu(
+                &arg_self_.interface,
+                arg_menu_model,
+                arg_is_rtl,
+            )
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn menu_will_show<I: ImplMenuModelDelegate, R: Rc>(
         self_: *mut _cef_menu_model_delegate_t,
         menu_model: *mut _cef_menu_model_t,
     ) {
-        let (arg_self_, arg_menu_model) = (self_, menu_model);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_menu_model = unsafe { arg_menu_model.as_mut() }
-            .map(|arg| MenuModel(unsafe { RefGuard::from_raw(arg) }));
-        let arg_menu_model = arg_menu_model.as_mut();
-        ImplMenuModelDelegate::menu_will_show(&arg_self_.interface, arg_menu_model)
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_menu_model) = (self_, menu_model);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_menu_model = unsafe { arg_menu_model.as_mut() }
+                .map(|arg| MenuModel(unsafe { RefGuard::from_raw(arg) }));
+            let arg_menu_model = arg_menu_model.as_mut();
+            ImplMenuModelDelegate::menu_will_show(&arg_self_.interface, arg_menu_model)
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn menu_closed<I: ImplMenuModelDelegate, R: Rc>(
         self_: *mut _cef_menu_model_delegate_t,
         menu_model: *mut _cef_menu_model_t,
     ) {
-        let (arg_self_, arg_menu_model) = (self_, menu_model);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_menu_model = unsafe { arg_menu_model.as_mut() }
-            .map(|arg| MenuModel(unsafe { RefGuard::from_raw(arg) }));
-        let arg_menu_model = arg_menu_model.as_mut();
-        ImplMenuModelDelegate::menu_closed(&arg_self_.interface, arg_menu_model)
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_menu_model) = (self_, menu_model);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_menu_model = unsafe { arg_menu_model.as_mut() }
+                .map(|arg| MenuModel(unsafe { RefGuard::from_raw(arg) }));
+            let arg_menu_model = arg_menu_model.as_mut();
+            ImplMenuModelDelegate::menu_closed(&arg_self_.interface, arg_menu_model)
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn format_label<I: ImplMenuModelDelegate, R: Rc>(
         self_: *mut _cef_menu_model_delegate_t,
         menu_model: *mut _cef_menu_model_t,
         label: *mut cef_string_t,
     ) -> ::std::os::raw::c_int {
-        let (arg_self_, arg_menu_model, arg_label) = (self_, menu_model, label);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_menu_model = unsafe { arg_menu_model.as_mut() }
-            .map(|arg| MenuModel(unsafe { RefGuard::from_raw(arg) }));
-        let arg_menu_model = arg_menu_model.as_mut();
-        let mut arg_label = if arg_label.is_null() {
-            None
-        } else {
-            Some(arg_label.into())
-        };
-        let arg_label = arg_label.as_mut();
-        ImplMenuModelDelegate::format_label(&arg_self_.interface, arg_menu_model, arg_label)
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_menu_model, arg_label) = (self_, menu_model, label);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_menu_model = unsafe { arg_menu_model.as_mut() }
+                .map(|arg| MenuModel(unsafe { RefGuard::from_raw(arg) }));
+            let arg_menu_model = arg_menu_model.as_mut();
+            let mut arg_label = if arg_label.is_null() {
+                None
+            } else {
+                Some(arg_label.into())
+            };
+            let arg_label = arg_label.as_mut();
+            ImplMenuModelDelegate::format_label(&arg_self_.interface, arg_menu_model, arg_label)
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
 }
 impl ImplMenuModelDelegate for MenuModelDelegate {
@@ -16384,28 +16684,33 @@ mod impl_cef_context_menu_handler_t {
         params: *mut _cef_context_menu_params_t,
         model: *mut _cef_menu_model_t,
     ) {
-        let (arg_self_, arg_browser, arg_frame, arg_params, arg_model) =
-            (self_, browser, frame, params, model);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_browser =
-            unsafe { arg_browser.as_mut() }.map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
-        let arg_browser = arg_browser.as_mut();
-        let mut arg_frame =
-            unsafe { arg_frame.as_mut() }.map(|arg| Frame(unsafe { RefGuard::from_raw(arg) }));
-        let arg_frame = arg_frame.as_mut();
-        let mut arg_params = unsafe { arg_params.as_mut() }
-            .map(|arg| ContextMenuParams(unsafe { RefGuard::from_raw(arg) }));
-        let arg_params = arg_params.as_mut();
-        let mut arg_model =
-            unsafe { arg_model.as_mut() }.map(|arg| MenuModel(unsafe { RefGuard::from_raw(arg) }));
-        let arg_model = arg_model.as_mut();
-        ImplContextMenuHandler::on_before_context_menu(
-            &arg_self_.interface,
-            arg_browser,
-            arg_frame,
-            arg_params,
-            arg_model,
-        )
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_browser, arg_frame, arg_params, arg_model) =
+                (self_, browser, frame, params, model);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_browser = unsafe { arg_browser.as_mut() }
+                .map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
+            let arg_browser = arg_browser.as_mut();
+            let mut arg_frame =
+                unsafe { arg_frame.as_mut() }.map(|arg| Frame(unsafe { RefGuard::from_raw(arg) }));
+            let arg_frame = arg_frame.as_mut();
+            let mut arg_params = unsafe { arg_params.as_mut() }
+                .map(|arg| ContextMenuParams(unsafe { RefGuard::from_raw(arg) }));
+            let arg_params = arg_params.as_mut();
+            let mut arg_model = unsafe { arg_model.as_mut() }
+                .map(|arg| MenuModel(unsafe { RefGuard::from_raw(arg) }));
+            let arg_model = arg_model.as_mut();
+            ImplContextMenuHandler::on_before_context_menu(
+                &arg_self_.interface,
+                arg_browser,
+                arg_frame,
+                arg_params,
+                arg_model,
+            )
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn run_context_menu<I: ImplContextMenuHandler, R: Rc>(
         self_: *mut _cef_context_menu_handler_t,
@@ -16415,32 +16720,37 @@ mod impl_cef_context_menu_handler_t {
         model: *mut _cef_menu_model_t,
         callback: *mut _cef_run_context_menu_callback_t,
     ) -> ::std::os::raw::c_int {
-        let (arg_self_, arg_browser, arg_frame, arg_params, arg_model, arg_callback) =
-            (self_, browser, frame, params, model, callback);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_browser =
-            unsafe { arg_browser.as_mut() }.map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
-        let arg_browser = arg_browser.as_mut();
-        let mut arg_frame =
-            unsafe { arg_frame.as_mut() }.map(|arg| Frame(unsafe { RefGuard::from_raw(arg) }));
-        let arg_frame = arg_frame.as_mut();
-        let mut arg_params = unsafe { arg_params.as_mut() }
-            .map(|arg| ContextMenuParams(unsafe { RefGuard::from_raw(arg) }));
-        let arg_params = arg_params.as_mut();
-        let mut arg_model =
-            unsafe { arg_model.as_mut() }.map(|arg| MenuModel(unsafe { RefGuard::from_raw(arg) }));
-        let arg_model = arg_model.as_mut();
-        let mut arg_callback = unsafe { arg_callback.as_mut() }
-            .map(|arg| RunContextMenuCallback(unsafe { RefGuard::from_raw(arg) }));
-        let arg_callback = arg_callback.as_mut();
-        ImplContextMenuHandler::run_context_menu(
-            &arg_self_.interface,
-            arg_browser,
-            arg_frame,
-            arg_params,
-            arg_model,
-            arg_callback,
-        )
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_browser, arg_frame, arg_params, arg_model, arg_callback) =
+                (self_, browser, frame, params, model, callback);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_browser = unsafe { arg_browser.as_mut() }
+                .map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
+            let arg_browser = arg_browser.as_mut();
+            let mut arg_frame =
+                unsafe { arg_frame.as_mut() }.map(|arg| Frame(unsafe { RefGuard::from_raw(arg) }));
+            let arg_frame = arg_frame.as_mut();
+            let mut arg_params = unsafe { arg_params.as_mut() }
+                .map(|arg| ContextMenuParams(unsafe { RefGuard::from_raw(arg) }));
+            let arg_params = arg_params.as_mut();
+            let mut arg_model = unsafe { arg_model.as_mut() }
+                .map(|arg| MenuModel(unsafe { RefGuard::from_raw(arg) }));
+            let arg_model = arg_model.as_mut();
+            let mut arg_callback = unsafe { arg_callback.as_mut() }
+                .map(|arg| RunContextMenuCallback(unsafe { RefGuard::from_raw(arg) }));
+            let arg_callback = arg_callback.as_mut();
+            ImplContextMenuHandler::run_context_menu(
+                &arg_self_.interface,
+                arg_browser,
+                arg_frame,
+                arg_params,
+                arg_model,
+                arg_callback,
+            )
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn on_context_menu_command<I: ImplContextMenuHandler, R: Rc>(
         self_: *mut _cef_context_menu_handler_t,
@@ -16450,47 +16760,57 @@ mod impl_cef_context_menu_handler_t {
         command_id: ::std::os::raw::c_int,
         event_flags: cef_event_flags_t,
     ) -> ::std::os::raw::c_int {
-        let (arg_self_, arg_browser, arg_frame, arg_params, arg_command_id, arg_event_flags) =
-            (self_, browser, frame, params, command_id, event_flags);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_browser =
-            unsafe { arg_browser.as_mut() }.map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
-        let arg_browser = arg_browser.as_mut();
-        let mut arg_frame =
-            unsafe { arg_frame.as_mut() }.map(|arg| Frame(unsafe { RefGuard::from_raw(arg) }));
-        let arg_frame = arg_frame.as_mut();
-        let mut arg_params = unsafe { arg_params.as_mut() }
-            .map(|arg| ContextMenuParams(unsafe { RefGuard::from_raw(arg) }));
-        let arg_params = arg_params.as_mut();
-        let arg_command_id = arg_command_id.into_raw();
-        let arg_event_flags = arg_event_flags.into_raw();
-        ImplContextMenuHandler::on_context_menu_command(
-            &arg_self_.interface,
-            arg_browser,
-            arg_frame,
-            arg_params,
-            arg_command_id,
-            arg_event_flags,
-        )
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_browser, arg_frame, arg_params, arg_command_id, arg_event_flags) =
+                (self_, browser, frame, params, command_id, event_flags);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_browser = unsafe { arg_browser.as_mut() }
+                .map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
+            let arg_browser = arg_browser.as_mut();
+            let mut arg_frame =
+                unsafe { arg_frame.as_mut() }.map(|arg| Frame(unsafe { RefGuard::from_raw(arg) }));
+            let arg_frame = arg_frame.as_mut();
+            let mut arg_params = unsafe { arg_params.as_mut() }
+                .map(|arg| ContextMenuParams(unsafe { RefGuard::from_raw(arg) }));
+            let arg_params = arg_params.as_mut();
+            let arg_command_id = arg_command_id.into_raw();
+            let arg_event_flags = arg_event_flags.into_raw();
+            ImplContextMenuHandler::on_context_menu_command(
+                &arg_self_.interface,
+                arg_browser,
+                arg_frame,
+                arg_params,
+                arg_command_id,
+                arg_event_flags,
+            )
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn on_context_menu_dismissed<I: ImplContextMenuHandler, R: Rc>(
         self_: *mut _cef_context_menu_handler_t,
         browser: *mut _cef_browser_t,
         frame: *mut _cef_frame_t,
     ) {
-        let (arg_self_, arg_browser, arg_frame) = (self_, browser, frame);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_browser =
-            unsafe { arg_browser.as_mut() }.map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
-        let arg_browser = arg_browser.as_mut();
-        let mut arg_frame =
-            unsafe { arg_frame.as_mut() }.map(|arg| Frame(unsafe { RefGuard::from_raw(arg) }));
-        let arg_frame = arg_frame.as_mut();
-        ImplContextMenuHandler::on_context_menu_dismissed(
-            &arg_self_.interface,
-            arg_browser,
-            arg_frame,
-        )
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_browser, arg_frame) = (self_, browser, frame);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_browser = unsafe { arg_browser.as_mut() }
+                .map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
+            let arg_browser = arg_browser.as_mut();
+            let mut arg_frame =
+                unsafe { arg_frame.as_mut() }.map(|arg| Frame(unsafe { RefGuard::from_raw(arg) }));
+            let arg_frame = arg_frame.as_mut();
+            ImplContextMenuHandler::on_context_menu_dismissed(
+                &arg_self_.interface,
+                arg_browser,
+                arg_frame,
+            )
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn run_quick_menu<I: ImplContextMenuHandler, R: Rc>(
         self_: *mut _cef_context_menu_handler_t,
@@ -16501,55 +16821,60 @@ mod impl_cef_context_menu_handler_t {
         edit_state_flags: cef_quick_menu_edit_state_flags_t,
         callback: *mut _cef_run_quick_menu_callback_t,
     ) -> ::std::os::raw::c_int {
-        let (
-            arg_self_,
-            arg_browser,
-            arg_frame,
-            arg_location,
-            arg_size,
-            arg_edit_state_flags,
-            arg_callback,
-        ) = (
-            self_,
-            browser,
-            frame,
-            location,
-            size,
-            edit_state_flags,
-            callback,
-        );
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_browser =
-            unsafe { arg_browser.as_mut() }.map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
-        let arg_browser = arg_browser.as_mut();
-        let mut arg_frame =
-            unsafe { arg_frame.as_mut() }.map(|arg| Frame(unsafe { RefGuard::from_raw(arg) }));
-        let arg_frame = arg_frame.as_mut();
-        let arg_location = if arg_location.is_null() {
-            None
-        } else {
-            Some(WrapParamRef::<Point, _>::from(arg_location))
-        };
-        let arg_location = arg_location.as_ref().map(|arg| arg.as_ref());
-        let arg_size = if arg_size.is_null() {
-            None
-        } else {
-            Some(WrapParamRef::<Size, _>::from(arg_size))
-        };
-        let arg_size = arg_size.as_ref().map(|arg| arg.as_ref());
-        let arg_edit_state_flags = arg_edit_state_flags.into_raw();
-        let mut arg_callback = unsafe { arg_callback.as_mut() }
-            .map(|arg| RunQuickMenuCallback(unsafe { RefGuard::from_raw(arg) }));
-        let arg_callback = arg_callback.as_mut();
-        ImplContextMenuHandler::run_quick_menu(
-            &arg_self_.interface,
-            arg_browser,
-            arg_frame,
-            arg_location,
-            arg_size,
-            arg_edit_state_flags,
-            arg_callback,
-        )
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (
+                arg_self_,
+                arg_browser,
+                arg_frame,
+                arg_location,
+                arg_size,
+                arg_edit_state_flags,
+                arg_callback,
+            ) = (
+                self_,
+                browser,
+                frame,
+                location,
+                size,
+                edit_state_flags,
+                callback,
+            );
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_browser = unsafe { arg_browser.as_mut() }
+                .map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
+            let arg_browser = arg_browser.as_mut();
+            let mut arg_frame =
+                unsafe { arg_frame.as_mut() }.map(|arg| Frame(unsafe { RefGuard::from_raw(arg) }));
+            let arg_frame = arg_frame.as_mut();
+            let arg_location = if arg_location.is_null() {
+                None
+            } else {
+                Some(WrapParamRef::<Point, _>::from(arg_location))
+            };
+            let arg_location = arg_location.as_ref().map(|arg| arg.as_ref());
+            let arg_size = if arg_size.is_null() {
+                None
+            } else {
+                Some(WrapParamRef::<Size, _>::from(arg_size))
+            };
+            let arg_size = arg_size.as_ref().map(|arg| arg.as_ref());
+            let arg_edit_state_flags = arg_edit_state_flags.into_raw();
+            let mut arg_callback = unsafe { arg_callback.as_mut() }
+                .map(|arg| RunQuickMenuCallback(unsafe { RefGuard::from_raw(arg) }));
+            let arg_callback = arg_callback.as_mut();
+            ImplContextMenuHandler::run_quick_menu(
+                &arg_self_.interface,
+                arg_browser,
+                arg_frame,
+                arg_location,
+                arg_size,
+                arg_edit_state_flags,
+                arg_callback,
+            )
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn on_quick_menu_command<I: ImplContextMenuHandler, R: Rc>(
         self_: *mut _cef_context_menu_handler_t,
@@ -16558,43 +16883,53 @@ mod impl_cef_context_menu_handler_t {
         command_id: ::std::os::raw::c_int,
         event_flags: cef_event_flags_t,
     ) -> ::std::os::raw::c_int {
-        let (arg_self_, arg_browser, arg_frame, arg_command_id, arg_event_flags) =
-            (self_, browser, frame, command_id, event_flags);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_browser =
-            unsafe { arg_browser.as_mut() }.map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
-        let arg_browser = arg_browser.as_mut();
-        let mut arg_frame =
-            unsafe { arg_frame.as_mut() }.map(|arg| Frame(unsafe { RefGuard::from_raw(arg) }));
-        let arg_frame = arg_frame.as_mut();
-        let arg_command_id = arg_command_id.into_raw();
-        let arg_event_flags = arg_event_flags.into_raw();
-        ImplContextMenuHandler::on_quick_menu_command(
-            &arg_self_.interface,
-            arg_browser,
-            arg_frame,
-            arg_command_id,
-            arg_event_flags,
-        )
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_browser, arg_frame, arg_command_id, arg_event_flags) =
+                (self_, browser, frame, command_id, event_flags);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_browser = unsafe { arg_browser.as_mut() }
+                .map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
+            let arg_browser = arg_browser.as_mut();
+            let mut arg_frame =
+                unsafe { arg_frame.as_mut() }.map(|arg| Frame(unsafe { RefGuard::from_raw(arg) }));
+            let arg_frame = arg_frame.as_mut();
+            let arg_command_id = arg_command_id.into_raw();
+            let arg_event_flags = arg_event_flags.into_raw();
+            ImplContextMenuHandler::on_quick_menu_command(
+                &arg_self_.interface,
+                arg_browser,
+                arg_frame,
+                arg_command_id,
+                arg_event_flags,
+            )
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn on_quick_menu_dismissed<I: ImplContextMenuHandler, R: Rc>(
         self_: *mut _cef_context_menu_handler_t,
         browser: *mut _cef_browser_t,
         frame: *mut _cef_frame_t,
     ) {
-        let (arg_self_, arg_browser, arg_frame) = (self_, browser, frame);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_browser =
-            unsafe { arg_browser.as_mut() }.map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
-        let arg_browser = arg_browser.as_mut();
-        let mut arg_frame =
-            unsafe { arg_frame.as_mut() }.map(|arg| Frame(unsafe { RefGuard::from_raw(arg) }));
-        let arg_frame = arg_frame.as_mut();
-        ImplContextMenuHandler::on_quick_menu_dismissed(
-            &arg_self_.interface,
-            arg_browser,
-            arg_frame,
-        )
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_browser, arg_frame) = (self_, browser, frame);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_browser = unsafe { arg_browser.as_mut() }
+                .map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
+            let arg_browser = arg_browser.as_mut();
+            let mut arg_frame =
+                unsafe { arg_frame.as_mut() }.map(|arg| Frame(unsafe { RefGuard::from_raw(arg) }));
+            let arg_frame = arg_frame.as_mut();
+            ImplContextMenuHandler::on_quick_menu_dismissed(
+                &arg_self_.interface,
+                arg_browser,
+                arg_frame,
+            )
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
 }
 impl ImplContextMenuHandler for ContextMenuHandler {
@@ -17388,76 +17723,81 @@ mod impl_cef_dialog_handler_t {
         accept_descriptions: *mut _cef_string_list_t,
         callback: *mut _cef_file_dialog_callback_t,
     ) -> ::std::os::raw::c_int {
-        let (
-            arg_self_,
-            arg_browser,
-            arg_mode,
-            arg_title,
-            arg_default_file_path,
-            arg_accept_filters,
-            arg_accept_extensions,
-            arg_accept_descriptions,
-            arg_callback,
-        ) = (
-            self_,
-            browser,
-            mode,
-            title,
-            default_file_path,
-            accept_filters,
-            accept_extensions,
-            accept_descriptions,
-            callback,
-        );
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_browser =
-            unsafe { arg_browser.as_mut() }.map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
-        let arg_browser = arg_browser.as_mut();
-        let arg_mode = arg_mode.into_raw();
-        let arg_title = if arg_title.is_null() {
-            None
-        } else {
-            Some(arg_title.into())
-        };
-        let arg_title = arg_title.as_ref();
-        let arg_default_file_path = if arg_default_file_path.is_null() {
-            None
-        } else {
-            Some(arg_default_file_path.into())
-        };
-        let arg_default_file_path = arg_default_file_path.as_ref();
-        let mut arg_accept_filters = if arg_accept_filters.is_null() {
-            None
-        } else {
-            Some(arg_accept_filters.into())
-        };
-        let arg_accept_filters = arg_accept_filters.as_mut();
-        let mut arg_accept_extensions = if arg_accept_extensions.is_null() {
-            None
-        } else {
-            Some(arg_accept_extensions.into())
-        };
-        let arg_accept_extensions = arg_accept_extensions.as_mut();
-        let mut arg_accept_descriptions = if arg_accept_descriptions.is_null() {
-            None
-        } else {
-            Some(arg_accept_descriptions.into())
-        };
-        let arg_accept_descriptions = arg_accept_descriptions.as_mut();
-        let mut arg_callback = unsafe { arg_callback.as_mut() }
-            .map(|arg| FileDialogCallback(unsafe { RefGuard::from_raw(arg) }));
-        let arg_callback = arg_callback.as_mut();
-        ImplDialogHandler::on_file_dialog(
-            &arg_self_.interface,
-            arg_browser,
-            arg_mode,
-            arg_title,
-            arg_default_file_path,
-            arg_accept_filters,
-            arg_accept_extensions,
-            arg_accept_descriptions,
-            arg_callback,
-        )
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (
+                arg_self_,
+                arg_browser,
+                arg_mode,
+                arg_title,
+                arg_default_file_path,
+                arg_accept_filters,
+                arg_accept_extensions,
+                arg_accept_descriptions,
+                arg_callback,
+            ) = (
+                self_,
+                browser,
+                mode,
+                title,
+                default_file_path,
+                accept_filters,
+                accept_extensions,
+                accept_descriptions,
+                callback,
+            );
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_browser = unsafe { arg_browser.as_mut() }
+                .map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
+            let arg_browser = arg_browser.as_mut();
+            let arg_mode = arg_mode.into_raw();
+            let arg_title = if arg_title.is_null() {
+                None
+            } else {
+                Some(arg_title.into())
+            };
+            let arg_title = arg_title.as_ref();
+            let arg_default_file_path = if arg_default_file_path.is_null() {
+                None
+            } else {
+                Some(arg_default_file_path.into())
+            };
+            let arg_default_file_path = arg_default_file_path.as_ref();
+            let mut arg_accept_filters = if arg_accept_filters.is_null() {
+                None
+            } else {
+                Some(arg_accept_filters.into())
+            };
+            let arg_accept_filters = arg_accept_filters.as_mut();
+            let mut arg_accept_extensions = if arg_accept_extensions.is_null() {
+                None
+            } else {
+                Some(arg_accept_extensions.into())
+            };
+            let arg_accept_extensions = arg_accept_extensions.as_mut();
+            let mut arg_accept_descriptions = if arg_accept_descriptions.is_null() {
+                None
+            } else {
+                Some(arg_accept_descriptions.into())
+            };
+            let arg_accept_descriptions = arg_accept_descriptions.as_mut();
+            let mut arg_callback = unsafe { arg_callback.as_mut() }
+                .map(|arg| FileDialogCallback(unsafe { RefGuard::from_raw(arg) }));
+            let arg_callback = arg_callback.as_mut();
+            ImplDialogHandler::on_file_dialog(
+                &arg_self_.interface,
+                arg_browser,
+                arg_mode,
+                arg_title,
+                arg_default_file_path,
+                arg_accept_filters,
+                arg_accept_extensions,
+                arg_accept_descriptions,
+                arg_callback,
+            )
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
 }
 impl ImplDialogHandler for DialogHandler {
@@ -17719,110 +18059,149 @@ mod impl_cef_display_handler_t {
         frame: *mut _cef_frame_t,
         url: *const cef_string_t,
     ) {
-        let (arg_self_, arg_browser, arg_frame, arg_url) = (self_, browser, frame, url);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_browser =
-            unsafe { arg_browser.as_mut() }.map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
-        let arg_browser = arg_browser.as_mut();
-        let mut arg_frame =
-            unsafe { arg_frame.as_mut() }.map(|arg| Frame(unsafe { RefGuard::from_raw(arg) }));
-        let arg_frame = arg_frame.as_mut();
-        let arg_url = if arg_url.is_null() {
-            None
-        } else {
-            Some(arg_url.into())
-        };
-        let arg_url = arg_url.as_ref();
-        ImplDisplayHandler::on_address_change(&arg_self_.interface, arg_browser, arg_frame, arg_url)
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_browser, arg_frame, arg_url) = (self_, browser, frame, url);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_browser = unsafe { arg_browser.as_mut() }
+                .map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
+            let arg_browser = arg_browser.as_mut();
+            let mut arg_frame =
+                unsafe { arg_frame.as_mut() }.map(|arg| Frame(unsafe { RefGuard::from_raw(arg) }));
+            let arg_frame = arg_frame.as_mut();
+            let arg_url = if arg_url.is_null() {
+                None
+            } else {
+                Some(arg_url.into())
+            };
+            let arg_url = arg_url.as_ref();
+            ImplDisplayHandler::on_address_change(
+                &arg_self_.interface,
+                arg_browser,
+                arg_frame,
+                arg_url,
+            )
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn on_title_change<I: ImplDisplayHandler, R: Rc>(
         self_: *mut _cef_display_handler_t,
         browser: *mut _cef_browser_t,
         title: *const cef_string_t,
     ) {
-        let (arg_self_, arg_browser, arg_title) = (self_, browser, title);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_browser =
-            unsafe { arg_browser.as_mut() }.map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
-        let arg_browser = arg_browser.as_mut();
-        let arg_title = if arg_title.is_null() {
-            None
-        } else {
-            Some(arg_title.into())
-        };
-        let arg_title = arg_title.as_ref();
-        ImplDisplayHandler::on_title_change(&arg_self_.interface, arg_browser, arg_title)
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_browser, arg_title) = (self_, browser, title);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_browser = unsafe { arg_browser.as_mut() }
+                .map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
+            let arg_browser = arg_browser.as_mut();
+            let arg_title = if arg_title.is_null() {
+                None
+            } else {
+                Some(arg_title.into())
+            };
+            let arg_title = arg_title.as_ref();
+            ImplDisplayHandler::on_title_change(&arg_self_.interface, arg_browser, arg_title)
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn on_favicon_urlchange<I: ImplDisplayHandler, R: Rc>(
         self_: *mut _cef_display_handler_t,
         browser: *mut _cef_browser_t,
         icon_urls: *mut _cef_string_list_t,
     ) {
-        let (arg_self_, arg_browser, arg_icon_urls) = (self_, browser, icon_urls);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_browser =
-            unsafe { arg_browser.as_mut() }.map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
-        let arg_browser = arg_browser.as_mut();
-        let mut arg_icon_urls = if arg_icon_urls.is_null() {
-            None
-        } else {
-            Some(arg_icon_urls.into())
-        };
-        let arg_icon_urls = arg_icon_urls.as_mut();
-        ImplDisplayHandler::on_favicon_urlchange(&arg_self_.interface, arg_browser, arg_icon_urls)
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_browser, arg_icon_urls) = (self_, browser, icon_urls);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_browser = unsafe { arg_browser.as_mut() }
+                .map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
+            let arg_browser = arg_browser.as_mut();
+            let mut arg_icon_urls = if arg_icon_urls.is_null() {
+                None
+            } else {
+                Some(arg_icon_urls.into())
+            };
+            let arg_icon_urls = arg_icon_urls.as_mut();
+            ImplDisplayHandler::on_favicon_urlchange(
+                &arg_self_.interface,
+                arg_browser,
+                arg_icon_urls,
+            )
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn on_fullscreen_mode_change<I: ImplDisplayHandler, R: Rc>(
         self_: *mut _cef_display_handler_t,
         browser: *mut _cef_browser_t,
         fullscreen: ::std::os::raw::c_int,
     ) {
-        let (arg_self_, arg_browser, arg_fullscreen) = (self_, browser, fullscreen);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_browser =
-            unsafe { arg_browser.as_mut() }.map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
-        let arg_browser = arg_browser.as_mut();
-        let arg_fullscreen = arg_fullscreen.into_raw();
-        ImplDisplayHandler::on_fullscreen_mode_change(
-            &arg_self_.interface,
-            arg_browser,
-            arg_fullscreen,
-        )
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_browser, arg_fullscreen) = (self_, browser, fullscreen);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_browser = unsafe { arg_browser.as_mut() }
+                .map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
+            let arg_browser = arg_browser.as_mut();
+            let arg_fullscreen = arg_fullscreen.into_raw();
+            ImplDisplayHandler::on_fullscreen_mode_change(
+                &arg_self_.interface,
+                arg_browser,
+                arg_fullscreen,
+            )
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn on_tooltip<I: ImplDisplayHandler, R: Rc>(
         self_: *mut _cef_display_handler_t,
         browser: *mut _cef_browser_t,
         text: *mut cef_string_t,
     ) -> ::std::os::raw::c_int {
-        let (arg_self_, arg_browser, arg_text) = (self_, browser, text);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_browser =
-            unsafe { arg_browser.as_mut() }.map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
-        let arg_browser = arg_browser.as_mut();
-        let mut arg_text = if arg_text.is_null() {
-            None
-        } else {
-            Some(arg_text.into())
-        };
-        let arg_text = arg_text.as_mut();
-        ImplDisplayHandler::on_tooltip(&arg_self_.interface, arg_browser, arg_text)
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_browser, arg_text) = (self_, browser, text);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_browser = unsafe { arg_browser.as_mut() }
+                .map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
+            let arg_browser = arg_browser.as_mut();
+            let mut arg_text = if arg_text.is_null() {
+                None
+            } else {
+                Some(arg_text.into())
+            };
+            let arg_text = arg_text.as_mut();
+            ImplDisplayHandler::on_tooltip(&arg_self_.interface, arg_browser, arg_text)
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn on_status_message<I: ImplDisplayHandler, R: Rc>(
         self_: *mut _cef_display_handler_t,
         browser: *mut _cef_browser_t,
         value: *const cef_string_t,
     ) {
-        let (arg_self_, arg_browser, arg_value) = (self_, browser, value);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_browser =
-            unsafe { arg_browser.as_mut() }.map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
-        let arg_browser = arg_browser.as_mut();
-        let arg_value = if arg_value.is_null() {
-            None
-        } else {
-            Some(arg_value.into())
-        };
-        let arg_value = arg_value.as_ref();
-        ImplDisplayHandler::on_status_message(&arg_self_.interface, arg_browser, arg_value)
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_browser, arg_value) = (self_, browser, value);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_browser = unsafe { arg_browser.as_mut() }
+                .map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
+            let arg_browser = arg_browser.as_mut();
+            let arg_value = if arg_value.is_null() {
+                None
+            } else {
+                Some(arg_value.into())
+            };
+            let arg_value = arg_value.as_ref();
+            ImplDisplayHandler::on_status_message(&arg_self_.interface, arg_browser, arg_value)
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn on_console_message<I: ImplDisplayHandler, R: Rc>(
         self_: *mut _cef_display_handler_t,
@@ -17832,69 +18211,84 @@ mod impl_cef_display_handler_t {
         source: *const cef_string_t,
         line: ::std::os::raw::c_int,
     ) -> ::std::os::raw::c_int {
-        let (arg_self_, arg_browser, arg_level, arg_message, arg_source, arg_line) =
-            (self_, browser, level, message, source, line);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_browser =
-            unsafe { arg_browser.as_mut() }.map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
-        let arg_browser = arg_browser.as_mut();
-        let arg_level = arg_level.into_raw();
-        let arg_message = if arg_message.is_null() {
-            None
-        } else {
-            Some(arg_message.into())
-        };
-        let arg_message = arg_message.as_ref();
-        let arg_source = if arg_source.is_null() {
-            None
-        } else {
-            Some(arg_source.into())
-        };
-        let arg_source = arg_source.as_ref();
-        let arg_line = arg_line.into_raw();
-        ImplDisplayHandler::on_console_message(
-            &arg_self_.interface,
-            arg_browser,
-            arg_level,
-            arg_message,
-            arg_source,
-            arg_line,
-        )
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_browser, arg_level, arg_message, arg_source, arg_line) =
+                (self_, browser, level, message, source, line);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_browser = unsafe { arg_browser.as_mut() }
+                .map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
+            let arg_browser = arg_browser.as_mut();
+            let arg_level = arg_level.into_raw();
+            let arg_message = if arg_message.is_null() {
+                None
+            } else {
+                Some(arg_message.into())
+            };
+            let arg_message = arg_message.as_ref();
+            let arg_source = if arg_source.is_null() {
+                None
+            } else {
+                Some(arg_source.into())
+            };
+            let arg_source = arg_source.as_ref();
+            let arg_line = arg_line.into_raw();
+            ImplDisplayHandler::on_console_message(
+                &arg_self_.interface,
+                arg_browser,
+                arg_level,
+                arg_message,
+                arg_source,
+                arg_line,
+            )
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn on_auto_resize<I: ImplDisplayHandler, R: Rc>(
         self_: *mut _cef_display_handler_t,
         browser: *mut _cef_browser_t,
         new_size: *const _cef_size_t,
     ) -> ::std::os::raw::c_int {
-        let (arg_self_, arg_browser, arg_new_size) = (self_, browser, new_size);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_browser =
-            unsafe { arg_browser.as_mut() }.map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
-        let arg_browser = arg_browser.as_mut();
-        let arg_new_size = if arg_new_size.is_null() {
-            None
-        } else {
-            Some(WrapParamRef::<Size, _>::from(arg_new_size))
-        };
-        let arg_new_size = arg_new_size.as_ref().map(|arg| arg.as_ref());
-        ImplDisplayHandler::on_auto_resize(&arg_self_.interface, arg_browser, arg_new_size)
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_browser, arg_new_size) = (self_, browser, new_size);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_browser = unsafe { arg_browser.as_mut() }
+                .map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
+            let arg_browser = arg_browser.as_mut();
+            let arg_new_size = if arg_new_size.is_null() {
+                None
+            } else {
+                Some(WrapParamRef::<Size, _>::from(arg_new_size))
+            };
+            let arg_new_size = arg_new_size.as_ref().map(|arg| arg.as_ref());
+            ImplDisplayHandler::on_auto_resize(&arg_self_.interface, arg_browser, arg_new_size)
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn on_loading_progress_change<I: ImplDisplayHandler, R: Rc>(
         self_: *mut _cef_display_handler_t,
         browser: *mut _cef_browser_t,
         progress: f64,
     ) {
-        let (arg_self_, arg_browser, arg_progress) = (self_, browser, progress);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_browser =
-            unsafe { arg_browser.as_mut() }.map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
-        let arg_browser = arg_browser.as_mut();
-        let arg_progress = arg_progress.into_raw();
-        ImplDisplayHandler::on_loading_progress_change(
-            &arg_self_.interface,
-            arg_browser,
-            arg_progress,
-        )
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_browser, arg_progress) = (self_, browser, progress);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_browser = unsafe { arg_browser.as_mut() }
+                .map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
+            let arg_browser = arg_browser.as_mut();
+            let arg_progress = arg_progress.into_raw();
+            ImplDisplayHandler::on_loading_progress_change(
+                &arg_self_.interface,
+                arg_browser,
+                arg_progress,
+            )
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn on_cursor_change<I: ImplDisplayHandler, R: Rc>(
         self_: *mut _cef_display_handler_t,
@@ -17903,27 +18297,32 @@ mod impl_cef_display_handler_t {
         type_: cef_cursor_type_t,
         custom_cursor_info: *const _cef_cursor_info_t,
     ) -> ::std::os::raw::c_int {
-        let (arg_self_, arg_browser, arg_cursor, arg_type_, arg_custom_cursor_info) =
-            (self_, browser, cursor, type_, custom_cursor_info);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_browser =
-            unsafe { arg_browser.as_mut() }.map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
-        let arg_browser = arg_browser.as_mut();
-        let arg_cursor = arg_cursor.into_raw();
-        let arg_type_ = arg_type_.into_raw();
-        let arg_custom_cursor_info = if arg_custom_cursor_info.is_null() {
-            None
-        } else {
-            Some(WrapParamRef::<CursorInfo, _>::from(arg_custom_cursor_info))
-        };
-        let arg_custom_cursor_info = arg_custom_cursor_info.as_ref().map(|arg| arg.as_ref());
-        ImplDisplayHandler::on_cursor_change(
-            &arg_self_.interface,
-            arg_browser,
-            arg_cursor,
-            arg_type_,
-            arg_custom_cursor_info,
-        )
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_browser, arg_cursor, arg_type_, arg_custom_cursor_info) =
+                (self_, browser, cursor, type_, custom_cursor_info);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_browser = unsafe { arg_browser.as_mut() }
+                .map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
+            let arg_browser = arg_browser.as_mut();
+            let arg_cursor = arg_cursor.into_raw();
+            let arg_type_ = arg_type_.into_raw();
+            let arg_custom_cursor_info = if arg_custom_cursor_info.is_null() {
+                None
+            } else {
+                Some(WrapParamRef::<CursorInfo, _>::from(arg_custom_cursor_info))
+            };
+            let arg_custom_cursor_info = arg_custom_cursor_info.as_ref().map(|arg| arg.as_ref());
+            ImplDisplayHandler::on_cursor_change(
+                &arg_self_.interface,
+                arg_browser,
+                arg_cursor,
+                arg_type_,
+                arg_custom_cursor_info,
+            )
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn on_media_access_change<I: ImplDisplayHandler, R: Rc>(
         self_: *mut _cef_display_handler_t,
@@ -17931,60 +18330,75 @@ mod impl_cef_display_handler_t {
         has_video_access: ::std::os::raw::c_int,
         has_audio_access: ::std::os::raw::c_int,
     ) {
-        let (arg_self_, arg_browser, arg_has_video_access, arg_has_audio_access) =
-            (self_, browser, has_video_access, has_audio_access);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_browser =
-            unsafe { arg_browser.as_mut() }.map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
-        let arg_browser = arg_browser.as_mut();
-        let arg_has_video_access = arg_has_video_access.into_raw();
-        let arg_has_audio_access = arg_has_audio_access.into_raw();
-        ImplDisplayHandler::on_media_access_change(
-            &arg_self_.interface,
-            arg_browser,
-            arg_has_video_access,
-            arg_has_audio_access,
-        )
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_browser, arg_has_video_access, arg_has_audio_access) =
+                (self_, browser, has_video_access, has_audio_access);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_browser = unsafe { arg_browser.as_mut() }
+                .map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
+            let arg_browser = arg_browser.as_mut();
+            let arg_has_video_access = arg_has_video_access.into_raw();
+            let arg_has_audio_access = arg_has_audio_access.into_raw();
+            ImplDisplayHandler::on_media_access_change(
+                &arg_self_.interface,
+                arg_browser,
+                arg_has_video_access,
+                arg_has_audio_access,
+            )
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn on_contents_bounds_change<I: ImplDisplayHandler, R: Rc>(
         self_: *mut _cef_display_handler_t,
         browser: *mut _cef_browser_t,
         new_bounds: *const _cef_rect_t,
     ) -> ::std::os::raw::c_int {
-        let (arg_self_, arg_browser, arg_new_bounds) = (self_, browser, new_bounds);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_browser =
-            unsafe { arg_browser.as_mut() }.map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
-        let arg_browser = arg_browser.as_mut();
-        let arg_new_bounds = if arg_new_bounds.is_null() {
-            None
-        } else {
-            Some(WrapParamRef::<Rect, _>::from(arg_new_bounds))
-        };
-        let arg_new_bounds = arg_new_bounds.as_ref().map(|arg| arg.as_ref());
-        ImplDisplayHandler::on_contents_bounds_change(
-            &arg_self_.interface,
-            arg_browser,
-            arg_new_bounds,
-        )
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_browser, arg_new_bounds) = (self_, browser, new_bounds);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_browser = unsafe { arg_browser.as_mut() }
+                .map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
+            let arg_browser = arg_browser.as_mut();
+            let arg_new_bounds = if arg_new_bounds.is_null() {
+                None
+            } else {
+                Some(WrapParamRef::<Rect, _>::from(arg_new_bounds))
+            };
+            let arg_new_bounds = arg_new_bounds.as_ref().map(|arg| arg.as_ref());
+            ImplDisplayHandler::on_contents_bounds_change(
+                &arg_self_.interface,
+                arg_browser,
+                arg_new_bounds,
+            )
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn get_root_window_screen_rect<I: ImplDisplayHandler, R: Rc>(
         self_: *mut _cef_display_handler_t,
         browser: *mut _cef_browser_t,
         rect: *mut _cef_rect_t,
     ) -> ::std::os::raw::c_int {
-        let (arg_self_, arg_browser, arg_rect) = (self_, browser, rect);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_browser =
-            unsafe { arg_browser.as_mut() }.map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
-        let arg_browser = arg_browser.as_mut();
-        let mut arg_rect = if arg_rect.is_null() {
-            None
-        } else {
-            Some(WrapParamRef::<Rect, _>::from(arg_rect))
-        };
-        let arg_rect = arg_rect.as_mut().map(|arg| arg.as_mut());
-        ImplDisplayHandler::root_window_screen_rect(&arg_self_.interface, arg_browser, arg_rect)
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_browser, arg_rect) = (self_, browser, rect);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_browser = unsafe { arg_browser.as_mut() }
+                .map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
+            let arg_browser = arg_browser.as_mut();
+            let mut arg_rect = if arg_rect.is_null() {
+                None
+            } else {
+                Some(WrapParamRef::<Rect, _>::from(arg_rect))
+            };
+            let arg_rect = arg_rect.as_mut().map(|arg| arg.as_mut());
+            ImplDisplayHandler::root_window_screen_rect(&arg_self_.interface, arg_browser, arg_rect)
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
 }
 impl ImplDisplayHandler for DisplayHandler {
@@ -18888,30 +19302,35 @@ mod impl_cef_download_handler_t {
         url: *const cef_string_t,
         request_method: *const cef_string_t,
     ) -> ::std::os::raw::c_int {
-        let (arg_self_, arg_browser, arg_url, arg_request_method) =
-            (self_, browser, url, request_method);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_browser =
-            unsafe { arg_browser.as_mut() }.map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
-        let arg_browser = arg_browser.as_mut();
-        let arg_url = if arg_url.is_null() {
-            None
-        } else {
-            Some(arg_url.into())
-        };
-        let arg_url = arg_url.as_ref();
-        let arg_request_method = if arg_request_method.is_null() {
-            None
-        } else {
-            Some(arg_request_method.into())
-        };
-        let arg_request_method = arg_request_method.as_ref();
-        ImplDownloadHandler::can_download(
-            &arg_self_.interface,
-            arg_browser,
-            arg_url,
-            arg_request_method,
-        )
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_browser, arg_url, arg_request_method) =
+                (self_, browser, url, request_method);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_browser = unsafe { arg_browser.as_mut() }
+                .map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
+            let arg_browser = arg_browser.as_mut();
+            let arg_url = if arg_url.is_null() {
+                None
+            } else {
+                Some(arg_url.into())
+            };
+            let arg_url = arg_url.as_ref();
+            let arg_request_method = if arg_request_method.is_null() {
+                None
+            } else {
+                Some(arg_request_method.into())
+            };
+            let arg_request_method = arg_request_method.as_ref();
+            ImplDownloadHandler::can_download(
+                &arg_self_.interface,
+                arg_browser,
+                arg_url,
+                arg_request_method,
+            )
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn on_before_download<I: ImplDownloadHandler, R: Rc>(
         self_: *mut _cef_download_handler_t,
@@ -18920,31 +19339,36 @@ mod impl_cef_download_handler_t {
         suggested_name: *const cef_string_t,
         callback: *mut _cef_before_download_callback_t,
     ) -> ::std::os::raw::c_int {
-        let (arg_self_, arg_browser, arg_download_item, arg_suggested_name, arg_callback) =
-            (self_, browser, download_item, suggested_name, callback);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_browser =
-            unsafe { arg_browser.as_mut() }.map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
-        let arg_browser = arg_browser.as_mut();
-        let mut arg_download_item = unsafe { arg_download_item.as_mut() }
-            .map(|arg| DownloadItem(unsafe { RefGuard::from_raw(arg) }));
-        let arg_download_item = arg_download_item.as_mut();
-        let arg_suggested_name = if arg_suggested_name.is_null() {
-            None
-        } else {
-            Some(arg_suggested_name.into())
-        };
-        let arg_suggested_name = arg_suggested_name.as_ref();
-        let mut arg_callback = unsafe { arg_callback.as_mut() }
-            .map(|arg| BeforeDownloadCallback(unsafe { RefGuard::from_raw(arg) }));
-        let arg_callback = arg_callback.as_mut();
-        ImplDownloadHandler::on_before_download(
-            &arg_self_.interface,
-            arg_browser,
-            arg_download_item,
-            arg_suggested_name,
-            arg_callback,
-        )
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_browser, arg_download_item, arg_suggested_name, arg_callback) =
+                (self_, browser, download_item, suggested_name, callback);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_browser = unsafe { arg_browser.as_mut() }
+                .map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
+            let arg_browser = arg_browser.as_mut();
+            let mut arg_download_item = unsafe { arg_download_item.as_mut() }
+                .map(|arg| DownloadItem(unsafe { RefGuard::from_raw(arg) }));
+            let arg_download_item = arg_download_item.as_mut();
+            let arg_suggested_name = if arg_suggested_name.is_null() {
+                None
+            } else {
+                Some(arg_suggested_name.into())
+            };
+            let arg_suggested_name = arg_suggested_name.as_ref();
+            let mut arg_callback = unsafe { arg_callback.as_mut() }
+                .map(|arg| BeforeDownloadCallback(unsafe { RefGuard::from_raw(arg) }));
+            let arg_callback = arg_callback.as_mut();
+            ImplDownloadHandler::on_before_download(
+                &arg_self_.interface,
+                arg_browser,
+                arg_download_item,
+                arg_suggested_name,
+                arg_callback,
+            )
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn on_download_updated<I: ImplDownloadHandler, R: Rc>(
         self_: *mut _cef_download_handler_t,
@@ -18952,24 +19376,29 @@ mod impl_cef_download_handler_t {
         download_item: *mut _cef_download_item_t,
         callback: *mut _cef_download_item_callback_t,
     ) {
-        let (arg_self_, arg_browser, arg_download_item, arg_callback) =
-            (self_, browser, download_item, callback);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_browser =
-            unsafe { arg_browser.as_mut() }.map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
-        let arg_browser = arg_browser.as_mut();
-        let mut arg_download_item = unsafe { arg_download_item.as_mut() }
-            .map(|arg| DownloadItem(unsafe { RefGuard::from_raw(arg) }));
-        let arg_download_item = arg_download_item.as_mut();
-        let mut arg_callback = unsafe { arg_callback.as_mut() }
-            .map(|arg| DownloadItemCallback(unsafe { RefGuard::from_raw(arg) }));
-        let arg_callback = arg_callback.as_mut();
-        ImplDownloadHandler::on_download_updated(
-            &arg_self_.interface,
-            arg_browser,
-            arg_download_item,
-            arg_callback,
-        )
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_browser, arg_download_item, arg_callback) =
+                (self_, browser, download_item, callback);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_browser = unsafe { arg_browser.as_mut() }
+                .map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
+            let arg_browser = arg_browser.as_mut();
+            let mut arg_download_item = unsafe { arg_download_item.as_mut() }
+                .map(|arg| DownloadItem(unsafe { RefGuard::from_raw(arg) }));
+            let arg_download_item = arg_download_item.as_mut();
+            let mut arg_callback = unsafe { arg_callback.as_mut() }
+                .map(|arg| DownloadItemCallback(unsafe { RefGuard::from_raw(arg) }));
+            let arg_callback = arg_callback.as_mut();
+            ImplDownloadHandler::on_download_updated(
+                &arg_self_.interface,
+                arg_browser,
+                arg_download_item,
+                arg_callback,
+            )
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
 }
 impl ImplDownloadHandler for DownloadHandler {
@@ -19179,16 +19608,27 @@ mod impl_cef_drag_handler_t {
         drag_data: *mut _cef_drag_data_t,
         mask: cef_drag_operations_mask_t,
     ) -> ::std::os::raw::c_int {
-        let (arg_self_, arg_browser, arg_drag_data, arg_mask) = (self_, browser, drag_data, mask);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_browser =
-            unsafe { arg_browser.as_mut() }.map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
-        let arg_browser = arg_browser.as_mut();
-        let mut arg_drag_data = unsafe { arg_drag_data.as_mut() }
-            .map(|arg| DragData(unsafe { RefGuard::from_raw(arg) }));
-        let arg_drag_data = arg_drag_data.as_mut();
-        let arg_mask = arg_mask.into_raw();
-        ImplDragHandler::on_drag_enter(&arg_self_.interface, arg_browser, arg_drag_data, arg_mask)
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_browser, arg_drag_data, arg_mask) =
+                (self_, browser, drag_data, mask);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_browser = unsafe { arg_browser.as_mut() }
+                .map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
+            let arg_browser = arg_browser.as_mut();
+            let mut arg_drag_data = unsafe { arg_drag_data.as_mut() }
+                .map(|arg| DragData(unsafe { RefGuard::from_raw(arg) }));
+            let arg_drag_data = arg_drag_data.as_mut();
+            let arg_mask = arg_mask.into_raw();
+            ImplDragHandler::on_drag_enter(
+                &arg_self_.interface,
+                arg_browser,
+                arg_drag_data,
+                arg_mask,
+            )
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn on_draggable_regions_changed<I: ImplDragHandler, R: Rc>(
         self_: *mut _cef_drag_handler_t,
@@ -19197,29 +19637,35 @@ mod impl_cef_drag_handler_t {
         regions_count: usize,
         regions: *const _cef_draggable_region_t,
     ) {
-        let (arg_self_, arg_browser, arg_frame, arg_regions_count, arg_regions) =
-            (self_, browser, frame, regions_count, regions);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_browser =
-            unsafe { arg_browser.as_mut() }.map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
-        let arg_browser = arg_browser.as_mut();
-        let mut arg_frame =
-            unsafe { arg_frame.as_mut() }.map(|arg| Frame(unsafe { RefGuard::from_raw(arg) }));
-        let arg_frame = arg_frame.as_mut();
-        let arg_regions = if arg_regions.is_null() {
-            None
-        } else {
-            let arg_regions = unsafe { std::slice::from_raw_parts(arg_regions, arg_regions_count) };
-            let arg_regions: Vec<_> = arg_regions.iter().map(|elem| (*elem).into()).collect();
-            Some(arg_regions)
-        };
-        let arg_regions = arg_regions.as_deref();
-        ImplDragHandler::on_draggable_regions_changed(
-            &arg_self_.interface,
-            arg_browser,
-            arg_frame,
-            arg_regions,
-        )
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_browser, arg_frame, arg_regions_count, arg_regions) =
+                (self_, browser, frame, regions_count, regions);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_browser = unsafe { arg_browser.as_mut() }
+                .map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
+            let arg_browser = arg_browser.as_mut();
+            let mut arg_frame =
+                unsafe { arg_frame.as_mut() }.map(|arg| Frame(unsafe { RefGuard::from_raw(arg) }));
+            let arg_frame = arg_frame.as_mut();
+            let arg_regions = if arg_regions.is_null() {
+                None
+            } else {
+                let arg_regions =
+                    unsafe { std::slice::from_raw_parts(arg_regions, arg_regions_count) };
+                let arg_regions: Vec<_> = arg_regions.iter().map(|elem| (*elem).into()).collect();
+                Some(arg_regions)
+            };
+            let arg_regions = arg_regions.as_deref();
+            ImplDragHandler::on_draggable_regions_changed(
+                &arg_self_.interface,
+                arg_browser,
+                arg_frame,
+                arg_regions,
+            )
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
 }
 impl ImplDragHandler for DragHandler {
@@ -19391,46 +19837,51 @@ mod impl_cef_find_handler_t {
         active_match_ordinal: ::std::os::raw::c_int,
         final_update: ::std::os::raw::c_int,
     ) {
-        let (
-            arg_self_,
-            arg_browser,
-            arg_identifier,
-            arg_count,
-            arg_selection_rect,
-            arg_active_match_ordinal,
-            arg_final_update,
-        ) = (
-            self_,
-            browser,
-            identifier,
-            count,
-            selection_rect,
-            active_match_ordinal,
-            final_update,
-        );
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_browser =
-            unsafe { arg_browser.as_mut() }.map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
-        let arg_browser = arg_browser.as_mut();
-        let arg_identifier = arg_identifier.into_raw();
-        let arg_count = arg_count.into_raw();
-        let arg_selection_rect = if arg_selection_rect.is_null() {
-            None
-        } else {
-            Some(WrapParamRef::<Rect, _>::from(arg_selection_rect))
-        };
-        let arg_selection_rect = arg_selection_rect.as_ref().map(|arg| arg.as_ref());
-        let arg_active_match_ordinal = arg_active_match_ordinal.into_raw();
-        let arg_final_update = arg_final_update.into_raw();
-        ImplFindHandler::on_find_result(
-            &arg_self_.interface,
-            arg_browser,
-            arg_identifier,
-            arg_count,
-            arg_selection_rect,
-            arg_active_match_ordinal,
-            arg_final_update,
-        )
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (
+                arg_self_,
+                arg_browser,
+                arg_identifier,
+                arg_count,
+                arg_selection_rect,
+                arg_active_match_ordinal,
+                arg_final_update,
+            ) = (
+                self_,
+                browser,
+                identifier,
+                count,
+                selection_rect,
+                active_match_ordinal,
+                final_update,
+            );
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_browser = unsafe { arg_browser.as_mut() }
+                .map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
+            let arg_browser = arg_browser.as_mut();
+            let arg_identifier = arg_identifier.into_raw();
+            let arg_count = arg_count.into_raw();
+            let arg_selection_rect = if arg_selection_rect.is_null() {
+                None
+            } else {
+                Some(WrapParamRef::<Rect, _>::from(arg_selection_rect))
+            };
+            let arg_selection_rect = arg_selection_rect.as_ref().map(|arg| arg.as_ref());
+            let arg_active_match_ordinal = arg_active_match_ordinal.into_raw();
+            let arg_final_update = arg_final_update.into_raw();
+            ImplFindHandler::on_find_result(
+                &arg_self_.interface,
+                arg_browser,
+                arg_identifier,
+                arg_count,
+                arg_selection_rect,
+                arg_active_match_ordinal,
+                arg_final_update,
+            )
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
 }
 impl ImplFindHandler for FindHandler {
@@ -19575,37 +20026,52 @@ mod impl_cef_focus_handler_t {
         browser: *mut _cef_browser_t,
         next: ::std::os::raw::c_int,
     ) {
-        let (arg_self_, arg_browser, arg_next) = (self_, browser, next);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_browser =
-            unsafe { arg_browser.as_mut() }.map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
-        let arg_browser = arg_browser.as_mut();
-        let arg_next = arg_next.into_raw();
-        ImplFocusHandler::on_take_focus(&arg_self_.interface, arg_browser, arg_next)
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_browser, arg_next) = (self_, browser, next);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_browser = unsafe { arg_browser.as_mut() }
+                .map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
+            let arg_browser = arg_browser.as_mut();
+            let arg_next = arg_next.into_raw();
+            ImplFocusHandler::on_take_focus(&arg_self_.interface, arg_browser, arg_next)
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn on_set_focus<I: ImplFocusHandler, R: Rc>(
         self_: *mut _cef_focus_handler_t,
         browser: *mut _cef_browser_t,
         source: cef_focus_source_t,
     ) -> ::std::os::raw::c_int {
-        let (arg_self_, arg_browser, arg_source) = (self_, browser, source);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_browser =
-            unsafe { arg_browser.as_mut() }.map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
-        let arg_browser = arg_browser.as_mut();
-        let arg_source = arg_source.into_raw();
-        ImplFocusHandler::on_set_focus(&arg_self_.interface, arg_browser, arg_source)
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_browser, arg_source) = (self_, browser, source);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_browser = unsafe { arg_browser.as_mut() }
+                .map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
+            let arg_browser = arg_browser.as_mut();
+            let arg_source = arg_source.into_raw();
+            ImplFocusHandler::on_set_focus(&arg_self_.interface, arg_browser, arg_source)
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn on_got_focus<I: ImplFocusHandler, R: Rc>(
         self_: *mut _cef_focus_handler_t,
         browser: *mut _cef_browser_t,
     ) {
-        let (arg_self_, arg_browser) = (self_, browser);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_browser =
-            unsafe { arg_browser.as_mut() }.map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
-        let arg_browser = arg_browser.as_mut();
-        ImplFocusHandler::on_got_focus(&arg_self_.interface, arg_browser)
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_browser) = (self_, browser);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_browser = unsafe { arg_browser.as_mut() }
+                .map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
+            let arg_browser = arg_browser.as_mut();
+            ImplFocusHandler::on_got_focus(&arg_self_.interface, arg_browser)
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
 }
 impl ImplFocusHandler for FocusHandler {
@@ -19766,30 +20232,40 @@ mod impl_cef_frame_handler_t {
         browser: *mut _cef_browser_t,
         frame: *mut _cef_frame_t,
     ) {
-        let (arg_self_, arg_browser, arg_frame) = (self_, browser, frame);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_browser =
-            unsafe { arg_browser.as_mut() }.map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
-        let arg_browser = arg_browser.as_mut();
-        let mut arg_frame =
-            unsafe { arg_frame.as_mut() }.map(|arg| Frame(unsafe { RefGuard::from_raw(arg) }));
-        let arg_frame = arg_frame.as_mut();
-        ImplFrameHandler::on_frame_created(&arg_self_.interface, arg_browser, arg_frame)
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_browser, arg_frame) = (self_, browser, frame);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_browser = unsafe { arg_browser.as_mut() }
+                .map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
+            let arg_browser = arg_browser.as_mut();
+            let mut arg_frame =
+                unsafe { arg_frame.as_mut() }.map(|arg| Frame(unsafe { RefGuard::from_raw(arg) }));
+            let arg_frame = arg_frame.as_mut();
+            ImplFrameHandler::on_frame_created(&arg_self_.interface, arg_browser, arg_frame)
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn on_frame_destroyed<I: ImplFrameHandler, R: Rc>(
         self_: *mut _cef_frame_handler_t,
         browser: *mut _cef_browser_t,
         frame: *mut _cef_frame_t,
     ) {
-        let (arg_self_, arg_browser, arg_frame) = (self_, browser, frame);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_browser =
-            unsafe { arg_browser.as_mut() }.map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
-        let arg_browser = arg_browser.as_mut();
-        let mut arg_frame =
-            unsafe { arg_frame.as_mut() }.map(|arg| Frame(unsafe { RefGuard::from_raw(arg) }));
-        let arg_frame = arg_frame.as_mut();
-        ImplFrameHandler::on_frame_destroyed(&arg_self_.interface, arg_browser, arg_frame)
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_browser, arg_frame) = (self_, browser, frame);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_browser = unsafe { arg_browser.as_mut() }
+                .map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
+            let arg_browser = arg_browser.as_mut();
+            let mut arg_frame =
+                unsafe { arg_frame.as_mut() }.map(|arg| Frame(unsafe { RefGuard::from_raw(arg) }));
+            let arg_frame = arg_frame.as_mut();
+            ImplFrameHandler::on_frame_destroyed(&arg_self_.interface, arg_browser, arg_frame)
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn on_frame_attached<I: ImplFrameHandler, R: Rc>(
         self_: *mut _cef_frame_handler_t,
@@ -19797,37 +20273,47 @@ mod impl_cef_frame_handler_t {
         frame: *mut _cef_frame_t,
         reattached: ::std::os::raw::c_int,
     ) {
-        let (arg_self_, arg_browser, arg_frame, arg_reattached) =
-            (self_, browser, frame, reattached);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_browser =
-            unsafe { arg_browser.as_mut() }.map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
-        let arg_browser = arg_browser.as_mut();
-        let mut arg_frame =
-            unsafe { arg_frame.as_mut() }.map(|arg| Frame(unsafe { RefGuard::from_raw(arg) }));
-        let arg_frame = arg_frame.as_mut();
-        let arg_reattached = arg_reattached.into_raw();
-        ImplFrameHandler::on_frame_attached(
-            &arg_self_.interface,
-            arg_browser,
-            arg_frame,
-            arg_reattached,
-        )
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_browser, arg_frame, arg_reattached) =
+                (self_, browser, frame, reattached);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_browser = unsafe { arg_browser.as_mut() }
+                .map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
+            let arg_browser = arg_browser.as_mut();
+            let mut arg_frame =
+                unsafe { arg_frame.as_mut() }.map(|arg| Frame(unsafe { RefGuard::from_raw(arg) }));
+            let arg_frame = arg_frame.as_mut();
+            let arg_reattached = arg_reattached.into_raw();
+            ImplFrameHandler::on_frame_attached(
+                &arg_self_.interface,
+                arg_browser,
+                arg_frame,
+                arg_reattached,
+            )
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn on_frame_detached<I: ImplFrameHandler, R: Rc>(
         self_: *mut _cef_frame_handler_t,
         browser: *mut _cef_browser_t,
         frame: *mut _cef_frame_t,
     ) {
-        let (arg_self_, arg_browser, arg_frame) = (self_, browser, frame);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_browser =
-            unsafe { arg_browser.as_mut() }.map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
-        let arg_browser = arg_browser.as_mut();
-        let mut arg_frame =
-            unsafe { arg_frame.as_mut() }.map(|arg| Frame(unsafe { RefGuard::from_raw(arg) }));
-        let arg_frame = arg_frame.as_mut();
-        ImplFrameHandler::on_frame_detached(&arg_self_.interface, arg_browser, arg_frame)
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_browser, arg_frame) = (self_, browser, frame);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_browser = unsafe { arg_browser.as_mut() }
+                .map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
+            let arg_browser = arg_browser.as_mut();
+            let mut arg_frame =
+                unsafe { arg_frame.as_mut() }.map(|arg| Frame(unsafe { RefGuard::from_raw(arg) }));
+            let arg_frame = arg_frame.as_mut();
+            ImplFrameHandler::on_frame_detached(&arg_self_.interface, arg_browser, arg_frame)
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn on_main_frame_changed<I: ImplFrameHandler, R: Rc>(
         self_: *mut _cef_frame_handler_t,
@@ -19835,24 +20321,29 @@ mod impl_cef_frame_handler_t {
         old_frame: *mut _cef_frame_t,
         new_frame: *mut _cef_frame_t,
     ) {
-        let (arg_self_, arg_browser, arg_old_frame, arg_new_frame) =
-            (self_, browser, old_frame, new_frame);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_browser =
-            unsafe { arg_browser.as_mut() }.map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
-        let arg_browser = arg_browser.as_mut();
-        let mut arg_old_frame =
-            unsafe { arg_old_frame.as_mut() }.map(|arg| Frame(unsafe { RefGuard::from_raw(arg) }));
-        let arg_old_frame = arg_old_frame.as_mut();
-        let mut arg_new_frame =
-            unsafe { arg_new_frame.as_mut() }.map(|arg| Frame(unsafe { RefGuard::from_raw(arg) }));
-        let arg_new_frame = arg_new_frame.as_mut();
-        ImplFrameHandler::on_main_frame_changed(
-            &arg_self_.interface,
-            arg_browser,
-            arg_old_frame,
-            arg_new_frame,
-        )
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_browser, arg_old_frame, arg_new_frame) =
+                (self_, browser, old_frame, new_frame);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_browser = unsafe { arg_browser.as_mut() }
+                .map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
+            let arg_browser = arg_browser.as_mut();
+            let mut arg_old_frame = unsafe { arg_old_frame.as_mut() }
+                .map(|arg| Frame(unsafe { RefGuard::from_raw(arg) }));
+            let arg_old_frame = arg_old_frame.as_mut();
+            let mut arg_new_frame = unsafe { arg_new_frame.as_mut() }
+                .map(|arg| Frame(unsafe { RefGuard::from_raw(arg) }));
+            let arg_new_frame = arg_new_frame.as_mut();
+            ImplFrameHandler::on_main_frame_changed(
+                &arg_self_.interface,
+                arg_browser,
+                arg_old_frame,
+                arg_new_frame,
+            )
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
 }
 impl ImplFrameHandler for FrameHandler {
@@ -20147,69 +20638,74 @@ mod impl_cef_jsdialog_handler_t {
         callback: *mut _cef_jsdialog_callback_t,
         suppress_message: *mut ::std::os::raw::c_int,
     ) -> ::std::os::raw::c_int {
-        let (
-            arg_self_,
-            arg_browser,
-            arg_origin_url,
-            arg_dialog_type,
-            arg_message_text,
-            arg_default_prompt_text,
-            arg_callback,
-            arg_suppress_message,
-        ) = (
-            self_,
-            browser,
-            origin_url,
-            dialog_type,
-            message_text,
-            default_prompt_text,
-            callback,
-            suppress_message,
-        );
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_browser =
-            unsafe { arg_browser.as_mut() }.map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
-        let arg_browser = arg_browser.as_mut();
-        let arg_origin_url = if arg_origin_url.is_null() {
-            None
-        } else {
-            Some(arg_origin_url.into())
-        };
-        let arg_origin_url = arg_origin_url.as_ref();
-        let arg_dialog_type = arg_dialog_type.into_raw();
-        let arg_message_text = if arg_message_text.is_null() {
-            None
-        } else {
-            Some(arg_message_text.into())
-        };
-        let arg_message_text = arg_message_text.as_ref();
-        let arg_default_prompt_text = if arg_default_prompt_text.is_null() {
-            None
-        } else {
-            Some(arg_default_prompt_text.into())
-        };
-        let arg_default_prompt_text = arg_default_prompt_text.as_ref();
-        let mut arg_callback = unsafe { arg_callback.as_mut() }
-            .map(|arg| JsdialogCallback(unsafe { RefGuard::from_raw(arg) }));
-        let arg_callback = arg_callback.as_mut();
-        let mut arg_suppress_message = if arg_suppress_message.is_null() {
-            None
-        } else {
-            Some(WrapParamRef::<::std::os::raw::c_int, _>::from(
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (
+                arg_self_,
+                arg_browser,
+                arg_origin_url,
+                arg_dialog_type,
+                arg_message_text,
+                arg_default_prompt_text,
+                arg_callback,
                 arg_suppress_message,
-            ))
-        };
-        let arg_suppress_message = arg_suppress_message.as_mut().map(|arg| arg.as_mut());
-        ImplJsdialogHandler::on_jsdialog(
-            &arg_self_.interface,
-            arg_browser,
-            arg_origin_url,
-            arg_dialog_type,
-            arg_message_text,
-            arg_default_prompt_text,
-            arg_callback,
-            arg_suppress_message,
-        )
+            ) = (
+                self_,
+                browser,
+                origin_url,
+                dialog_type,
+                message_text,
+                default_prompt_text,
+                callback,
+                suppress_message,
+            );
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_browser = unsafe { arg_browser.as_mut() }
+                .map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
+            let arg_browser = arg_browser.as_mut();
+            let arg_origin_url = if arg_origin_url.is_null() {
+                None
+            } else {
+                Some(arg_origin_url.into())
+            };
+            let arg_origin_url = arg_origin_url.as_ref();
+            let arg_dialog_type = arg_dialog_type.into_raw();
+            let arg_message_text = if arg_message_text.is_null() {
+                None
+            } else {
+                Some(arg_message_text.into())
+            };
+            let arg_message_text = arg_message_text.as_ref();
+            let arg_default_prompt_text = if arg_default_prompt_text.is_null() {
+                None
+            } else {
+                Some(arg_default_prompt_text.into())
+            };
+            let arg_default_prompt_text = arg_default_prompt_text.as_ref();
+            let mut arg_callback = unsafe { arg_callback.as_mut() }
+                .map(|arg| JsdialogCallback(unsafe { RefGuard::from_raw(arg) }));
+            let arg_callback = arg_callback.as_mut();
+            let mut arg_suppress_message = if arg_suppress_message.is_null() {
+                None
+            } else {
+                Some(WrapParamRef::<::std::os::raw::c_int, _>::from(
+                    arg_suppress_message,
+                ))
+            };
+            let arg_suppress_message = arg_suppress_message.as_mut().map(|arg| arg.as_mut());
+            ImplJsdialogHandler::on_jsdialog(
+                &arg_self_.interface,
+                arg_browser,
+                arg_origin_url,
+                arg_dialog_type,
+                arg_message_text,
+                arg_default_prompt_text,
+                arg_callback,
+                arg_suppress_message,
+            )
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn on_before_unload_dialog<I: ImplJsdialogHandler, R: Rc>(
         self_: *mut _cef_jsdialog_handler_t,
@@ -20218,51 +20714,66 @@ mod impl_cef_jsdialog_handler_t {
         is_reload: ::std::os::raw::c_int,
         callback: *mut _cef_jsdialog_callback_t,
     ) -> ::std::os::raw::c_int {
-        let (arg_self_, arg_browser, arg_message_text, arg_is_reload, arg_callback) =
-            (self_, browser, message_text, is_reload, callback);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_browser =
-            unsafe { arg_browser.as_mut() }.map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
-        let arg_browser = arg_browser.as_mut();
-        let arg_message_text = if arg_message_text.is_null() {
-            None
-        } else {
-            Some(arg_message_text.into())
-        };
-        let arg_message_text = arg_message_text.as_ref();
-        let arg_is_reload = arg_is_reload.into_raw();
-        let mut arg_callback = unsafe { arg_callback.as_mut() }
-            .map(|arg| JsdialogCallback(unsafe { RefGuard::from_raw(arg) }));
-        let arg_callback = arg_callback.as_mut();
-        ImplJsdialogHandler::on_before_unload_dialog(
-            &arg_self_.interface,
-            arg_browser,
-            arg_message_text,
-            arg_is_reload,
-            arg_callback,
-        )
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_browser, arg_message_text, arg_is_reload, arg_callback) =
+                (self_, browser, message_text, is_reload, callback);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_browser = unsafe { arg_browser.as_mut() }
+                .map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
+            let arg_browser = arg_browser.as_mut();
+            let arg_message_text = if arg_message_text.is_null() {
+                None
+            } else {
+                Some(arg_message_text.into())
+            };
+            let arg_message_text = arg_message_text.as_ref();
+            let arg_is_reload = arg_is_reload.into_raw();
+            let mut arg_callback = unsafe { arg_callback.as_mut() }
+                .map(|arg| JsdialogCallback(unsafe { RefGuard::from_raw(arg) }));
+            let arg_callback = arg_callback.as_mut();
+            ImplJsdialogHandler::on_before_unload_dialog(
+                &arg_self_.interface,
+                arg_browser,
+                arg_message_text,
+                arg_is_reload,
+                arg_callback,
+            )
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn on_reset_dialog_state<I: ImplJsdialogHandler, R: Rc>(
         self_: *mut _cef_jsdialog_handler_t,
         browser: *mut _cef_browser_t,
     ) {
-        let (arg_self_, arg_browser) = (self_, browser);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_browser =
-            unsafe { arg_browser.as_mut() }.map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
-        let arg_browser = arg_browser.as_mut();
-        ImplJsdialogHandler::on_reset_dialog_state(&arg_self_.interface, arg_browser)
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_browser) = (self_, browser);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_browser = unsafe { arg_browser.as_mut() }
+                .map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
+            let arg_browser = arg_browser.as_mut();
+            ImplJsdialogHandler::on_reset_dialog_state(&arg_self_.interface, arg_browser)
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn on_dialog_closed<I: ImplJsdialogHandler, R: Rc>(
         self_: *mut _cef_jsdialog_handler_t,
         browser: *mut _cef_browser_t,
     ) {
-        let (arg_self_, arg_browser) = (self_, browser);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_browser =
-            unsafe { arg_browser.as_mut() }.map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
-        let arg_browser = arg_browser.as_mut();
-        ImplJsdialogHandler::on_dialog_closed(&arg_self_.interface, arg_browser)
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_browser) = (self_, browser);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_browser = unsafe { arg_browser.as_mut() }
+                .map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
+            let arg_browser = arg_browser.as_mut();
+            ImplJsdialogHandler::on_dialog_closed(&arg_self_.interface, arg_browser)
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
 }
 impl ImplJsdialogHandler for JsdialogHandler {
@@ -20508,39 +21019,45 @@ mod impl_cef_keyboard_handler_t {
         os_event: *mut MSG,
         is_keyboard_shortcut: *mut ::std::os::raw::c_int,
     ) -> ::std::os::raw::c_int {
-        let (arg_self_, arg_browser, arg_event, arg_os_event, arg_is_keyboard_shortcut) =
-            (self_, browser, event, os_event, is_keyboard_shortcut);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_browser =
-            unsafe { arg_browser.as_mut() }.map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
-        let arg_browser = arg_browser.as_mut();
-        let arg_event = if arg_event.is_null() {
-            None
-        } else {
-            Some(WrapParamRef::<KeyEvent, _>::from(arg_event))
-        };
-        let arg_event = arg_event.as_ref().map(|arg| arg.as_ref());
-        let mut arg_os_event = if arg_os_event.is_null() {
-            None
-        } else {
-            Some(WrapParamRef::<MSG, _>::from(arg_os_event))
-        };
-        let arg_os_event = arg_os_event.as_mut().map(|arg| arg.as_mut());
-        let mut arg_is_keyboard_shortcut = if arg_is_keyboard_shortcut.is_null() {
-            None
-        } else {
-            Some(WrapParamRef::<::std::os::raw::c_int, _>::from(
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_browser, arg_event, arg_os_event, arg_is_keyboard_shortcut) =
+                (self_, browser, event, os_event, is_keyboard_shortcut);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_browser = unsafe { arg_browser.as_mut() }
+                .map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
+            let arg_browser = arg_browser.as_mut();
+            let arg_event = if arg_event.is_null() {
+                None
+            } else {
+                Some(WrapParamRef::<KeyEvent, _>::from(arg_event))
+            };
+            let arg_event = arg_event.as_ref().map(|arg| arg.as_ref());
+            let mut arg_os_event = if arg_os_event.is_null() {
+                None
+            } else {
+                Some(WrapParamRef::<MSG, _>::from(arg_os_event))
+            };
+            let arg_os_event = arg_os_event.as_mut().map(|arg| arg.as_mut());
+            let mut arg_is_keyboard_shortcut = if arg_is_keyboard_shortcut.is_null() {
+                None
+            } else {
+                Some(WrapParamRef::<::std::os::raw::c_int, _>::from(
+                    arg_is_keyboard_shortcut,
+                ))
+            };
+            let arg_is_keyboard_shortcut =
+                arg_is_keyboard_shortcut.as_mut().map(|arg| arg.as_mut());
+            ImplKeyboardHandler::on_pre_key_event(
+                &arg_self_.interface,
+                arg_browser,
+                arg_event,
+                arg_os_event,
                 arg_is_keyboard_shortcut,
-            ))
-        };
-        let arg_is_keyboard_shortcut = arg_is_keyboard_shortcut.as_mut().map(|arg| arg.as_mut());
-        ImplKeyboardHandler::on_pre_key_event(
-            &arg_self_.interface,
-            arg_browser,
-            arg_event,
-            arg_os_event,
-            arg_is_keyboard_shortcut,
-        )
+            )
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn on_key_event<I: ImplKeyboardHandler, R: Rc>(
         self_: *mut _cef_keyboard_handler_t,
@@ -20548,29 +21065,35 @@ mod impl_cef_keyboard_handler_t {
         event: *const _cef_key_event_t,
         os_event: *mut MSG,
     ) -> ::std::os::raw::c_int {
-        let (arg_self_, arg_browser, arg_event, arg_os_event) = (self_, browser, event, os_event);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_browser =
-            unsafe { arg_browser.as_mut() }.map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
-        let arg_browser = arg_browser.as_mut();
-        let arg_event = if arg_event.is_null() {
-            None
-        } else {
-            Some(WrapParamRef::<KeyEvent, _>::from(arg_event))
-        };
-        let arg_event = arg_event.as_ref().map(|arg| arg.as_ref());
-        let mut arg_os_event = if arg_os_event.is_null() {
-            None
-        } else {
-            Some(WrapParamRef::<MSG, _>::from(arg_os_event))
-        };
-        let arg_os_event = arg_os_event.as_mut().map(|arg| arg.as_mut());
-        ImplKeyboardHandler::on_key_event(
-            &arg_self_.interface,
-            arg_browser,
-            arg_event,
-            arg_os_event,
-        )
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_browser, arg_event, arg_os_event) =
+                (self_, browser, event, os_event);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_browser = unsafe { arg_browser.as_mut() }
+                .map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
+            let arg_browser = arg_browser.as_mut();
+            let arg_event = if arg_event.is_null() {
+                None
+            } else {
+                Some(WrapParamRef::<KeyEvent, _>::from(arg_event))
+            };
+            let arg_event = arg_event.as_ref().map(|arg| arg.as_ref());
+            let mut arg_os_event = if arg_os_event.is_null() {
+                None
+            } else {
+                Some(WrapParamRef::<MSG, _>::from(arg_os_event))
+            };
+            let arg_os_event = arg_os_event.as_mut().map(|arg| arg.as_mut());
+            ImplKeyboardHandler::on_key_event(
+                &arg_self_.interface,
+                arg_browser,
+                arg_event,
+                arg_os_event,
+            )
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
 }
 impl ImplKeyboardHandler for KeyboardHandler {
@@ -20787,153 +21310,164 @@ mod impl_cef_life_span_handler_t {
         extra_info: *mut *mut _cef_dictionary_value_t,
         no_javascript_access: *mut ::std::os::raw::c_int,
     ) -> ::std::os::raw::c_int {
-        let (
-            arg_self_,
-            arg_browser,
-            arg_frame,
-            arg_popup_id,
-            arg_target_url,
-            arg_target_frame_name,
-            arg_target_disposition,
-            arg_user_gesture,
-            arg_popup_features,
-            arg_window_info,
-            arg_client,
-            arg_settings,
-            arg_extra_info,
-            arg_no_javascript_access,
-        ) = (
-            self_,
-            browser,
-            frame,
-            popup_id,
-            target_url,
-            target_frame_name,
-            target_disposition,
-            user_gesture,
-            popup_features,
-            window_info,
-            client,
-            settings,
-            extra_info,
-            no_javascript_access,
-        );
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_browser =
-            unsafe { arg_browser.as_mut() }.map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
-        let arg_browser = arg_browser.as_mut();
-        let mut arg_frame =
-            unsafe { arg_frame.as_mut() }.map(|arg| Frame(unsafe { RefGuard::from_raw(arg) }));
-        let arg_frame = arg_frame.as_mut();
-        let arg_popup_id = arg_popup_id.into_raw();
-        let arg_target_url = if arg_target_url.is_null() {
-            None
-        } else {
-            Some(arg_target_url.into())
-        };
-        let arg_target_url = arg_target_url.as_ref();
-        let arg_target_frame_name = if arg_target_frame_name.is_null() {
-            None
-        } else {
-            Some(arg_target_frame_name.into())
-        };
-        let arg_target_frame_name = arg_target_frame_name.as_ref();
-        let arg_target_disposition = arg_target_disposition.into_raw();
-        let arg_user_gesture = arg_user_gesture.into_raw();
-        let arg_popup_features = if arg_popup_features.is_null() {
-            None
-        } else {
-            Some(WrapParamRef::<PopupFeatures, _>::from(arg_popup_features))
-        };
-        let arg_popup_features = arg_popup_features.as_ref().map(|arg| arg.as_ref());
-        let mut arg_window_info = if arg_window_info.is_null() {
-            None
-        } else {
-            Some(WrapParamRef::<WindowInfo, _>::from(arg_window_info))
-        };
-        let arg_window_info = arg_window_info.as_mut().map(|arg| arg.as_mut());
-        let out_client = arg_client;
-        let mut wrap_client = unsafe { arg_client.as_mut() }.and_then(|ptr| {
-            if ptr.is_null() {
-                None
-            } else {
-                Some(Client(unsafe { RefGuard::from_raw(*ptr) }))
-            }
-        });
-        let arg_client = Some(&mut wrap_client);
-        let mut arg_settings = if arg_settings.is_null() {
-            None
-        } else {
-            Some(WrapParamRef::<BrowserSettings, _>::from(arg_settings))
-        };
-        let arg_settings = arg_settings.as_mut().map(|arg| arg.as_mut());
-        let out_extra_info = arg_extra_info;
-        let mut wrap_extra_info = unsafe { arg_extra_info.as_mut() }.and_then(|ptr| {
-            if ptr.is_null() {
-                None
-            } else {
-                Some(DictionaryValue(unsafe { RefGuard::from_raw(*ptr) }))
-            }
-        });
-        let arg_extra_info = Some(&mut wrap_extra_info);
-        let mut arg_no_javascript_access = if arg_no_javascript_access.is_null() {
-            None
-        } else {
-            Some(WrapParamRef::<::std::os::raw::c_int, _>::from(
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (
+                arg_self_,
+                arg_browser,
+                arg_frame,
+                arg_popup_id,
+                arg_target_url,
+                arg_target_frame_name,
+                arg_target_disposition,
+                arg_user_gesture,
+                arg_popup_features,
+                arg_window_info,
+                arg_client,
+                arg_settings,
+                arg_extra_info,
                 arg_no_javascript_access,
-            ))
-        };
-        let arg_no_javascript_access = arg_no_javascript_access.as_mut().map(|arg| arg.as_mut());
-        let result = ImplLifeSpanHandler::on_before_popup(
-            &arg_self_.interface,
-            arg_browser,
-            arg_frame,
-            arg_popup_id,
-            arg_target_url,
-            arg_target_frame_name,
-            arg_target_disposition,
-            arg_user_gesture,
-            arg_popup_features,
-            arg_window_info,
-            arg_client,
-            arg_settings,
-            arg_extra_info,
-            arg_no_javascript_access,
-        );
-        if let Some(out_client) = unsafe { out_client.as_mut() } {
-            match wrap_client {
-                Some(wrap_client) if wrap_client.get_raw() == *out_client => drop(wrap_client),
-                Some(wrap_client) => *out_client = wrap_client.wrap_result(),
-                None => *out_client = std::ptr::null_mut(),
-            }
-        }
-        if let Some(out_extra_info) = unsafe { out_extra_info.as_mut() } {
-            match wrap_extra_info {
-                Some(wrap_extra_info) if wrap_extra_info.get_raw() == *out_extra_info => {
-                    drop(wrap_extra_info)
+            ) = (
+                self_,
+                browser,
+                frame,
+                popup_id,
+                target_url,
+                target_frame_name,
+                target_disposition,
+                user_gesture,
+                popup_features,
+                window_info,
+                client,
+                settings,
+                extra_info,
+                no_javascript_access,
+            );
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_browser = unsafe { arg_browser.as_mut() }
+                .map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
+            let arg_browser = arg_browser.as_mut();
+            let mut arg_frame =
+                unsafe { arg_frame.as_mut() }.map(|arg| Frame(unsafe { RefGuard::from_raw(arg) }));
+            let arg_frame = arg_frame.as_mut();
+            let arg_popup_id = arg_popup_id.into_raw();
+            let arg_target_url = if arg_target_url.is_null() {
+                None
+            } else {
+                Some(arg_target_url.into())
+            };
+            let arg_target_url = arg_target_url.as_ref();
+            let arg_target_frame_name = if arg_target_frame_name.is_null() {
+                None
+            } else {
+                Some(arg_target_frame_name.into())
+            };
+            let arg_target_frame_name = arg_target_frame_name.as_ref();
+            let arg_target_disposition = arg_target_disposition.into_raw();
+            let arg_user_gesture = arg_user_gesture.into_raw();
+            let arg_popup_features = if arg_popup_features.is_null() {
+                None
+            } else {
+                Some(WrapParamRef::<PopupFeatures, _>::from(arg_popup_features))
+            };
+            let arg_popup_features = arg_popup_features.as_ref().map(|arg| arg.as_ref());
+            let mut arg_window_info = if arg_window_info.is_null() {
+                None
+            } else {
+                Some(WrapParamRef::<WindowInfo, _>::from(arg_window_info))
+            };
+            let arg_window_info = arg_window_info.as_mut().map(|arg| arg.as_mut());
+            let out_client = arg_client;
+            let mut wrap_client = unsafe { arg_client.as_mut() }.and_then(|ptr| {
+                if ptr.is_null() {
+                    None
+                } else {
+                    Some(Client(unsafe { RefGuard::from_raw(*ptr) }))
                 }
-                Some(wrap_extra_info) => *out_extra_info = wrap_extra_info.wrap_result(),
-                None => *out_extra_info = std::ptr::null_mut(),
+            });
+            let arg_client = Some(&mut wrap_client);
+            let mut arg_settings = if arg_settings.is_null() {
+                None
+            } else {
+                Some(WrapParamRef::<BrowserSettings, _>::from(arg_settings))
+            };
+            let arg_settings = arg_settings.as_mut().map(|arg| arg.as_mut());
+            let out_extra_info = arg_extra_info;
+            let mut wrap_extra_info = unsafe { arg_extra_info.as_mut() }.and_then(|ptr| {
+                if ptr.is_null() {
+                    None
+                } else {
+                    Some(DictionaryValue(unsafe { RefGuard::from_raw(*ptr) }))
+                }
+            });
+            let arg_extra_info = Some(&mut wrap_extra_info);
+            let mut arg_no_javascript_access = if arg_no_javascript_access.is_null() {
+                None
+            } else {
+                Some(WrapParamRef::<::std::os::raw::c_int, _>::from(
+                    arg_no_javascript_access,
+                ))
+            };
+            let arg_no_javascript_access =
+                arg_no_javascript_access.as_mut().map(|arg| arg.as_mut());
+            let result = ImplLifeSpanHandler::on_before_popup(
+                &arg_self_.interface,
+                arg_browser,
+                arg_frame,
+                arg_popup_id,
+                arg_target_url,
+                arg_target_frame_name,
+                arg_target_disposition,
+                arg_user_gesture,
+                arg_popup_features,
+                arg_window_info,
+                arg_client,
+                arg_settings,
+                arg_extra_info,
+                arg_no_javascript_access,
+            );
+            if let Some(out_client) = unsafe { out_client.as_mut() } {
+                match wrap_client {
+                    Some(wrap_client) if wrap_client.get_raw() == *out_client => drop(wrap_client),
+                    Some(wrap_client) => *out_client = wrap_client.wrap_result(),
+                    None => *out_client = std::ptr::null_mut(),
+                }
             }
+            if let Some(out_extra_info) = unsafe { out_extra_info.as_mut() } {
+                match wrap_extra_info {
+                    Some(wrap_extra_info) if wrap_extra_info.get_raw() == *out_extra_info => {
+                        drop(wrap_extra_info)
+                    }
+                    Some(wrap_extra_info) => *out_extra_info = wrap_extra_info.wrap_result(),
+                    None => *out_extra_info = std::ptr::null_mut(),
+                }
+            }
+            result
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
         }
-        result
     }
     extern "C" fn on_before_popup_aborted<I: ImplLifeSpanHandler, R: Rc>(
         self_: *mut _cef_life_span_handler_t,
         browser: *mut _cef_browser_t,
         popup_id: ::std::os::raw::c_int,
     ) {
-        let (arg_self_, arg_browser, arg_popup_id) = (self_, browser, popup_id);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_browser =
-            unsafe { arg_browser.as_mut() }.map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
-        let arg_browser = arg_browser.as_mut();
-        let arg_popup_id = arg_popup_id.into_raw();
-        ImplLifeSpanHandler::on_before_popup_aborted(
-            &arg_self_.interface,
-            arg_browser,
-            arg_popup_id,
-        )
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_browser, arg_popup_id) = (self_, browser, popup_id);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_browser = unsafe { arg_browser.as_mut() }
+                .map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
+            let arg_browser = arg_browser.as_mut();
+            let arg_popup_id = arg_popup_id.into_raw();
+            ImplLifeSpanHandler::on_before_popup_aborted(
+                &arg_self_.interface,
+                arg_browser,
+                arg_popup_id,
+            )
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn on_before_dev_tools_popup<I: ImplLifeSpanHandler, R: Rc>(
         self_: *mut _cef_life_span_handler_t,
@@ -20944,123 +21478,143 @@ mod impl_cef_life_span_handler_t {
         extra_info: *mut *mut _cef_dictionary_value_t,
         use_default_window: *mut ::std::os::raw::c_int,
     ) {
-        let (
-            arg_self_,
-            arg_browser,
-            arg_window_info,
-            arg_client,
-            arg_settings,
-            arg_extra_info,
-            arg_use_default_window,
-        ) = (
-            self_,
-            browser,
-            window_info,
-            client,
-            settings,
-            extra_info,
-            use_default_window,
-        );
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_browser =
-            unsafe { arg_browser.as_mut() }.map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
-        let arg_browser = arg_browser.as_mut();
-        let mut arg_window_info = if arg_window_info.is_null() {
-            None
-        } else {
-            Some(WrapParamRef::<WindowInfo, _>::from(arg_window_info))
-        };
-        let arg_window_info = arg_window_info.as_mut().map(|arg| arg.as_mut());
-        let out_client = arg_client;
-        let mut wrap_client = unsafe { arg_client.as_mut() }.and_then(|ptr| {
-            if ptr.is_null() {
-                None
-            } else {
-                Some(Client(unsafe { RefGuard::from_raw(*ptr) }))
-            }
-        });
-        let arg_client = Some(&mut wrap_client);
-        let mut arg_settings = if arg_settings.is_null() {
-            None
-        } else {
-            Some(WrapParamRef::<BrowserSettings, _>::from(arg_settings))
-        };
-        let arg_settings = arg_settings.as_mut().map(|arg| arg.as_mut());
-        let out_extra_info = arg_extra_info;
-        let mut wrap_extra_info = unsafe { arg_extra_info.as_mut() }.and_then(|ptr| {
-            if ptr.is_null() {
-                None
-            } else {
-                Some(DictionaryValue(unsafe { RefGuard::from_raw(*ptr) }))
-            }
-        });
-        let arg_extra_info = Some(&mut wrap_extra_info);
-        let mut arg_use_default_window = if arg_use_default_window.is_null() {
-            None
-        } else {
-            Some(WrapParamRef::<::std::os::raw::c_int, _>::from(
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (
+                arg_self_,
+                arg_browser,
+                arg_window_info,
+                arg_client,
+                arg_settings,
+                arg_extra_info,
                 arg_use_default_window,
-            ))
-        };
-        let arg_use_default_window = arg_use_default_window.as_mut().map(|arg| arg.as_mut());
-        let result = ImplLifeSpanHandler::on_before_dev_tools_popup(
-            &arg_self_.interface,
-            arg_browser,
-            arg_window_info,
-            arg_client,
-            arg_settings,
-            arg_extra_info,
-            arg_use_default_window,
-        );
-        if let Some(out_client) = unsafe { out_client.as_mut() } {
-            match wrap_client {
-                Some(wrap_client) if wrap_client.get_raw() == *out_client => drop(wrap_client),
-                Some(wrap_client) => *out_client = wrap_client.wrap_result(),
-                None => *out_client = std::ptr::null_mut(),
-            }
-        }
-        if let Some(out_extra_info) = unsafe { out_extra_info.as_mut() } {
-            match wrap_extra_info {
-                Some(wrap_extra_info) if wrap_extra_info.get_raw() == *out_extra_info => {
-                    drop(wrap_extra_info)
+            ) = (
+                self_,
+                browser,
+                window_info,
+                client,
+                settings,
+                extra_info,
+                use_default_window,
+            );
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_browser = unsafe { arg_browser.as_mut() }
+                .map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
+            let arg_browser = arg_browser.as_mut();
+            let mut arg_window_info = if arg_window_info.is_null() {
+                None
+            } else {
+                Some(WrapParamRef::<WindowInfo, _>::from(arg_window_info))
+            };
+            let arg_window_info = arg_window_info.as_mut().map(|arg| arg.as_mut());
+            let out_client = arg_client;
+            let mut wrap_client = unsafe { arg_client.as_mut() }.and_then(|ptr| {
+                if ptr.is_null() {
+                    None
+                } else {
+                    Some(Client(unsafe { RefGuard::from_raw(*ptr) }))
                 }
-                Some(wrap_extra_info) => *out_extra_info = wrap_extra_info.wrap_result(),
-                None => *out_extra_info = std::ptr::null_mut(),
+            });
+            let arg_client = Some(&mut wrap_client);
+            let mut arg_settings = if arg_settings.is_null() {
+                None
+            } else {
+                Some(WrapParamRef::<BrowserSettings, _>::from(arg_settings))
+            };
+            let arg_settings = arg_settings.as_mut().map(|arg| arg.as_mut());
+            let out_extra_info = arg_extra_info;
+            let mut wrap_extra_info = unsafe { arg_extra_info.as_mut() }.and_then(|ptr| {
+                if ptr.is_null() {
+                    None
+                } else {
+                    Some(DictionaryValue(unsafe { RefGuard::from_raw(*ptr) }))
+                }
+            });
+            let arg_extra_info = Some(&mut wrap_extra_info);
+            let mut arg_use_default_window = if arg_use_default_window.is_null() {
+                None
+            } else {
+                Some(WrapParamRef::<::std::os::raw::c_int, _>::from(
+                    arg_use_default_window,
+                ))
+            };
+            let arg_use_default_window = arg_use_default_window.as_mut().map(|arg| arg.as_mut());
+            let result = ImplLifeSpanHandler::on_before_dev_tools_popup(
+                &arg_self_.interface,
+                arg_browser,
+                arg_window_info,
+                arg_client,
+                arg_settings,
+                arg_extra_info,
+                arg_use_default_window,
+            );
+            if let Some(out_client) = unsafe { out_client.as_mut() } {
+                match wrap_client {
+                    Some(wrap_client) if wrap_client.get_raw() == *out_client => drop(wrap_client),
+                    Some(wrap_client) => *out_client = wrap_client.wrap_result(),
+                    None => *out_client = std::ptr::null_mut(),
+                }
             }
+            if let Some(out_extra_info) = unsafe { out_extra_info.as_mut() } {
+                match wrap_extra_info {
+                    Some(wrap_extra_info) if wrap_extra_info.get_raw() == *out_extra_info => {
+                        drop(wrap_extra_info)
+                    }
+                    Some(wrap_extra_info) => *out_extra_info = wrap_extra_info.wrap_result(),
+                    None => *out_extra_info = std::ptr::null_mut(),
+                }
+            }
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
         }
     }
     extern "C" fn on_after_created<I: ImplLifeSpanHandler, R: Rc>(
         self_: *mut _cef_life_span_handler_t,
         browser: *mut _cef_browser_t,
     ) {
-        let (arg_self_, arg_browser) = (self_, browser);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_browser =
-            unsafe { arg_browser.as_mut() }.map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
-        let arg_browser = arg_browser.as_mut();
-        ImplLifeSpanHandler::on_after_created(&arg_self_.interface, arg_browser)
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_browser) = (self_, browser);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_browser = unsafe { arg_browser.as_mut() }
+                .map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
+            let arg_browser = arg_browser.as_mut();
+            ImplLifeSpanHandler::on_after_created(&arg_self_.interface, arg_browser)
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn do_close<I: ImplLifeSpanHandler, R: Rc>(
         self_: *mut _cef_life_span_handler_t,
         browser: *mut _cef_browser_t,
     ) -> ::std::os::raw::c_int {
-        let (arg_self_, arg_browser) = (self_, browser);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_browser =
-            unsafe { arg_browser.as_mut() }.map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
-        let arg_browser = arg_browser.as_mut();
-        ImplLifeSpanHandler::do_close(&arg_self_.interface, arg_browser)
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_browser) = (self_, browser);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_browser = unsafe { arg_browser.as_mut() }
+                .map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
+            let arg_browser = arg_browser.as_mut();
+            ImplLifeSpanHandler::do_close(&arg_self_.interface, arg_browser)
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn on_before_close<I: ImplLifeSpanHandler, R: Rc>(
         self_: *mut _cef_life_span_handler_t,
         browser: *mut _cef_browser_t,
     ) {
-        let (arg_self_, arg_browser) = (self_, browser);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_browser =
-            unsafe { arg_browser.as_mut() }.map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
-        let arg_browser = arg_browser.as_mut();
-        ImplLifeSpanHandler::on_before_close(&arg_self_.interface, arg_browser)
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_browser) = (self_, browser);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_browser = unsafe { arg_browser.as_mut() }
+                .map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
+            let arg_browser = arg_browser.as_mut();
+            ImplLifeSpanHandler::on_before_close(&arg_self_.interface, arg_browser)
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
 }
 impl ImplLifeSpanHandler for LifeSpanHandler {
@@ -21496,22 +22050,27 @@ mod impl_cef_load_handler_t {
         can_go_back: ::std::os::raw::c_int,
         can_go_forward: ::std::os::raw::c_int,
     ) {
-        let (arg_self_, arg_browser, arg_is_loading, arg_can_go_back, arg_can_go_forward) =
-            (self_, browser, is_loading, can_go_back, can_go_forward);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_browser =
-            unsafe { arg_browser.as_mut() }.map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
-        let arg_browser = arg_browser.as_mut();
-        let arg_is_loading = arg_is_loading.into_raw();
-        let arg_can_go_back = arg_can_go_back.into_raw();
-        let arg_can_go_forward = arg_can_go_forward.into_raw();
-        ImplLoadHandler::on_loading_state_change(
-            &arg_self_.interface,
-            arg_browser,
-            arg_is_loading,
-            arg_can_go_back,
-            arg_can_go_forward,
-        )
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_browser, arg_is_loading, arg_can_go_back, arg_can_go_forward) =
+                (self_, browser, is_loading, can_go_back, can_go_forward);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_browser = unsafe { arg_browser.as_mut() }
+                .map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
+            let arg_browser = arg_browser.as_mut();
+            let arg_is_loading = arg_is_loading.into_raw();
+            let arg_can_go_back = arg_can_go_back.into_raw();
+            let arg_can_go_forward = arg_can_go_forward.into_raw();
+            ImplLoadHandler::on_loading_state_change(
+                &arg_self_.interface,
+                arg_browser,
+                arg_is_loading,
+                arg_can_go_back,
+                arg_can_go_forward,
+            )
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn on_load_start<I: ImplLoadHandler, R: Rc>(
         self_: *mut _cef_load_handler_t,
@@ -21519,22 +22078,27 @@ mod impl_cef_load_handler_t {
         frame: *mut _cef_frame_t,
         transition_type: cef_transition_type_t,
     ) {
-        let (arg_self_, arg_browser, arg_frame, arg_transition_type) =
-            (self_, browser, frame, transition_type);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_browser =
-            unsafe { arg_browser.as_mut() }.map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
-        let arg_browser = arg_browser.as_mut();
-        let mut arg_frame =
-            unsafe { arg_frame.as_mut() }.map(|arg| Frame(unsafe { RefGuard::from_raw(arg) }));
-        let arg_frame = arg_frame.as_mut();
-        let arg_transition_type = arg_transition_type.into_raw();
-        ImplLoadHandler::on_load_start(
-            &arg_self_.interface,
-            arg_browser,
-            arg_frame,
-            arg_transition_type,
-        )
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_browser, arg_frame, arg_transition_type) =
+                (self_, browser, frame, transition_type);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_browser = unsafe { arg_browser.as_mut() }
+                .map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
+            let arg_browser = arg_browser.as_mut();
+            let mut arg_frame =
+                unsafe { arg_frame.as_mut() }.map(|arg| Frame(unsafe { RefGuard::from_raw(arg) }));
+            let arg_frame = arg_frame.as_mut();
+            let arg_transition_type = arg_transition_type.into_raw();
+            ImplLoadHandler::on_load_start(
+                &arg_self_.interface,
+                arg_browser,
+                arg_frame,
+                arg_transition_type,
+            )
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn on_load_end<I: ImplLoadHandler, R: Rc>(
         self_: *mut _cef_load_handler_t,
@@ -21542,22 +22106,27 @@ mod impl_cef_load_handler_t {
         frame: *mut _cef_frame_t,
         http_status_code: ::std::os::raw::c_int,
     ) {
-        let (arg_self_, arg_browser, arg_frame, arg_http_status_code) =
-            (self_, browser, frame, http_status_code);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_browser =
-            unsafe { arg_browser.as_mut() }.map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
-        let arg_browser = arg_browser.as_mut();
-        let mut arg_frame =
-            unsafe { arg_frame.as_mut() }.map(|arg| Frame(unsafe { RefGuard::from_raw(arg) }));
-        let arg_frame = arg_frame.as_mut();
-        let arg_http_status_code = arg_http_status_code.into_raw();
-        ImplLoadHandler::on_load_end(
-            &arg_self_.interface,
-            arg_browser,
-            arg_frame,
-            arg_http_status_code,
-        )
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_browser, arg_frame, arg_http_status_code) =
+                (self_, browser, frame, http_status_code);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_browser = unsafe { arg_browser.as_mut() }
+                .map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
+            let arg_browser = arg_browser.as_mut();
+            let mut arg_frame =
+                unsafe { arg_frame.as_mut() }.map(|arg| Frame(unsafe { RefGuard::from_raw(arg) }));
+            let arg_frame = arg_frame.as_mut();
+            let arg_http_status_code = arg_http_status_code.into_raw();
+            ImplLoadHandler::on_load_end(
+                &arg_self_.interface,
+                arg_browser,
+                arg_frame,
+                arg_http_status_code,
+            )
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn on_load_error<I: ImplLoadHandler, R: Rc>(
         self_: *mut _cef_load_handler_t,
@@ -21567,36 +22136,41 @@ mod impl_cef_load_handler_t {
         error_text: *const cef_string_t,
         failed_url: *const cef_string_t,
     ) {
-        let (arg_self_, arg_browser, arg_frame, arg_error_code, arg_error_text, arg_failed_url) =
-            (self_, browser, frame, error_code, error_text, failed_url);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_browser =
-            unsafe { arg_browser.as_mut() }.map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
-        let arg_browser = arg_browser.as_mut();
-        let mut arg_frame =
-            unsafe { arg_frame.as_mut() }.map(|arg| Frame(unsafe { RefGuard::from_raw(arg) }));
-        let arg_frame = arg_frame.as_mut();
-        let arg_error_code = arg_error_code.into_raw();
-        let arg_error_text = if arg_error_text.is_null() {
-            None
-        } else {
-            Some(arg_error_text.into())
-        };
-        let arg_error_text = arg_error_text.as_ref();
-        let arg_failed_url = if arg_failed_url.is_null() {
-            None
-        } else {
-            Some(arg_failed_url.into())
-        };
-        let arg_failed_url = arg_failed_url.as_ref();
-        ImplLoadHandler::on_load_error(
-            &arg_self_.interface,
-            arg_browser,
-            arg_frame,
-            arg_error_code,
-            arg_error_text,
-            arg_failed_url,
-        )
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_browser, arg_frame, arg_error_code, arg_error_text, arg_failed_url) =
+                (self_, browser, frame, error_code, error_text, failed_url);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_browser = unsafe { arg_browser.as_mut() }
+                .map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
+            let arg_browser = arg_browser.as_mut();
+            let mut arg_frame =
+                unsafe { arg_frame.as_mut() }.map(|arg| Frame(unsafe { RefGuard::from_raw(arg) }));
+            let arg_frame = arg_frame.as_mut();
+            let arg_error_code = arg_error_code.into_raw();
+            let arg_error_text = if arg_error_text.is_null() {
+                None
+            } else {
+                Some(arg_error_text.into())
+            };
+            let arg_error_text = arg_error_text.as_ref();
+            let arg_failed_url = if arg_failed_url.is_null() {
+                None
+            } else {
+                Some(arg_failed_url.into())
+            };
+            let arg_failed_url = arg_failed_url.as_ref();
+            ImplLoadHandler::on_load_error(
+                &arg_self_.interface,
+                arg_browser,
+                arg_frame,
+                arg_error_code,
+                arg_error_text,
+                arg_failed_url,
+            )
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
 }
 impl ImplLoadHandler for LoadHandler {
@@ -21960,46 +22534,51 @@ mod impl_cef_permission_handler_t {
         requested_permissions: u32,
         callback: *mut _cef_media_access_callback_t,
     ) -> ::std::os::raw::c_int {
-        let (
-            arg_self_,
-            arg_browser,
-            arg_frame,
-            arg_requesting_origin,
-            arg_requested_permissions,
-            arg_callback,
-        ) = (
-            self_,
-            browser,
-            frame,
-            requesting_origin,
-            requested_permissions,
-            callback,
-        );
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_browser =
-            unsafe { arg_browser.as_mut() }.map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
-        let arg_browser = arg_browser.as_mut();
-        let mut arg_frame =
-            unsafe { arg_frame.as_mut() }.map(|arg| Frame(unsafe { RefGuard::from_raw(arg) }));
-        let arg_frame = arg_frame.as_mut();
-        let arg_requesting_origin = if arg_requesting_origin.is_null() {
-            None
-        } else {
-            Some(arg_requesting_origin.into())
-        };
-        let arg_requesting_origin = arg_requesting_origin.as_ref();
-        let arg_requested_permissions = arg_requested_permissions.into_raw();
-        let mut arg_callback = unsafe { arg_callback.as_mut() }
-            .map(|arg| MediaAccessCallback(unsafe { RefGuard::from_raw(arg) }));
-        let arg_callback = arg_callback.as_mut();
-        ImplPermissionHandler::on_request_media_access_permission(
-            &arg_self_.interface,
-            arg_browser,
-            arg_frame,
-            arg_requesting_origin,
-            arg_requested_permissions,
-            arg_callback,
-        )
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (
+                arg_self_,
+                arg_browser,
+                arg_frame,
+                arg_requesting_origin,
+                arg_requested_permissions,
+                arg_callback,
+            ) = (
+                self_,
+                browser,
+                frame,
+                requesting_origin,
+                requested_permissions,
+                callback,
+            );
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_browser = unsafe { arg_browser.as_mut() }
+                .map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
+            let arg_browser = arg_browser.as_mut();
+            let mut arg_frame =
+                unsafe { arg_frame.as_mut() }.map(|arg| Frame(unsafe { RefGuard::from_raw(arg) }));
+            let arg_frame = arg_frame.as_mut();
+            let arg_requesting_origin = if arg_requesting_origin.is_null() {
+                None
+            } else {
+                Some(arg_requesting_origin.into())
+            };
+            let arg_requesting_origin = arg_requesting_origin.as_ref();
+            let arg_requested_permissions = arg_requested_permissions.into_raw();
+            let mut arg_callback = unsafe { arg_callback.as_mut() }
+                .map(|arg| MediaAccessCallback(unsafe { RefGuard::from_raw(arg) }));
+            let arg_callback = arg_callback.as_mut();
+            ImplPermissionHandler::on_request_media_access_permission(
+                &arg_self_.interface,
+                arg_browser,
+                arg_frame,
+                arg_requesting_origin,
+                arg_requested_permissions,
+                arg_callback,
+            )
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn on_show_permission_prompt<I: ImplPermissionHandler, R: Rc>(
         self_: *mut _cef_permission_handler_t,
@@ -22009,44 +22588,49 @@ mod impl_cef_permission_handler_t {
         requested_permissions: u32,
         callback: *mut _cef_permission_prompt_callback_t,
     ) -> ::std::os::raw::c_int {
-        let (
-            arg_self_,
-            arg_browser,
-            arg_prompt_id,
-            arg_requesting_origin,
-            arg_requested_permissions,
-            arg_callback,
-        ) = (
-            self_,
-            browser,
-            prompt_id,
-            requesting_origin,
-            requested_permissions,
-            callback,
-        );
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_browser =
-            unsafe { arg_browser.as_mut() }.map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
-        let arg_browser = arg_browser.as_mut();
-        let arg_prompt_id = arg_prompt_id.into_raw();
-        let arg_requesting_origin = if arg_requesting_origin.is_null() {
-            None
-        } else {
-            Some(arg_requesting_origin.into())
-        };
-        let arg_requesting_origin = arg_requesting_origin.as_ref();
-        let arg_requested_permissions = arg_requested_permissions.into_raw();
-        let mut arg_callback = unsafe { arg_callback.as_mut() }
-            .map(|arg| PermissionPromptCallback(unsafe { RefGuard::from_raw(arg) }));
-        let arg_callback = arg_callback.as_mut();
-        ImplPermissionHandler::on_show_permission_prompt(
-            &arg_self_.interface,
-            arg_browser,
-            arg_prompt_id,
-            arg_requesting_origin,
-            arg_requested_permissions,
-            arg_callback,
-        )
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (
+                arg_self_,
+                arg_browser,
+                arg_prompt_id,
+                arg_requesting_origin,
+                arg_requested_permissions,
+                arg_callback,
+            ) = (
+                self_,
+                browser,
+                prompt_id,
+                requesting_origin,
+                requested_permissions,
+                callback,
+            );
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_browser = unsafe { arg_browser.as_mut() }
+                .map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
+            let arg_browser = arg_browser.as_mut();
+            let arg_prompt_id = arg_prompt_id.into_raw();
+            let arg_requesting_origin = if arg_requesting_origin.is_null() {
+                None
+            } else {
+                Some(arg_requesting_origin.into())
+            };
+            let arg_requesting_origin = arg_requesting_origin.as_ref();
+            let arg_requested_permissions = arg_requested_permissions.into_raw();
+            let mut arg_callback = unsafe { arg_callback.as_mut() }
+                .map(|arg| PermissionPromptCallback(unsafe { RefGuard::from_raw(arg) }));
+            let arg_callback = arg_callback.as_mut();
+            ImplPermissionHandler::on_show_permission_prompt(
+                &arg_self_.interface,
+                arg_browser,
+                arg_prompt_id,
+                arg_requesting_origin,
+                arg_requested_permissions,
+                arg_callback,
+            )
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn on_dismiss_permission_prompt<I: ImplPermissionHandler, R: Rc>(
         self_: *mut _cef_permission_handler_t,
@@ -22054,20 +22638,25 @@ mod impl_cef_permission_handler_t {
         prompt_id: u64,
         result: cef_permission_request_result_t,
     ) {
-        let (arg_self_, arg_browser, arg_prompt_id, arg_result) =
-            (self_, browser, prompt_id, result);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_browser =
-            unsafe { arg_browser.as_mut() }.map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
-        let arg_browser = arg_browser.as_mut();
-        let arg_prompt_id = arg_prompt_id.into_raw();
-        let arg_result = arg_result.into_raw();
-        ImplPermissionHandler::on_dismiss_permission_prompt(
-            &arg_self_.interface,
-            arg_browser,
-            arg_prompt_id,
-            arg_result,
-        )
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_browser, arg_prompt_id, arg_result) =
+                (self_, browser, prompt_id, result);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_browser = unsafe { arg_browser.as_mut() }
+                .map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
+            let arg_browser = arg_browser.as_mut();
+            let arg_prompt_id = arg_prompt_id.into_raw();
+            let arg_result = arg_result.into_raw();
+            ImplPermissionHandler::on_dismiss_permission_prompt(
+                &arg_self_.interface,
+                arg_browser,
+                arg_prompt_id,
+                arg_result,
+            )
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
 }
 impl ImplPermissionHandler for PermissionHandler {
@@ -22842,12 +23431,17 @@ mod impl_cef_print_handler_t {
         self_: *mut _cef_print_handler_t,
         browser: *mut _cef_browser_t,
     ) {
-        let (arg_self_, arg_browser) = (self_, browser);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_browser =
-            unsafe { arg_browser.as_mut() }.map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
-        let arg_browser = arg_browser.as_mut();
-        ImplPrintHandler::on_print_start(&arg_self_.interface, arg_browser)
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_browser) = (self_, browser);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_browser = unsafe { arg_browser.as_mut() }
+                .map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
+            let arg_browser = arg_browser.as_mut();
+            ImplPrintHandler::on_print_start(&arg_self_.interface, arg_browser)
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn on_print_settings<I: ImplPrintHandler, R: Rc>(
         self_: *mut _cef_print_handler_t,
@@ -22855,22 +23449,27 @@ mod impl_cef_print_handler_t {
         settings: *mut _cef_print_settings_t,
         get_defaults: ::std::os::raw::c_int,
     ) {
-        let (arg_self_, arg_browser, arg_settings, arg_get_defaults) =
-            (self_, browser, settings, get_defaults);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_browser =
-            unsafe { arg_browser.as_mut() }.map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
-        let arg_browser = arg_browser.as_mut();
-        let mut arg_settings = unsafe { arg_settings.as_mut() }
-            .map(|arg| PrintSettings(unsafe { RefGuard::from_raw(arg) }));
-        let arg_settings = arg_settings.as_mut();
-        let arg_get_defaults = arg_get_defaults.into_raw();
-        ImplPrintHandler::on_print_settings(
-            &arg_self_.interface,
-            arg_browser,
-            arg_settings,
-            arg_get_defaults,
-        )
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_browser, arg_settings, arg_get_defaults) =
+                (self_, browser, settings, get_defaults);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_browser = unsafe { arg_browser.as_mut() }
+                .map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
+            let arg_browser = arg_browser.as_mut();
+            let mut arg_settings = unsafe { arg_settings.as_mut() }
+                .map(|arg| PrintSettings(unsafe { RefGuard::from_raw(arg) }));
+            let arg_settings = arg_settings.as_mut();
+            let arg_get_defaults = arg_get_defaults.into_raw();
+            ImplPrintHandler::on_print_settings(
+                &arg_self_.interface,
+                arg_browser,
+                arg_settings,
+                arg_get_defaults,
+            )
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn on_print_dialog<I: ImplPrintHandler, R: Rc>(
         self_: *mut _cef_print_handler_t,
@@ -22878,22 +23477,27 @@ mod impl_cef_print_handler_t {
         has_selection: ::std::os::raw::c_int,
         callback: *mut _cef_print_dialog_callback_t,
     ) -> ::std::os::raw::c_int {
-        let (arg_self_, arg_browser, arg_has_selection, arg_callback) =
-            (self_, browser, has_selection, callback);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_browser =
-            unsafe { arg_browser.as_mut() }.map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
-        let arg_browser = arg_browser.as_mut();
-        let arg_has_selection = arg_has_selection.into_raw();
-        let mut arg_callback = unsafe { arg_callback.as_mut() }
-            .map(|arg| PrintDialogCallback(unsafe { RefGuard::from_raw(arg) }));
-        let arg_callback = arg_callback.as_mut();
-        ImplPrintHandler::on_print_dialog(
-            &arg_self_.interface,
-            arg_browser,
-            arg_has_selection,
-            arg_callback,
-        )
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_browser, arg_has_selection, arg_callback) =
+                (self_, browser, has_selection, callback);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_browser = unsafe { arg_browser.as_mut() }
+                .map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
+            let arg_browser = arg_browser.as_mut();
+            let arg_has_selection = arg_has_selection.into_raw();
+            let mut arg_callback = unsafe { arg_callback.as_mut() }
+                .map(|arg| PrintDialogCallback(unsafe { RefGuard::from_raw(arg) }));
+            let arg_callback = arg_callback.as_mut();
+            ImplPrintHandler::on_print_dialog(
+                &arg_self_.interface,
+                arg_browser,
+                arg_has_selection,
+                arg_callback,
+            )
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn on_print_job<I: ImplPrintHandler, R: Rc>(
         self_: *mut _cef_print_handler_t,
@@ -22902,64 +23506,79 @@ mod impl_cef_print_handler_t {
         pdf_file_path: *const cef_string_t,
         callback: *mut _cef_print_job_callback_t,
     ) -> ::std::os::raw::c_int {
-        let (arg_self_, arg_browser, arg_document_name, arg_pdf_file_path, arg_callback) =
-            (self_, browser, document_name, pdf_file_path, callback);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_browser =
-            unsafe { arg_browser.as_mut() }.map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
-        let arg_browser = arg_browser.as_mut();
-        let arg_document_name = if arg_document_name.is_null() {
-            None
-        } else {
-            Some(arg_document_name.into())
-        };
-        let arg_document_name = arg_document_name.as_ref();
-        let arg_pdf_file_path = if arg_pdf_file_path.is_null() {
-            None
-        } else {
-            Some(arg_pdf_file_path.into())
-        };
-        let arg_pdf_file_path = arg_pdf_file_path.as_ref();
-        let mut arg_callback = unsafe { arg_callback.as_mut() }
-            .map(|arg| PrintJobCallback(unsafe { RefGuard::from_raw(arg) }));
-        let arg_callback = arg_callback.as_mut();
-        ImplPrintHandler::on_print_job(
-            &arg_self_.interface,
-            arg_browser,
-            arg_document_name,
-            arg_pdf_file_path,
-            arg_callback,
-        )
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_browser, arg_document_name, arg_pdf_file_path, arg_callback) =
+                (self_, browser, document_name, pdf_file_path, callback);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_browser = unsafe { arg_browser.as_mut() }
+                .map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
+            let arg_browser = arg_browser.as_mut();
+            let arg_document_name = if arg_document_name.is_null() {
+                None
+            } else {
+                Some(arg_document_name.into())
+            };
+            let arg_document_name = arg_document_name.as_ref();
+            let arg_pdf_file_path = if arg_pdf_file_path.is_null() {
+                None
+            } else {
+                Some(arg_pdf_file_path.into())
+            };
+            let arg_pdf_file_path = arg_pdf_file_path.as_ref();
+            let mut arg_callback = unsafe { arg_callback.as_mut() }
+                .map(|arg| PrintJobCallback(unsafe { RefGuard::from_raw(arg) }));
+            let arg_callback = arg_callback.as_mut();
+            ImplPrintHandler::on_print_job(
+                &arg_self_.interface,
+                arg_browser,
+                arg_document_name,
+                arg_pdf_file_path,
+                arg_callback,
+            )
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn on_print_reset<I: ImplPrintHandler, R: Rc>(
         self_: *mut _cef_print_handler_t,
         browser: *mut _cef_browser_t,
     ) {
-        let (arg_self_, arg_browser) = (self_, browser);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_browser =
-            unsafe { arg_browser.as_mut() }.map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
-        let arg_browser = arg_browser.as_mut();
-        ImplPrintHandler::on_print_reset(&arg_self_.interface, arg_browser)
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_browser) = (self_, browser);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_browser = unsafe { arg_browser.as_mut() }
+                .map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
+            let arg_browser = arg_browser.as_mut();
+            ImplPrintHandler::on_print_reset(&arg_self_.interface, arg_browser)
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn get_pdf_paper_size<I: ImplPrintHandler, R: Rc>(
         self_: *mut _cef_print_handler_t,
         browser: *mut _cef_browser_t,
         device_units_per_inch: ::std::os::raw::c_int,
     ) -> _cef_size_t {
-        let (arg_self_, arg_browser, arg_device_units_per_inch) =
-            (self_, browser, device_units_per_inch);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_browser =
-            unsafe { arg_browser.as_mut() }.map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
-        let arg_browser = arg_browser.as_mut();
-        let arg_device_units_per_inch = arg_device_units_per_inch.into_raw();
-        let result = ImplPrintHandler::pdf_paper_size(
-            &arg_self_.interface,
-            arg_browser,
-            arg_device_units_per_inch,
-        );
-        result.into()
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_browser, arg_device_units_per_inch) =
+                (self_, browser, device_units_per_inch);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_browser = unsafe { arg_browser.as_mut() }
+                .map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
+            let arg_browser = arg_browser.as_mut();
+            let arg_device_units_per_inch = arg_device_units_per_inch.into_raw();
+            let result = ImplPrintHandler::pdf_paper_size(
+                &arg_self_.interface,
+                arg_browser,
+                arg_device_units_per_inch,
+            );
+            result.into()
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
 }
 impl ImplPrintHandler for PrintHandler {
@@ -23319,48 +23938,63 @@ mod impl_cef_render_handler_t {
     extern "C" fn get_accessibility_handler<I: ImplRenderHandler, R: Rc>(
         self_: *mut _cef_render_handler_t,
     ) -> *mut _cef_accessibility_handler_t {
-        let arg_self_ = self_;
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let result = ImplRenderHandler::accessibility_handler(&arg_self_.interface);
-        result
-            .map(|result| result.into())
-            .unwrap_or(std::ptr::null_mut())
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let arg_self_ = self_;
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let result = ImplRenderHandler::accessibility_handler(&arg_self_.interface);
+            result
+                .map(|result| result.into())
+                .unwrap_or(std::ptr::null_mut())
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn get_root_screen_rect<I: ImplRenderHandler, R: Rc>(
         self_: *mut _cef_render_handler_t,
         browser: *mut _cef_browser_t,
         rect: *mut _cef_rect_t,
     ) -> ::std::os::raw::c_int {
-        let (arg_self_, arg_browser, arg_rect) = (self_, browser, rect);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_browser =
-            unsafe { arg_browser.as_mut() }.map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
-        let arg_browser = arg_browser.as_mut();
-        let mut arg_rect = if arg_rect.is_null() {
-            None
-        } else {
-            Some(WrapParamRef::<Rect, _>::from(arg_rect))
-        };
-        let arg_rect = arg_rect.as_mut().map(|arg| arg.as_mut());
-        ImplRenderHandler::root_screen_rect(&arg_self_.interface, arg_browser, arg_rect)
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_browser, arg_rect) = (self_, browser, rect);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_browser = unsafe { arg_browser.as_mut() }
+                .map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
+            let arg_browser = arg_browser.as_mut();
+            let mut arg_rect = if arg_rect.is_null() {
+                None
+            } else {
+                Some(WrapParamRef::<Rect, _>::from(arg_rect))
+            };
+            let arg_rect = arg_rect.as_mut().map(|arg| arg.as_mut());
+            ImplRenderHandler::root_screen_rect(&arg_self_.interface, arg_browser, arg_rect)
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn get_view_rect<I: ImplRenderHandler, R: Rc>(
         self_: *mut _cef_render_handler_t,
         browser: *mut _cef_browser_t,
         rect: *mut _cef_rect_t,
     ) {
-        let (arg_self_, arg_browser, arg_rect) = (self_, browser, rect);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_browser =
-            unsafe { arg_browser.as_mut() }.map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
-        let arg_browser = arg_browser.as_mut();
-        let mut arg_rect = if arg_rect.is_null() {
-            None
-        } else {
-            Some(WrapParamRef::<Rect, _>::from(arg_rect))
-        };
-        let arg_rect = arg_rect.as_mut().map(|arg| arg.as_mut());
-        ImplRenderHandler::view_rect(&arg_self_.interface, arg_browser, arg_rect)
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_browser, arg_rect) = (self_, browser, rect);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_browser = unsafe { arg_browser.as_mut() }
+                .map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
+            let arg_browser = arg_browser.as_mut();
+            let mut arg_rect = if arg_rect.is_null() {
+                None
+            } else {
+                Some(WrapParamRef::<Rect, _>::from(arg_rect))
+            };
+            let arg_rect = arg_rect.as_mut().map(|arg| arg.as_mut());
+            ImplRenderHandler::view_rect(&arg_self_.interface, arg_browser, arg_rect)
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn get_screen_point<I: ImplRenderHandler, R: Rc>(
         self_: *mut _cef_render_handler_t,
@@ -23370,83 +24004,103 @@ mod impl_cef_render_handler_t {
         screen_x: *mut ::std::os::raw::c_int,
         screen_y: *mut ::std::os::raw::c_int,
     ) -> ::std::os::raw::c_int {
-        let (arg_self_, arg_browser, arg_view_x, arg_view_y, arg_screen_x, arg_screen_y) =
-            (self_, browser, view_x, view_y, screen_x, screen_y);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_browser =
-            unsafe { arg_browser.as_mut() }.map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
-        let arg_browser = arg_browser.as_mut();
-        let arg_view_x = arg_view_x.into_raw();
-        let arg_view_y = arg_view_y.into_raw();
-        let mut arg_screen_x = if arg_screen_x.is_null() {
-            None
-        } else {
-            Some(WrapParamRef::<::std::os::raw::c_int, _>::from(arg_screen_x))
-        };
-        let arg_screen_x = arg_screen_x.as_mut().map(|arg| arg.as_mut());
-        let mut arg_screen_y = if arg_screen_y.is_null() {
-            None
-        } else {
-            Some(WrapParamRef::<::std::os::raw::c_int, _>::from(arg_screen_y))
-        };
-        let arg_screen_y = arg_screen_y.as_mut().map(|arg| arg.as_mut());
-        ImplRenderHandler::screen_point(
-            &arg_self_.interface,
-            arg_browser,
-            arg_view_x,
-            arg_view_y,
-            arg_screen_x,
-            arg_screen_y,
-        )
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_browser, arg_view_x, arg_view_y, arg_screen_x, arg_screen_y) =
+                (self_, browser, view_x, view_y, screen_x, screen_y);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_browser = unsafe { arg_browser.as_mut() }
+                .map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
+            let arg_browser = arg_browser.as_mut();
+            let arg_view_x = arg_view_x.into_raw();
+            let arg_view_y = arg_view_y.into_raw();
+            let mut arg_screen_x = if arg_screen_x.is_null() {
+                None
+            } else {
+                Some(WrapParamRef::<::std::os::raw::c_int, _>::from(arg_screen_x))
+            };
+            let arg_screen_x = arg_screen_x.as_mut().map(|arg| arg.as_mut());
+            let mut arg_screen_y = if arg_screen_y.is_null() {
+                None
+            } else {
+                Some(WrapParamRef::<::std::os::raw::c_int, _>::from(arg_screen_y))
+            };
+            let arg_screen_y = arg_screen_y.as_mut().map(|arg| arg.as_mut());
+            ImplRenderHandler::screen_point(
+                &arg_self_.interface,
+                arg_browser,
+                arg_view_x,
+                arg_view_y,
+                arg_screen_x,
+                arg_screen_y,
+            )
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn get_screen_info<I: ImplRenderHandler, R: Rc>(
         self_: *mut _cef_render_handler_t,
         browser: *mut _cef_browser_t,
         screen_info: *mut _cef_screen_info_t,
     ) -> ::std::os::raw::c_int {
-        let (arg_self_, arg_browser, arg_screen_info) = (self_, browser, screen_info);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_browser =
-            unsafe { arg_browser.as_mut() }.map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
-        let arg_browser = arg_browser.as_mut();
-        let mut arg_screen_info = if arg_screen_info.is_null() {
-            None
-        } else {
-            Some(WrapParamRef::<ScreenInfo, _>::from(arg_screen_info))
-        };
-        let arg_screen_info = arg_screen_info.as_mut().map(|arg| arg.as_mut());
-        ImplRenderHandler::screen_info(&arg_self_.interface, arg_browser, arg_screen_info)
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_browser, arg_screen_info) = (self_, browser, screen_info);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_browser = unsafe { arg_browser.as_mut() }
+                .map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
+            let arg_browser = arg_browser.as_mut();
+            let mut arg_screen_info = if arg_screen_info.is_null() {
+                None
+            } else {
+                Some(WrapParamRef::<ScreenInfo, _>::from(arg_screen_info))
+            };
+            let arg_screen_info = arg_screen_info.as_mut().map(|arg| arg.as_mut());
+            ImplRenderHandler::screen_info(&arg_self_.interface, arg_browser, arg_screen_info)
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn on_popup_show<I: ImplRenderHandler, R: Rc>(
         self_: *mut _cef_render_handler_t,
         browser: *mut _cef_browser_t,
         show: ::std::os::raw::c_int,
     ) {
-        let (arg_self_, arg_browser, arg_show) = (self_, browser, show);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_browser =
-            unsafe { arg_browser.as_mut() }.map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
-        let arg_browser = arg_browser.as_mut();
-        let arg_show = arg_show.into_raw();
-        ImplRenderHandler::on_popup_show(&arg_self_.interface, arg_browser, arg_show)
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_browser, arg_show) = (self_, browser, show);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_browser = unsafe { arg_browser.as_mut() }
+                .map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
+            let arg_browser = arg_browser.as_mut();
+            let arg_show = arg_show.into_raw();
+            ImplRenderHandler::on_popup_show(&arg_self_.interface, arg_browser, arg_show)
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn on_popup_size<I: ImplRenderHandler, R: Rc>(
         self_: *mut _cef_render_handler_t,
         browser: *mut _cef_browser_t,
         rect: *const _cef_rect_t,
     ) {
-        let (arg_self_, arg_browser, arg_rect) = (self_, browser, rect);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_browser =
-            unsafe { arg_browser.as_mut() }.map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
-        let arg_browser = arg_browser.as_mut();
-        let arg_rect = if arg_rect.is_null() {
-            None
-        } else {
-            Some(WrapParamRef::<Rect, _>::from(arg_rect))
-        };
-        let arg_rect = arg_rect.as_ref().map(|arg| arg.as_ref());
-        ImplRenderHandler::on_popup_size(&arg_self_.interface, arg_browser, arg_rect)
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_browser, arg_rect) = (self_, browser, rect);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_browser = unsafe { arg_browser.as_mut() }
+                .map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
+            let arg_browser = arg_browser.as_mut();
+            let arg_rect = if arg_rect.is_null() {
+                None
+            } else {
+                Some(WrapParamRef::<Rect, _>::from(arg_rect))
+            };
+            let arg_rect = arg_rect.as_ref().map(|arg| arg.as_ref());
+            ImplRenderHandler::on_popup_size(&arg_self_.interface, arg_browser, arg_rect)
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn on_paint<I: ImplRenderHandler, R: Rc>(
         self_: *mut _cef_render_handler_t,
@@ -23458,52 +24112,57 @@ mod impl_cef_render_handler_t {
         width: ::std::os::raw::c_int,
         height: ::std::os::raw::c_int,
     ) {
-        let (
-            arg_self_,
-            arg_browser,
-            arg_type_,
-            arg_dirty_rects_count,
-            arg_dirty_rects,
-            arg_buffer,
-            arg_width,
-            arg_height,
-        ) = (
-            self_,
-            browser,
-            type_,
-            dirty_rects_count,
-            dirty_rects,
-            buffer,
-            width,
-            height,
-        );
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_browser =
-            unsafe { arg_browser.as_mut() }.map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
-        let arg_browser = arg_browser.as_mut();
-        let arg_type_ = arg_type_.into_raw();
-        let arg_dirty_rects = if arg_dirty_rects.is_null() {
-            None
-        } else {
-            let arg_dirty_rects =
-                unsafe { std::slice::from_raw_parts(arg_dirty_rects, arg_dirty_rects_count) };
-            let arg_dirty_rects: Vec<_> =
-                arg_dirty_rects.iter().map(|elem| (*elem).into()).collect();
-            Some(arg_dirty_rects)
-        };
-        let arg_dirty_rects = arg_dirty_rects.as_deref();
-        let arg_buffer = arg_buffer.cast();
-        let arg_width = arg_width.into_raw();
-        let arg_height = arg_height.into_raw();
-        ImplRenderHandler::on_paint(
-            &arg_self_.interface,
-            arg_browser,
-            arg_type_,
-            arg_dirty_rects,
-            arg_buffer,
-            arg_width,
-            arg_height,
-        )
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (
+                arg_self_,
+                arg_browser,
+                arg_type_,
+                arg_dirty_rects_count,
+                arg_dirty_rects,
+                arg_buffer,
+                arg_width,
+                arg_height,
+            ) = (
+                self_,
+                browser,
+                type_,
+                dirty_rects_count,
+                dirty_rects,
+                buffer,
+                width,
+                height,
+            );
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_browser = unsafe { arg_browser.as_mut() }
+                .map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
+            let arg_browser = arg_browser.as_mut();
+            let arg_type_ = arg_type_.into_raw();
+            let arg_dirty_rects = if arg_dirty_rects.is_null() {
+                None
+            } else {
+                let arg_dirty_rects =
+                    unsafe { std::slice::from_raw_parts(arg_dirty_rects, arg_dirty_rects_count) };
+                let arg_dirty_rects: Vec<_> =
+                    arg_dirty_rects.iter().map(|elem| (*elem).into()).collect();
+                Some(arg_dirty_rects)
+            };
+            let arg_dirty_rects = arg_dirty_rects.as_deref();
+            let arg_buffer = arg_buffer.cast();
+            let arg_width = arg_width.into_raw();
+            let arg_height = arg_height.into_raw();
+            ImplRenderHandler::on_paint(
+                &arg_self_.interface,
+                arg_browser,
+                arg_type_,
+                arg_dirty_rects,
+                arg_buffer,
+                arg_width,
+                arg_height,
+            )
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn on_accelerated_paint<I: ImplRenderHandler, R: Rc>(
         self_: *mut _cef_render_handler_t,
@@ -23513,36 +24172,47 @@ mod impl_cef_render_handler_t {
         dirty_rects: *const _cef_rect_t,
         info: *const _cef_accelerated_paint_info_t,
     ) {
-        let (arg_self_, arg_browser, arg_type_, arg_dirty_rects_count, arg_dirty_rects, arg_info) =
-            (self_, browser, type_, dirty_rects_count, dirty_rects, info);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_browser =
-            unsafe { arg_browser.as_mut() }.map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
-        let arg_browser = arg_browser.as_mut();
-        let arg_type_ = arg_type_.into_raw();
-        let arg_dirty_rects = if arg_dirty_rects.is_null() {
-            None
-        } else {
-            let arg_dirty_rects =
-                unsafe { std::slice::from_raw_parts(arg_dirty_rects, arg_dirty_rects_count) };
-            let arg_dirty_rects: Vec<_> =
-                arg_dirty_rects.iter().map(|elem| (*elem).into()).collect();
-            Some(arg_dirty_rects)
-        };
-        let arg_dirty_rects = arg_dirty_rects.as_deref();
-        let arg_info = if arg_info.is_null() {
-            None
-        } else {
-            Some(WrapParamRef::<AcceleratedPaintInfo, _>::from(arg_info))
-        };
-        let arg_info = arg_info.as_ref().map(|arg| arg.as_ref());
-        ImplRenderHandler::on_accelerated_paint(
-            &arg_self_.interface,
-            arg_browser,
-            arg_type_,
-            arg_dirty_rects,
-            arg_info,
-        )
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (
+                arg_self_,
+                arg_browser,
+                arg_type_,
+                arg_dirty_rects_count,
+                arg_dirty_rects,
+                arg_info,
+            ) = (self_, browser, type_, dirty_rects_count, dirty_rects, info);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_browser = unsafe { arg_browser.as_mut() }
+                .map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
+            let arg_browser = arg_browser.as_mut();
+            let arg_type_ = arg_type_.into_raw();
+            let arg_dirty_rects = if arg_dirty_rects.is_null() {
+                None
+            } else {
+                let arg_dirty_rects =
+                    unsafe { std::slice::from_raw_parts(arg_dirty_rects, arg_dirty_rects_count) };
+                let arg_dirty_rects: Vec<_> =
+                    arg_dirty_rects.iter().map(|elem| (*elem).into()).collect();
+                Some(arg_dirty_rects)
+            };
+            let arg_dirty_rects = arg_dirty_rects.as_deref();
+            let arg_info = if arg_info.is_null() {
+                None
+            } else {
+                Some(WrapParamRef::<AcceleratedPaintInfo, _>::from(arg_info))
+            };
+            let arg_info = arg_info.as_ref().map(|arg| arg.as_ref());
+            ImplRenderHandler::on_accelerated_paint(
+                &arg_self_.interface,
+                arg_browser,
+                arg_type_,
+                arg_dirty_rects,
+                arg_info,
+            )
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn get_touch_handle_size<I: ImplRenderHandler, R: Rc>(
         self_: *mut _cef_render_handler_t,
@@ -23550,47 +24220,57 @@ mod impl_cef_render_handler_t {
         orientation: cef_horizontal_alignment_t,
         size: *mut _cef_size_t,
     ) {
-        let (arg_self_, arg_browser, arg_orientation, arg_size) =
-            (self_, browser, orientation, size);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_browser =
-            unsafe { arg_browser.as_mut() }.map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
-        let arg_browser = arg_browser.as_mut();
-        let arg_orientation = arg_orientation.into_raw();
-        let mut arg_size = if arg_size.is_null() {
-            None
-        } else {
-            Some(WrapParamRef::<Size, _>::from(arg_size))
-        };
-        let arg_size = arg_size.as_mut().map(|arg| arg.as_mut());
-        ImplRenderHandler::touch_handle_size(
-            &arg_self_.interface,
-            arg_browser,
-            arg_orientation,
-            arg_size,
-        )
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_browser, arg_orientation, arg_size) =
+                (self_, browser, orientation, size);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_browser = unsafe { arg_browser.as_mut() }
+                .map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
+            let arg_browser = arg_browser.as_mut();
+            let arg_orientation = arg_orientation.into_raw();
+            let mut arg_size = if arg_size.is_null() {
+                None
+            } else {
+                Some(WrapParamRef::<Size, _>::from(arg_size))
+            };
+            let arg_size = arg_size.as_mut().map(|arg| arg.as_mut());
+            ImplRenderHandler::touch_handle_size(
+                &arg_self_.interface,
+                arg_browser,
+                arg_orientation,
+                arg_size,
+            )
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn on_touch_handle_state_changed<I: ImplRenderHandler, R: Rc>(
         self_: *mut _cef_render_handler_t,
         browser: *mut _cef_browser_t,
         state: *const _cef_touch_handle_state_t,
     ) {
-        let (arg_self_, arg_browser, arg_state) = (self_, browser, state);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_browser =
-            unsafe { arg_browser.as_mut() }.map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
-        let arg_browser = arg_browser.as_mut();
-        let arg_state = if arg_state.is_null() {
-            None
-        } else {
-            Some(WrapParamRef::<TouchHandleState, _>::from(arg_state))
-        };
-        let arg_state = arg_state.as_ref().map(|arg| arg.as_ref());
-        ImplRenderHandler::on_touch_handle_state_changed(
-            &arg_self_.interface,
-            arg_browser,
-            arg_state,
-        )
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_browser, arg_state) = (self_, browser, state);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_browser = unsafe { arg_browser.as_mut() }
+                .map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
+            let arg_browser = arg_browser.as_mut();
+            let arg_state = if arg_state.is_null() {
+                None
+            } else {
+                Some(WrapParamRef::<TouchHandleState, _>::from(arg_state))
+            };
+            let arg_state = arg_state.as_ref().map(|arg| arg.as_ref());
+            ImplRenderHandler::on_touch_handle_state_changed(
+                &arg_self_.interface,
+                arg_browser,
+                arg_state,
+            )
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn start_dragging<I: ImplRenderHandler, R: Rc>(
         self_: *mut _cef_render_handler_t,
@@ -23600,39 +24280,49 @@ mod impl_cef_render_handler_t {
         x: ::std::os::raw::c_int,
         y: ::std::os::raw::c_int,
     ) -> ::std::os::raw::c_int {
-        let (arg_self_, arg_browser, arg_drag_data, arg_allowed_ops, arg_x, arg_y) =
-            (self_, browser, drag_data, allowed_ops, x, y);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_browser =
-            unsafe { arg_browser.as_mut() }.map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
-        let arg_browser = arg_browser.as_mut();
-        let mut arg_drag_data = unsafe { arg_drag_data.as_mut() }
-            .map(|arg| DragData(unsafe { RefGuard::from_raw(arg) }));
-        let arg_drag_data = arg_drag_data.as_mut();
-        let arg_allowed_ops = arg_allowed_ops.into_raw();
-        let arg_x = arg_x.into_raw();
-        let arg_y = arg_y.into_raw();
-        ImplRenderHandler::start_dragging(
-            &arg_self_.interface,
-            arg_browser,
-            arg_drag_data,
-            arg_allowed_ops,
-            arg_x,
-            arg_y,
-        )
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_browser, arg_drag_data, arg_allowed_ops, arg_x, arg_y) =
+                (self_, browser, drag_data, allowed_ops, x, y);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_browser = unsafe { arg_browser.as_mut() }
+                .map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
+            let arg_browser = arg_browser.as_mut();
+            let mut arg_drag_data = unsafe { arg_drag_data.as_mut() }
+                .map(|arg| DragData(unsafe { RefGuard::from_raw(arg) }));
+            let arg_drag_data = arg_drag_data.as_mut();
+            let arg_allowed_ops = arg_allowed_ops.into_raw();
+            let arg_x = arg_x.into_raw();
+            let arg_y = arg_y.into_raw();
+            ImplRenderHandler::start_dragging(
+                &arg_self_.interface,
+                arg_browser,
+                arg_drag_data,
+                arg_allowed_ops,
+                arg_x,
+                arg_y,
+            )
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn update_drag_cursor<I: ImplRenderHandler, R: Rc>(
         self_: *mut _cef_render_handler_t,
         browser: *mut _cef_browser_t,
         operation: cef_drag_operations_mask_t,
     ) {
-        let (arg_self_, arg_browser, arg_operation) = (self_, browser, operation);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_browser =
-            unsafe { arg_browser.as_mut() }.map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
-        let arg_browser = arg_browser.as_mut();
-        let arg_operation = arg_operation.into_raw();
-        ImplRenderHandler::update_drag_cursor(&arg_self_.interface, arg_browser, arg_operation)
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_browser, arg_operation) = (self_, browser, operation);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_browser = unsafe { arg_browser.as_mut() }
+                .map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
+            let arg_browser = arg_browser.as_mut();
+            let arg_operation = arg_operation.into_raw();
+            ImplRenderHandler::update_drag_cursor(&arg_self_.interface, arg_browser, arg_operation)
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn on_scroll_offset_changed<I: ImplRenderHandler, R: Rc>(
         self_: *mut _cef_render_handler_t,
@@ -23640,14 +24330,24 @@ mod impl_cef_render_handler_t {
         x: f64,
         y: f64,
     ) {
-        let (arg_self_, arg_browser, arg_x, arg_y) = (self_, browser, x, y);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_browser =
-            unsafe { arg_browser.as_mut() }.map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
-        let arg_browser = arg_browser.as_mut();
-        let arg_x = arg_x.into_raw();
-        let arg_y = arg_y.into_raw();
-        ImplRenderHandler::on_scroll_offset_changed(&arg_self_.interface, arg_browser, arg_x, arg_y)
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_browser, arg_x, arg_y) = (self_, browser, x, y);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_browser = unsafe { arg_browser.as_mut() }
+                .map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
+            let arg_browser = arg_browser.as_mut();
+            let arg_x = arg_x.into_raw();
+            let arg_y = arg_y.into_raw();
+            ImplRenderHandler::on_scroll_offset_changed(
+                &arg_self_.interface,
+                arg_browser,
+                arg_x,
+                arg_y,
+            )
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn on_ime_composition_range_changed<I: ImplRenderHandler, R: Rc>(
         self_: *mut _cef_render_handler_t,
@@ -23656,48 +24356,53 @@ mod impl_cef_render_handler_t {
         character_bounds_count: usize,
         character_bounds: *const _cef_rect_t,
     ) {
-        let (
-            arg_self_,
-            arg_browser,
-            arg_selected_range,
-            arg_character_bounds_count,
-            arg_character_bounds,
-        ) = (
-            self_,
-            browser,
-            selected_range,
-            character_bounds_count,
-            character_bounds,
-        );
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_browser =
-            unsafe { arg_browser.as_mut() }.map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
-        let arg_browser = arg_browser.as_mut();
-        let arg_selected_range = if arg_selected_range.is_null() {
-            None
-        } else {
-            Some(WrapParamRef::<Range, _>::from(arg_selected_range))
-        };
-        let arg_selected_range = arg_selected_range.as_ref().map(|arg| arg.as_ref());
-        let arg_character_bounds = if arg_character_bounds.is_null() {
-            None
-        } else {
-            let arg_character_bounds = unsafe {
-                std::slice::from_raw_parts(arg_character_bounds, arg_character_bounds_count)
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (
+                arg_self_,
+                arg_browser,
+                arg_selected_range,
+                arg_character_bounds_count,
+                arg_character_bounds,
+            ) = (
+                self_,
+                browser,
+                selected_range,
+                character_bounds_count,
+                character_bounds,
+            );
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_browser = unsafe { arg_browser.as_mut() }
+                .map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
+            let arg_browser = arg_browser.as_mut();
+            let arg_selected_range = if arg_selected_range.is_null() {
+                None
+            } else {
+                Some(WrapParamRef::<Range, _>::from(arg_selected_range))
             };
-            let arg_character_bounds: Vec<_> = arg_character_bounds
-                .iter()
-                .map(|elem| (*elem).into())
-                .collect();
-            Some(arg_character_bounds)
-        };
-        let arg_character_bounds = arg_character_bounds.as_deref();
-        ImplRenderHandler::on_ime_composition_range_changed(
-            &arg_self_.interface,
-            arg_browser,
-            arg_selected_range,
-            arg_character_bounds,
-        )
+            let arg_selected_range = arg_selected_range.as_ref().map(|arg| arg.as_ref());
+            let arg_character_bounds = if arg_character_bounds.is_null() {
+                None
+            } else {
+                let arg_character_bounds = unsafe {
+                    std::slice::from_raw_parts(arg_character_bounds, arg_character_bounds_count)
+                };
+                let arg_character_bounds: Vec<_> = arg_character_bounds
+                    .iter()
+                    .map(|elem| (*elem).into())
+                    .collect();
+                Some(arg_character_bounds)
+            };
+            let arg_character_bounds = arg_character_bounds.as_deref();
+            ImplRenderHandler::on_ime_composition_range_changed(
+                &arg_self_.interface,
+                arg_browser,
+                arg_selected_range,
+                arg_character_bounds,
+            )
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn on_text_selection_changed<I: ImplRenderHandler, R: Rc>(
         self_: *mut _cef_render_handler_t,
@@ -23705,47 +24410,57 @@ mod impl_cef_render_handler_t {
         selected_text: *const cef_string_t,
         selected_range: *const _cef_range_t,
     ) {
-        let (arg_self_, arg_browser, arg_selected_text, arg_selected_range) =
-            (self_, browser, selected_text, selected_range);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_browser =
-            unsafe { arg_browser.as_mut() }.map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
-        let arg_browser = arg_browser.as_mut();
-        let arg_selected_text = if arg_selected_text.is_null() {
-            None
-        } else {
-            Some(arg_selected_text.into())
-        };
-        let arg_selected_text = arg_selected_text.as_ref();
-        let arg_selected_range = if arg_selected_range.is_null() {
-            None
-        } else {
-            Some(WrapParamRef::<Range, _>::from(arg_selected_range))
-        };
-        let arg_selected_range = arg_selected_range.as_ref().map(|arg| arg.as_ref());
-        ImplRenderHandler::on_text_selection_changed(
-            &arg_self_.interface,
-            arg_browser,
-            arg_selected_text,
-            arg_selected_range,
-        )
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_browser, arg_selected_text, arg_selected_range) =
+                (self_, browser, selected_text, selected_range);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_browser = unsafe { arg_browser.as_mut() }
+                .map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
+            let arg_browser = arg_browser.as_mut();
+            let arg_selected_text = if arg_selected_text.is_null() {
+                None
+            } else {
+                Some(arg_selected_text.into())
+            };
+            let arg_selected_text = arg_selected_text.as_ref();
+            let arg_selected_range = if arg_selected_range.is_null() {
+                None
+            } else {
+                Some(WrapParamRef::<Range, _>::from(arg_selected_range))
+            };
+            let arg_selected_range = arg_selected_range.as_ref().map(|arg| arg.as_ref());
+            ImplRenderHandler::on_text_selection_changed(
+                &arg_self_.interface,
+                arg_browser,
+                arg_selected_text,
+                arg_selected_range,
+            )
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn on_virtual_keyboard_requested<I: ImplRenderHandler, R: Rc>(
         self_: *mut _cef_render_handler_t,
         browser: *mut _cef_browser_t,
         input_mode: cef_text_input_mode_t,
     ) {
-        let (arg_self_, arg_browser, arg_input_mode) = (self_, browser, input_mode);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_browser =
-            unsafe { arg_browser.as_mut() }.map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
-        let arg_browser = arg_browser.as_mut();
-        let arg_input_mode = arg_input_mode.into_raw();
-        ImplRenderHandler::on_virtual_keyboard_requested(
-            &arg_self_.interface,
-            arg_browser,
-            arg_input_mode,
-        )
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_browser, arg_input_mode) = (self_, browser, input_mode);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_browser = unsafe { arg_browser.as_mut() }
+                .map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
+            let arg_browser = arg_browser.as_mut();
+            let arg_input_mode = arg_input_mode.into_raw();
+            ImplRenderHandler::on_virtual_keyboard_requested(
+                &arg_self_.interface,
+                arg_browser,
+                arg_input_mode,
+            )
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
 }
 impl ImplRenderHandler for RenderHandler {
@@ -24848,44 +25563,54 @@ mod impl_cef_resource_handler_t {
         handle_request: *mut ::std::os::raw::c_int,
         callback: *mut _cef_callback_t,
     ) -> ::std::os::raw::c_int {
-        let (arg_self_, arg_request, arg_handle_request, arg_callback) =
-            (self_, request, handle_request, callback);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_request =
-            unsafe { arg_request.as_mut() }.map(|arg| Request(unsafe { RefGuard::from_raw(arg) }));
-        let arg_request = arg_request.as_mut();
-        let mut arg_handle_request = if arg_handle_request.is_null() {
-            None
-        } else {
-            Some(WrapParamRef::<::std::os::raw::c_int, _>::from(
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_request, arg_handle_request, arg_callback) =
+                (self_, request, handle_request, callback);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_request = unsafe { arg_request.as_mut() }
+                .map(|arg| Request(unsafe { RefGuard::from_raw(arg) }));
+            let arg_request = arg_request.as_mut();
+            let mut arg_handle_request = if arg_handle_request.is_null() {
+                None
+            } else {
+                Some(WrapParamRef::<::std::os::raw::c_int, _>::from(
+                    arg_handle_request,
+                ))
+            };
+            let arg_handle_request = arg_handle_request.as_mut().map(|arg| arg.as_mut());
+            let mut arg_callback = unsafe { arg_callback.as_mut() }
+                .map(|arg| Callback(unsafe { RefGuard::from_raw(arg) }));
+            let arg_callback = arg_callback.as_mut();
+            ImplResourceHandler::open(
+                &arg_self_.interface,
+                arg_request,
                 arg_handle_request,
-            ))
-        };
-        let arg_handle_request = arg_handle_request.as_mut().map(|arg| arg.as_mut());
-        let mut arg_callback = unsafe { arg_callback.as_mut() }
-            .map(|arg| Callback(unsafe { RefGuard::from_raw(arg) }));
-        let arg_callback = arg_callback.as_mut();
-        ImplResourceHandler::open(
-            &arg_self_.interface,
-            arg_request,
-            arg_handle_request,
-            arg_callback,
-        )
+                arg_callback,
+            )
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn process_request<I: ImplResourceHandler, R: Rc>(
         self_: *mut _cef_resource_handler_t,
         request: *mut _cef_request_t,
         callback: *mut _cef_callback_t,
     ) -> ::std::os::raw::c_int {
-        let (arg_self_, arg_request, arg_callback) = (self_, request, callback);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_request =
-            unsafe { arg_request.as_mut() }.map(|arg| Request(unsafe { RefGuard::from_raw(arg) }));
-        let arg_request = arg_request.as_mut();
-        let mut arg_callback = unsafe { arg_callback.as_mut() }
-            .map(|arg| Callback(unsafe { RefGuard::from_raw(arg) }));
-        let arg_callback = arg_callback.as_mut();
-        ImplResourceHandler::process_request(&arg_self_.interface, arg_request, arg_callback)
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_request, arg_callback) = (self_, request, callback);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_request = unsafe { arg_request.as_mut() }
+                .map(|arg| Request(unsafe { RefGuard::from_raw(arg) }));
+            let arg_request = arg_request.as_mut();
+            let mut arg_callback = unsafe { arg_callback.as_mut() }
+                .map(|arg| Callback(unsafe { RefGuard::from_raw(arg) }));
+            let arg_callback = arg_callback.as_mut();
+            ImplResourceHandler::process_request(&arg_self_.interface, arg_request, arg_callback)
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn get_response_headers<I: ImplResourceHandler, R: Rc>(
         self_: *mut _cef_resource_handler_t,
@@ -24893,30 +25618,35 @@ mod impl_cef_resource_handler_t {
         response_length: *mut i64,
         redirect_url: *mut cef_string_t,
     ) {
-        let (arg_self_, arg_response, arg_response_length, arg_redirect_url) =
-            (self_, response, response_length, redirect_url);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_response = unsafe { arg_response.as_mut() }
-            .map(|arg| Response(unsafe { RefGuard::from_raw(arg) }));
-        let arg_response = arg_response.as_mut();
-        let mut arg_response_length = if arg_response_length.is_null() {
-            None
-        } else {
-            Some(WrapParamRef::<i64, _>::from(arg_response_length))
-        };
-        let arg_response_length = arg_response_length.as_mut().map(|arg| arg.as_mut());
-        let mut arg_redirect_url = if arg_redirect_url.is_null() {
-            None
-        } else {
-            Some(arg_redirect_url.into())
-        };
-        let arg_redirect_url = arg_redirect_url.as_mut();
-        ImplResourceHandler::response_headers(
-            &arg_self_.interface,
-            arg_response,
-            arg_response_length,
-            arg_redirect_url,
-        )
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_response, arg_response_length, arg_redirect_url) =
+                (self_, response, response_length, redirect_url);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_response = unsafe { arg_response.as_mut() }
+                .map(|arg| Response(unsafe { RefGuard::from_raw(arg) }));
+            let arg_response = arg_response.as_mut();
+            let mut arg_response_length = if arg_response_length.is_null() {
+                None
+            } else {
+                Some(WrapParamRef::<i64, _>::from(arg_response_length))
+            };
+            let arg_response_length = arg_response_length.as_mut().map(|arg| arg.as_mut());
+            let mut arg_redirect_url = if arg_redirect_url.is_null() {
+                None
+            } else {
+                Some(arg_redirect_url.into())
+            };
+            let arg_redirect_url = arg_redirect_url.as_mut();
+            ImplResourceHandler::response_headers(
+                &arg_self_.interface,
+                arg_response,
+                arg_response_length,
+                arg_redirect_url,
+            )
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn skip<I: ImplResourceHandler, R: Rc>(
         self_: *mut _cef_resource_handler_t,
@@ -24924,25 +25654,30 @@ mod impl_cef_resource_handler_t {
         bytes_skipped: *mut i64,
         callback: *mut _cef_resource_skip_callback_t,
     ) -> ::std::os::raw::c_int {
-        let (arg_self_, arg_bytes_to_skip, arg_bytes_skipped, arg_callback) =
-            (self_, bytes_to_skip, bytes_skipped, callback);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let arg_bytes_to_skip = arg_bytes_to_skip.into_raw();
-        let mut arg_bytes_skipped = if arg_bytes_skipped.is_null() {
-            None
-        } else {
-            Some(WrapParamRef::<i64, _>::from(arg_bytes_skipped))
-        };
-        let arg_bytes_skipped = arg_bytes_skipped.as_mut().map(|arg| arg.as_mut());
-        let mut arg_callback = unsafe { arg_callback.as_mut() }
-            .map(|arg| ResourceSkipCallback(unsafe { RefGuard::from_raw(arg) }));
-        let arg_callback = arg_callback.as_mut();
-        ImplResourceHandler::skip(
-            &arg_self_.interface,
-            arg_bytes_to_skip,
-            arg_bytes_skipped,
-            arg_callback,
-        )
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_bytes_to_skip, arg_bytes_skipped, arg_callback) =
+                (self_, bytes_to_skip, bytes_skipped, callback);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let arg_bytes_to_skip = arg_bytes_to_skip.into_raw();
+            let mut arg_bytes_skipped = if arg_bytes_skipped.is_null() {
+                None
+            } else {
+                Some(WrapParamRef::<i64, _>::from(arg_bytes_skipped))
+            };
+            let arg_bytes_skipped = arg_bytes_skipped.as_mut().map(|arg| arg.as_mut());
+            let mut arg_callback = unsafe { arg_callback.as_mut() }
+                .map(|arg| ResourceSkipCallback(unsafe { RefGuard::from_raw(arg) }));
+            let arg_callback = arg_callback.as_mut();
+            ImplResourceHandler::skip(
+                &arg_self_.interface,
+                arg_bytes_to_skip,
+                arg_bytes_skipped,
+                arg_callback,
+            )
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn read<I: ImplResourceHandler, R: Rc>(
         self_: *mut _cef_resource_handler_t,
@@ -24951,29 +25686,34 @@ mod impl_cef_resource_handler_t {
         bytes_read: *mut ::std::os::raw::c_int,
         callback: *mut _cef_resource_read_callback_t,
     ) -> ::std::os::raw::c_int {
-        let (arg_self_, arg_data_out, arg_bytes_to_read, arg_bytes_read, arg_callback) =
-            (self_, data_out, bytes_to_read, bytes_read, callback);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let arg_data_out = arg_data_out.cast();
-        let arg_bytes_to_read = arg_bytes_to_read.into_raw();
-        let mut arg_bytes_read = if arg_bytes_read.is_null() {
-            None
-        } else {
-            Some(WrapParamRef::<::std::os::raw::c_int, _>::from(
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_data_out, arg_bytes_to_read, arg_bytes_read, arg_callback) =
+                (self_, data_out, bytes_to_read, bytes_read, callback);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let arg_data_out = arg_data_out.cast();
+            let arg_bytes_to_read = arg_bytes_to_read.into_raw();
+            let mut arg_bytes_read = if arg_bytes_read.is_null() {
+                None
+            } else {
+                Some(WrapParamRef::<::std::os::raw::c_int, _>::from(
+                    arg_bytes_read,
+                ))
+            };
+            let arg_bytes_read = arg_bytes_read.as_mut().map(|arg| arg.as_mut());
+            let mut arg_callback = unsafe { arg_callback.as_mut() }
+                .map(|arg| ResourceReadCallback(unsafe { RefGuard::from_raw(arg) }));
+            let arg_callback = arg_callback.as_mut();
+            ImplResourceHandler::read(
+                &arg_self_.interface,
+                arg_data_out,
+                arg_bytes_to_read,
                 arg_bytes_read,
-            ))
-        };
-        let arg_bytes_read = arg_bytes_read.as_mut().map(|arg| arg.as_mut());
-        let mut arg_callback = unsafe { arg_callback.as_mut() }
-            .map(|arg| ResourceReadCallback(unsafe { RefGuard::from_raw(arg) }));
-        let arg_callback = arg_callback.as_mut();
-        ImplResourceHandler::read(
-            &arg_self_.interface,
-            arg_data_out,
-            arg_bytes_to_read,
-            arg_bytes_read,
-            arg_callback,
-        )
+                arg_callback,
+            )
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn read_response<I: ImplResourceHandler, R: Rc>(
         self_: *mut _cef_resource_handler_t,
@@ -24982,34 +25722,44 @@ mod impl_cef_resource_handler_t {
         bytes_read: *mut ::std::os::raw::c_int,
         callback: *mut _cef_callback_t,
     ) -> ::std::os::raw::c_int {
-        let (arg_self_, arg_data_out, arg_bytes_to_read, arg_bytes_read, arg_callback) =
-            (self_, data_out, bytes_to_read, bytes_read, callback);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let arg_data_out = arg_data_out.cast();
-        let arg_bytes_to_read = arg_bytes_to_read.into_raw();
-        let mut arg_bytes_read = if arg_bytes_read.is_null() {
-            None
-        } else {
-            Some(WrapParamRef::<::std::os::raw::c_int, _>::from(
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_data_out, arg_bytes_to_read, arg_bytes_read, arg_callback) =
+                (self_, data_out, bytes_to_read, bytes_read, callback);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let arg_data_out = arg_data_out.cast();
+            let arg_bytes_to_read = arg_bytes_to_read.into_raw();
+            let mut arg_bytes_read = if arg_bytes_read.is_null() {
+                None
+            } else {
+                Some(WrapParamRef::<::std::os::raw::c_int, _>::from(
+                    arg_bytes_read,
+                ))
+            };
+            let arg_bytes_read = arg_bytes_read.as_mut().map(|arg| arg.as_mut());
+            let mut arg_callback = unsafe { arg_callback.as_mut() }
+                .map(|arg| Callback(unsafe { RefGuard::from_raw(arg) }));
+            let arg_callback = arg_callback.as_mut();
+            ImplResourceHandler::read_response(
+                &arg_self_.interface,
+                arg_data_out,
+                arg_bytes_to_read,
                 arg_bytes_read,
-            ))
-        };
-        let arg_bytes_read = arg_bytes_read.as_mut().map(|arg| arg.as_mut());
-        let mut arg_callback = unsafe { arg_callback.as_mut() }
-            .map(|arg| Callback(unsafe { RefGuard::from_raw(arg) }));
-        let arg_callback = arg_callback.as_mut();
-        ImplResourceHandler::read_response(
-            &arg_self_.interface,
-            arg_data_out,
-            arg_bytes_to_read,
-            arg_bytes_read,
-            arg_callback,
-        )
+                arg_callback,
+            )
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn cancel<I: ImplResourceHandler, R: Rc>(self_: *mut _cef_resource_handler_t) {
-        let arg_self_ = self_;
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        ImplResourceHandler::cancel(&arg_self_.interface)
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let arg_self_ = self_;
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            ImplResourceHandler::cancel(&arg_self_.interface)
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
 }
 impl ImplResourceHandler for ResourceHandler {
@@ -25311,9 +26061,14 @@ mod impl_cef_response_filter_t {
     extern "C" fn init_filter<I: ImplResponseFilter, R: Rc>(
         self_: *mut _cef_response_filter_t,
     ) -> ::std::os::raw::c_int {
-        let arg_self_ = self_;
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        ImplResponseFilter::init_filter(&arg_self_.interface)
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let arg_self_ = self_;
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            ImplResponseFilter::init_filter(&arg_self_.interface)
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn filter<I: ImplResponseFilter, R: Rc>(
         self_: *mut _cef_response_filter_t,
@@ -25324,62 +26079,68 @@ mod impl_cef_response_filter_t {
         data_out_size: usize,
         data_out_written: *mut usize,
     ) -> cef_response_filter_status_t {
-        let (
-            arg_self_,
-            arg_data_in,
-            arg_data_in_size,
-            arg_data_in_read,
-            arg_data_out,
-            arg_data_out_size,
-            arg_data_out_written,
-        ) = (
-            self_,
-            data_in,
-            data_in_size,
-            data_in_read,
-            data_out,
-            data_out_size,
-            data_out_written,
-        );
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let out_data_in = (!arg_data_in.is_null() && arg_data_in_size > 0).then(|| unsafe {
-            std::slice::from_raw_parts_mut(arg_data_in.cast(), arg_data_in_size)
-        });
-        let mut vec_data_in = out_data_in.as_ref().map(|arg| arg.to_vec());
-        let arg_data_in = vec_data_in.as_mut();
-        let mut arg_data_in_read = if arg_data_in_read.is_null() {
-            None
-        } else {
-            Some(WrapParamRef::<usize, _>::from(arg_data_in_read))
-        };
-        let arg_data_in_read = arg_data_in_read.as_mut().map(|arg| arg.as_mut());
-        let out_data_out = (!arg_data_out.is_null() && arg_data_out_size > 0).then(|| unsafe {
-            std::slice::from_raw_parts_mut(arg_data_out.cast(), arg_data_out_size)
-        });
-        let mut vec_data_out = out_data_out.as_ref().map(|arg| arg.to_vec());
-        let arg_data_out = vec_data_out.as_mut();
-        let mut arg_data_out_written = if arg_data_out_written.is_null() {
-            None
-        } else {
-            Some(WrapParamRef::<usize, _>::from(arg_data_out_written))
-        };
-        let arg_data_out_written = arg_data_out_written.as_mut().map(|arg| arg.as_mut());
-        let result = ImplResponseFilter::filter(
-            &arg_self_.interface,
-            arg_data_in,
-            arg_data_in_read,
-            arg_data_out,
-            arg_data_out_written,
-        );
-        if let (Some(out_data_in), Some(vec_data_in)) = (out_data_in, vec_data_in.as_mut()) {
-            let size = vec_data_in.len().min(out_data_in.len());
-            out_data_in[..size].copy_from_slice(&vec_data_in[..size]);
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (
+                arg_self_,
+                arg_data_in,
+                arg_data_in_size,
+                arg_data_in_read,
+                arg_data_out,
+                arg_data_out_size,
+                arg_data_out_written,
+            ) = (
+                self_,
+                data_in,
+                data_in_size,
+                data_in_read,
+                data_out,
+                data_out_size,
+                data_out_written,
+            );
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let out_data_in = (!arg_data_in.is_null() && arg_data_in_size > 0).then(|| unsafe {
+                std::slice::from_raw_parts_mut(arg_data_in.cast(), arg_data_in_size)
+            });
+            let mut vec_data_in = out_data_in.as_ref().map(|arg| arg.to_vec());
+            let arg_data_in = vec_data_in.as_mut();
+            let mut arg_data_in_read = if arg_data_in_read.is_null() {
+                None
+            } else {
+                Some(WrapParamRef::<usize, _>::from(arg_data_in_read))
+            };
+            let arg_data_in_read = arg_data_in_read.as_mut().map(|arg| arg.as_mut());
+            let out_data_out = (!arg_data_out.is_null() && arg_data_out_size > 0).then(|| unsafe {
+                std::slice::from_raw_parts_mut(arg_data_out.cast(), arg_data_out_size)
+            });
+            let mut vec_data_out = out_data_out.as_ref().map(|arg| arg.to_vec());
+            let arg_data_out = vec_data_out.as_mut();
+            let mut arg_data_out_written = if arg_data_out_written.is_null() {
+                None
+            } else {
+                Some(WrapParamRef::<usize, _>::from(arg_data_out_written))
+            };
+            let arg_data_out_written = arg_data_out_written.as_mut().map(|arg| arg.as_mut());
+            let result = ImplResponseFilter::filter(
+                &arg_self_.interface,
+                arg_data_in,
+                arg_data_in_read,
+                arg_data_out,
+                arg_data_out_written,
+            );
+            if let (Some(out_data_in), Some(vec_data_in)) = (out_data_in, vec_data_in.as_mut()) {
+                let size = vec_data_in.len().min(out_data_in.len());
+                out_data_in[..size].copy_from_slice(&vec_data_in[..size]);
+            }
+            if let (Some(out_data_out), Some(vec_data_out)) = (out_data_out, vec_data_out.as_mut())
+            {
+                let size = vec_data_out.len().min(out_data_out.len());
+                out_data_out[..size].copy_from_slice(&vec_data_out[..size]);
+            }
+            result.into()
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
         }
-        if let (Some(out_data_out), Some(vec_data_out)) = (out_data_out, vec_data_out.as_mut()) {
-            let size = vec_data_out.len().min(out_data_out.len());
-            out_data_out[..size].copy_from_slice(&vec_data_out[..size]);
-        }
-        result.into()
     }
 }
 impl ImplResponseFilter for ResponseFilter {
@@ -25626,26 +26387,31 @@ mod impl_cef_resource_request_handler_t {
         frame: *mut _cef_frame_t,
         request: *mut _cef_request_t,
     ) -> *mut _cef_cookie_access_filter_t {
-        let (arg_self_, arg_browser, arg_frame, arg_request) = (self_, browser, frame, request);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_browser =
-            unsafe { arg_browser.as_mut() }.map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
-        let arg_browser = arg_browser.as_mut();
-        let mut arg_frame =
-            unsafe { arg_frame.as_mut() }.map(|arg| Frame(unsafe { RefGuard::from_raw(arg) }));
-        let arg_frame = arg_frame.as_mut();
-        let mut arg_request =
-            unsafe { arg_request.as_mut() }.map(|arg| Request(unsafe { RefGuard::from_raw(arg) }));
-        let arg_request = arg_request.as_mut();
-        let result = ImplResourceRequestHandler::cookie_access_filter(
-            &arg_self_.interface,
-            arg_browser,
-            arg_frame,
-            arg_request,
-        );
-        result
-            .map(|result| result.into())
-            .unwrap_or(std::ptr::null_mut())
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_browser, arg_frame, arg_request) = (self_, browser, frame, request);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_browser = unsafe { arg_browser.as_mut() }
+                .map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
+            let arg_browser = arg_browser.as_mut();
+            let mut arg_frame =
+                unsafe { arg_frame.as_mut() }.map(|arg| Frame(unsafe { RefGuard::from_raw(arg) }));
+            let arg_frame = arg_frame.as_mut();
+            let mut arg_request = unsafe { arg_request.as_mut() }
+                .map(|arg| Request(unsafe { RefGuard::from_raw(arg) }));
+            let arg_request = arg_request.as_mut();
+            let result = ImplResourceRequestHandler::cookie_access_filter(
+                &arg_self_.interface,
+                arg_browser,
+                arg_frame,
+                arg_request,
+            );
+            result
+                .map(|result| result.into())
+                .unwrap_or(std::ptr::null_mut())
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn on_before_resource_load<I: ImplResourceRequestHandler, R: Rc>(
         self_: *mut _cef_resource_request_handler_t,
@@ -25654,29 +26420,34 @@ mod impl_cef_resource_request_handler_t {
         request: *mut _cef_request_t,
         callback: *mut _cef_callback_t,
     ) -> cef_return_value_t {
-        let (arg_self_, arg_browser, arg_frame, arg_request, arg_callback) =
-            (self_, browser, frame, request, callback);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_browser =
-            unsafe { arg_browser.as_mut() }.map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
-        let arg_browser = arg_browser.as_mut();
-        let mut arg_frame =
-            unsafe { arg_frame.as_mut() }.map(|arg| Frame(unsafe { RefGuard::from_raw(arg) }));
-        let arg_frame = arg_frame.as_mut();
-        let mut arg_request =
-            unsafe { arg_request.as_mut() }.map(|arg| Request(unsafe { RefGuard::from_raw(arg) }));
-        let arg_request = arg_request.as_mut();
-        let mut arg_callback = unsafe { arg_callback.as_mut() }
-            .map(|arg| Callback(unsafe { RefGuard::from_raw(arg) }));
-        let arg_callback = arg_callback.as_mut();
-        let result = ImplResourceRequestHandler::on_before_resource_load(
-            &arg_self_.interface,
-            arg_browser,
-            arg_frame,
-            arg_request,
-            arg_callback,
-        );
-        result.into()
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_browser, arg_frame, arg_request, arg_callback) =
+                (self_, browser, frame, request, callback);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_browser = unsafe { arg_browser.as_mut() }
+                .map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
+            let arg_browser = arg_browser.as_mut();
+            let mut arg_frame =
+                unsafe { arg_frame.as_mut() }.map(|arg| Frame(unsafe { RefGuard::from_raw(arg) }));
+            let arg_frame = arg_frame.as_mut();
+            let mut arg_request = unsafe { arg_request.as_mut() }
+                .map(|arg| Request(unsafe { RefGuard::from_raw(arg) }));
+            let arg_request = arg_request.as_mut();
+            let mut arg_callback = unsafe { arg_callback.as_mut() }
+                .map(|arg| Callback(unsafe { RefGuard::from_raw(arg) }));
+            let arg_callback = arg_callback.as_mut();
+            let result = ImplResourceRequestHandler::on_before_resource_load(
+                &arg_self_.interface,
+                arg_browser,
+                arg_frame,
+                arg_request,
+                arg_callback,
+            );
+            result.into()
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn get_resource_handler<I: ImplResourceRequestHandler, R: Rc>(
         self_: *mut _cef_resource_request_handler_t,
@@ -25684,26 +26455,31 @@ mod impl_cef_resource_request_handler_t {
         frame: *mut _cef_frame_t,
         request: *mut _cef_request_t,
     ) -> *mut _cef_resource_handler_t {
-        let (arg_self_, arg_browser, arg_frame, arg_request) = (self_, browser, frame, request);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_browser =
-            unsafe { arg_browser.as_mut() }.map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
-        let arg_browser = arg_browser.as_mut();
-        let mut arg_frame =
-            unsafe { arg_frame.as_mut() }.map(|arg| Frame(unsafe { RefGuard::from_raw(arg) }));
-        let arg_frame = arg_frame.as_mut();
-        let mut arg_request =
-            unsafe { arg_request.as_mut() }.map(|arg| Request(unsafe { RefGuard::from_raw(arg) }));
-        let arg_request = arg_request.as_mut();
-        let result = ImplResourceRequestHandler::resource_handler(
-            &arg_self_.interface,
-            arg_browser,
-            arg_frame,
-            arg_request,
-        );
-        result
-            .map(|result| result.into())
-            .unwrap_or(std::ptr::null_mut())
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_browser, arg_frame, arg_request) = (self_, browser, frame, request);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_browser = unsafe { arg_browser.as_mut() }
+                .map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
+            let arg_browser = arg_browser.as_mut();
+            let mut arg_frame =
+                unsafe { arg_frame.as_mut() }.map(|arg| Frame(unsafe { RefGuard::from_raw(arg) }));
+            let arg_frame = arg_frame.as_mut();
+            let mut arg_request = unsafe { arg_request.as_mut() }
+                .map(|arg| Request(unsafe { RefGuard::from_raw(arg) }));
+            let arg_request = arg_request.as_mut();
+            let result = ImplResourceRequestHandler::resource_handler(
+                &arg_self_.interface,
+                arg_browser,
+                arg_frame,
+                arg_request,
+            );
+            result
+                .map(|result| result.into())
+                .unwrap_or(std::ptr::null_mut())
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn on_resource_redirect<I: ImplResourceRequestHandler, R: Rc>(
         self_: *mut _cef_resource_request_handler_t,
@@ -25713,35 +26489,40 @@ mod impl_cef_resource_request_handler_t {
         response: *mut _cef_response_t,
         new_url: *mut cef_string_t,
     ) {
-        let (arg_self_, arg_browser, arg_frame, arg_request, arg_response, arg_new_url) =
-            (self_, browser, frame, request, response, new_url);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_browser =
-            unsafe { arg_browser.as_mut() }.map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
-        let arg_browser = arg_browser.as_mut();
-        let mut arg_frame =
-            unsafe { arg_frame.as_mut() }.map(|arg| Frame(unsafe { RefGuard::from_raw(arg) }));
-        let arg_frame = arg_frame.as_mut();
-        let mut arg_request =
-            unsafe { arg_request.as_mut() }.map(|arg| Request(unsafe { RefGuard::from_raw(arg) }));
-        let arg_request = arg_request.as_mut();
-        let mut arg_response = unsafe { arg_response.as_mut() }
-            .map(|arg| Response(unsafe { RefGuard::from_raw(arg) }));
-        let arg_response = arg_response.as_mut();
-        let mut arg_new_url = if arg_new_url.is_null() {
-            None
-        } else {
-            Some(arg_new_url.into())
-        };
-        let arg_new_url = arg_new_url.as_mut();
-        ImplResourceRequestHandler::on_resource_redirect(
-            &arg_self_.interface,
-            arg_browser,
-            arg_frame,
-            arg_request,
-            arg_response,
-            arg_new_url,
-        )
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_browser, arg_frame, arg_request, arg_response, arg_new_url) =
+                (self_, browser, frame, request, response, new_url);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_browser = unsafe { arg_browser.as_mut() }
+                .map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
+            let arg_browser = arg_browser.as_mut();
+            let mut arg_frame =
+                unsafe { arg_frame.as_mut() }.map(|arg| Frame(unsafe { RefGuard::from_raw(arg) }));
+            let arg_frame = arg_frame.as_mut();
+            let mut arg_request = unsafe { arg_request.as_mut() }
+                .map(|arg| Request(unsafe { RefGuard::from_raw(arg) }));
+            let arg_request = arg_request.as_mut();
+            let mut arg_response = unsafe { arg_response.as_mut() }
+                .map(|arg| Response(unsafe { RefGuard::from_raw(arg) }));
+            let arg_response = arg_response.as_mut();
+            let mut arg_new_url = if arg_new_url.is_null() {
+                None
+            } else {
+                Some(arg_new_url.into())
+            };
+            let arg_new_url = arg_new_url.as_mut();
+            ImplResourceRequestHandler::on_resource_redirect(
+                &arg_self_.interface,
+                arg_browser,
+                arg_frame,
+                arg_request,
+                arg_response,
+                arg_new_url,
+            )
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn on_resource_response<I: ImplResourceRequestHandler, R: Rc>(
         self_: *mut _cef_resource_request_handler_t,
@@ -25750,28 +26531,33 @@ mod impl_cef_resource_request_handler_t {
         request: *mut _cef_request_t,
         response: *mut _cef_response_t,
     ) -> ::std::os::raw::c_int {
-        let (arg_self_, arg_browser, arg_frame, arg_request, arg_response) =
-            (self_, browser, frame, request, response);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_browser =
-            unsafe { arg_browser.as_mut() }.map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
-        let arg_browser = arg_browser.as_mut();
-        let mut arg_frame =
-            unsafe { arg_frame.as_mut() }.map(|arg| Frame(unsafe { RefGuard::from_raw(arg) }));
-        let arg_frame = arg_frame.as_mut();
-        let mut arg_request =
-            unsafe { arg_request.as_mut() }.map(|arg| Request(unsafe { RefGuard::from_raw(arg) }));
-        let arg_request = arg_request.as_mut();
-        let mut arg_response = unsafe { arg_response.as_mut() }
-            .map(|arg| Response(unsafe { RefGuard::from_raw(arg) }));
-        let arg_response = arg_response.as_mut();
-        ImplResourceRequestHandler::on_resource_response(
-            &arg_self_.interface,
-            arg_browser,
-            arg_frame,
-            arg_request,
-            arg_response,
-        )
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_browser, arg_frame, arg_request, arg_response) =
+                (self_, browser, frame, request, response);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_browser = unsafe { arg_browser.as_mut() }
+                .map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
+            let arg_browser = arg_browser.as_mut();
+            let mut arg_frame =
+                unsafe { arg_frame.as_mut() }.map(|arg| Frame(unsafe { RefGuard::from_raw(arg) }));
+            let arg_frame = arg_frame.as_mut();
+            let mut arg_request = unsafe { arg_request.as_mut() }
+                .map(|arg| Request(unsafe { RefGuard::from_raw(arg) }));
+            let arg_request = arg_request.as_mut();
+            let mut arg_response = unsafe { arg_response.as_mut() }
+                .map(|arg| Response(unsafe { RefGuard::from_raw(arg) }));
+            let arg_response = arg_response.as_mut();
+            ImplResourceRequestHandler::on_resource_response(
+                &arg_self_.interface,
+                arg_browser,
+                arg_frame,
+                arg_request,
+                arg_response,
+            )
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn get_resource_response_filter<I: ImplResourceRequestHandler, R: Rc>(
         self_: *mut _cef_resource_request_handler_t,
@@ -25780,31 +26566,36 @@ mod impl_cef_resource_request_handler_t {
         request: *mut _cef_request_t,
         response: *mut _cef_response_t,
     ) -> *mut _cef_response_filter_t {
-        let (arg_self_, arg_browser, arg_frame, arg_request, arg_response) =
-            (self_, browser, frame, request, response);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_browser =
-            unsafe { arg_browser.as_mut() }.map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
-        let arg_browser = arg_browser.as_mut();
-        let mut arg_frame =
-            unsafe { arg_frame.as_mut() }.map(|arg| Frame(unsafe { RefGuard::from_raw(arg) }));
-        let arg_frame = arg_frame.as_mut();
-        let mut arg_request =
-            unsafe { arg_request.as_mut() }.map(|arg| Request(unsafe { RefGuard::from_raw(arg) }));
-        let arg_request = arg_request.as_mut();
-        let mut arg_response = unsafe { arg_response.as_mut() }
-            .map(|arg| Response(unsafe { RefGuard::from_raw(arg) }));
-        let arg_response = arg_response.as_mut();
-        let result = ImplResourceRequestHandler::resource_response_filter(
-            &arg_self_.interface,
-            arg_browser,
-            arg_frame,
-            arg_request,
-            arg_response,
-        );
-        result
-            .map(|result| result.into())
-            .unwrap_or(std::ptr::null_mut())
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_browser, arg_frame, arg_request, arg_response) =
+                (self_, browser, frame, request, response);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_browser = unsafe { arg_browser.as_mut() }
+                .map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
+            let arg_browser = arg_browser.as_mut();
+            let mut arg_frame =
+                unsafe { arg_frame.as_mut() }.map(|arg| Frame(unsafe { RefGuard::from_raw(arg) }));
+            let arg_frame = arg_frame.as_mut();
+            let mut arg_request = unsafe { arg_request.as_mut() }
+                .map(|arg| Request(unsafe { RefGuard::from_raw(arg) }));
+            let arg_request = arg_request.as_mut();
+            let mut arg_response = unsafe { arg_response.as_mut() }
+                .map(|arg| Response(unsafe { RefGuard::from_raw(arg) }));
+            let arg_response = arg_response.as_mut();
+            let result = ImplResourceRequestHandler::resource_response_filter(
+                &arg_self_.interface,
+                arg_browser,
+                arg_frame,
+                arg_request,
+                arg_response,
+            );
+            result
+                .map(|result| result.into())
+                .unwrap_or(std::ptr::null_mut())
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn on_resource_load_complete<I: ImplResourceRequestHandler, R: Rc>(
         self_: *mut _cef_resource_request_handler_t,
@@ -25815,47 +26606,52 @@ mod impl_cef_resource_request_handler_t {
         status: cef_urlrequest_status_t,
         received_content_length: i64,
     ) {
-        let (
-            arg_self_,
-            arg_browser,
-            arg_frame,
-            arg_request,
-            arg_response,
-            arg_status,
-            arg_received_content_length,
-        ) = (
-            self_,
-            browser,
-            frame,
-            request,
-            response,
-            status,
-            received_content_length,
-        );
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_browser =
-            unsafe { arg_browser.as_mut() }.map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
-        let arg_browser = arg_browser.as_mut();
-        let mut arg_frame =
-            unsafe { arg_frame.as_mut() }.map(|arg| Frame(unsafe { RefGuard::from_raw(arg) }));
-        let arg_frame = arg_frame.as_mut();
-        let mut arg_request =
-            unsafe { arg_request.as_mut() }.map(|arg| Request(unsafe { RefGuard::from_raw(arg) }));
-        let arg_request = arg_request.as_mut();
-        let mut arg_response = unsafe { arg_response.as_mut() }
-            .map(|arg| Response(unsafe { RefGuard::from_raw(arg) }));
-        let arg_response = arg_response.as_mut();
-        let arg_status = arg_status.into_raw();
-        let arg_received_content_length = arg_received_content_length.into_raw();
-        ImplResourceRequestHandler::on_resource_load_complete(
-            &arg_self_.interface,
-            arg_browser,
-            arg_frame,
-            arg_request,
-            arg_response,
-            arg_status,
-            arg_received_content_length,
-        )
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (
+                arg_self_,
+                arg_browser,
+                arg_frame,
+                arg_request,
+                arg_response,
+                arg_status,
+                arg_received_content_length,
+            ) = (
+                self_,
+                browser,
+                frame,
+                request,
+                response,
+                status,
+                received_content_length,
+            );
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_browser = unsafe { arg_browser.as_mut() }
+                .map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
+            let arg_browser = arg_browser.as_mut();
+            let mut arg_frame =
+                unsafe { arg_frame.as_mut() }.map(|arg| Frame(unsafe { RefGuard::from_raw(arg) }));
+            let arg_frame = arg_frame.as_mut();
+            let mut arg_request = unsafe { arg_request.as_mut() }
+                .map(|arg| Request(unsafe { RefGuard::from_raw(arg) }));
+            let arg_request = arg_request.as_mut();
+            let mut arg_response = unsafe { arg_response.as_mut() }
+                .map(|arg| Response(unsafe { RefGuard::from_raw(arg) }));
+            let arg_response = arg_response.as_mut();
+            let arg_status = arg_status.into_raw();
+            let arg_received_content_length = arg_received_content_length.into_raw();
+            ImplResourceRequestHandler::on_resource_load_complete(
+                &arg_self_.interface,
+                arg_browser,
+                arg_frame,
+                arg_request,
+                arg_response,
+                arg_status,
+                arg_received_content_length,
+            )
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn on_protocol_execution<I: ImplResourceRequestHandler, R: Rc>(
         self_: *mut _cef_resource_request_handler_t,
@@ -25864,33 +26660,38 @@ mod impl_cef_resource_request_handler_t {
         request: *mut _cef_request_t,
         allow_os_execution: *mut ::std::os::raw::c_int,
     ) {
-        let (arg_self_, arg_browser, arg_frame, arg_request, arg_allow_os_execution) =
-            (self_, browser, frame, request, allow_os_execution);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_browser =
-            unsafe { arg_browser.as_mut() }.map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
-        let arg_browser = arg_browser.as_mut();
-        let mut arg_frame =
-            unsafe { arg_frame.as_mut() }.map(|arg| Frame(unsafe { RefGuard::from_raw(arg) }));
-        let arg_frame = arg_frame.as_mut();
-        let mut arg_request =
-            unsafe { arg_request.as_mut() }.map(|arg| Request(unsafe { RefGuard::from_raw(arg) }));
-        let arg_request = arg_request.as_mut();
-        let mut arg_allow_os_execution = if arg_allow_os_execution.is_null() {
-            None
-        } else {
-            Some(WrapParamRef::<::std::os::raw::c_int, _>::from(
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_browser, arg_frame, arg_request, arg_allow_os_execution) =
+                (self_, browser, frame, request, allow_os_execution);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_browser = unsafe { arg_browser.as_mut() }
+                .map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
+            let arg_browser = arg_browser.as_mut();
+            let mut arg_frame =
+                unsafe { arg_frame.as_mut() }.map(|arg| Frame(unsafe { RefGuard::from_raw(arg) }));
+            let arg_frame = arg_frame.as_mut();
+            let mut arg_request = unsafe { arg_request.as_mut() }
+                .map(|arg| Request(unsafe { RefGuard::from_raw(arg) }));
+            let arg_request = arg_request.as_mut();
+            let mut arg_allow_os_execution = if arg_allow_os_execution.is_null() {
+                None
+            } else {
+                Some(WrapParamRef::<::std::os::raw::c_int, _>::from(
+                    arg_allow_os_execution,
+                ))
+            };
+            let arg_allow_os_execution = arg_allow_os_execution.as_mut().map(|arg| arg.as_mut());
+            ImplResourceRequestHandler::on_protocol_execution(
+                &arg_self_.interface,
+                arg_browser,
+                arg_frame,
+                arg_request,
                 arg_allow_os_execution,
-            ))
-        };
-        let arg_allow_os_execution = arg_allow_os_execution.as_mut().map(|arg| arg.as_mut());
-        ImplResourceRequestHandler::on_protocol_execution(
-            &arg_self_.interface,
-            arg_browser,
-            arg_frame,
-            arg_request,
-            arg_allow_os_execution,
-        )
+            )
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
 }
 impl ImplResourceRequestHandler for ResourceRequestHandler {
@@ -26371,31 +27172,36 @@ mod impl_cef_cookie_access_filter_t {
         request: *mut _cef_request_t,
         cookie: *const _cef_cookie_t,
     ) -> ::std::os::raw::c_int {
-        let (arg_self_, arg_browser, arg_frame, arg_request, arg_cookie) =
-            (self_, browser, frame, request, cookie);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_browser =
-            unsafe { arg_browser.as_mut() }.map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
-        let arg_browser = arg_browser.as_mut();
-        let mut arg_frame =
-            unsafe { arg_frame.as_mut() }.map(|arg| Frame(unsafe { RefGuard::from_raw(arg) }));
-        let arg_frame = arg_frame.as_mut();
-        let mut arg_request =
-            unsafe { arg_request.as_mut() }.map(|arg| Request(unsafe { RefGuard::from_raw(arg) }));
-        let arg_request = arg_request.as_mut();
-        let arg_cookie = if arg_cookie.is_null() {
-            None
-        } else {
-            Some(WrapParamRef::<Cookie, _>::from(arg_cookie))
-        };
-        let arg_cookie = arg_cookie.as_ref().map(|arg| arg.as_ref());
-        ImplCookieAccessFilter::can_send_cookie(
-            &arg_self_.interface,
-            arg_browser,
-            arg_frame,
-            arg_request,
-            arg_cookie,
-        )
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_browser, arg_frame, arg_request, arg_cookie) =
+                (self_, browser, frame, request, cookie);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_browser = unsafe { arg_browser.as_mut() }
+                .map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
+            let arg_browser = arg_browser.as_mut();
+            let mut arg_frame =
+                unsafe { arg_frame.as_mut() }.map(|arg| Frame(unsafe { RefGuard::from_raw(arg) }));
+            let arg_frame = arg_frame.as_mut();
+            let mut arg_request = unsafe { arg_request.as_mut() }
+                .map(|arg| Request(unsafe { RefGuard::from_raw(arg) }));
+            let arg_request = arg_request.as_mut();
+            let arg_cookie = if arg_cookie.is_null() {
+                None
+            } else {
+                Some(WrapParamRef::<Cookie, _>::from(arg_cookie))
+            };
+            let arg_cookie = arg_cookie.as_ref().map(|arg| arg.as_ref());
+            ImplCookieAccessFilter::can_send_cookie(
+                &arg_self_.interface,
+                arg_browser,
+                arg_frame,
+                arg_request,
+                arg_cookie,
+            )
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn can_save_cookie<I: ImplCookieAccessFilter, R: Rc>(
         self_: *mut _cef_cookie_access_filter_t,
@@ -26405,35 +27211,40 @@ mod impl_cef_cookie_access_filter_t {
         response: *mut _cef_response_t,
         cookie: *const _cef_cookie_t,
     ) -> ::std::os::raw::c_int {
-        let (arg_self_, arg_browser, arg_frame, arg_request, arg_response, arg_cookie) =
-            (self_, browser, frame, request, response, cookie);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_browser =
-            unsafe { arg_browser.as_mut() }.map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
-        let arg_browser = arg_browser.as_mut();
-        let mut arg_frame =
-            unsafe { arg_frame.as_mut() }.map(|arg| Frame(unsafe { RefGuard::from_raw(arg) }));
-        let arg_frame = arg_frame.as_mut();
-        let mut arg_request =
-            unsafe { arg_request.as_mut() }.map(|arg| Request(unsafe { RefGuard::from_raw(arg) }));
-        let arg_request = arg_request.as_mut();
-        let mut arg_response = unsafe { arg_response.as_mut() }
-            .map(|arg| Response(unsafe { RefGuard::from_raw(arg) }));
-        let arg_response = arg_response.as_mut();
-        let arg_cookie = if arg_cookie.is_null() {
-            None
-        } else {
-            Some(WrapParamRef::<Cookie, _>::from(arg_cookie))
-        };
-        let arg_cookie = arg_cookie.as_ref().map(|arg| arg.as_ref());
-        ImplCookieAccessFilter::can_save_cookie(
-            &arg_self_.interface,
-            arg_browser,
-            arg_frame,
-            arg_request,
-            arg_response,
-            arg_cookie,
-        )
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_browser, arg_frame, arg_request, arg_response, arg_cookie) =
+                (self_, browser, frame, request, response, cookie);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_browser = unsafe { arg_browser.as_mut() }
+                .map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
+            let arg_browser = arg_browser.as_mut();
+            let mut arg_frame =
+                unsafe { arg_frame.as_mut() }.map(|arg| Frame(unsafe { RefGuard::from_raw(arg) }));
+            let arg_frame = arg_frame.as_mut();
+            let mut arg_request = unsafe { arg_request.as_mut() }
+                .map(|arg| Request(unsafe { RefGuard::from_raw(arg) }));
+            let arg_request = arg_request.as_mut();
+            let mut arg_response = unsafe { arg_response.as_mut() }
+                .map(|arg| Response(unsafe { RefGuard::from_raw(arg) }));
+            let arg_response = arg_response.as_mut();
+            let arg_cookie = if arg_cookie.is_null() {
+                None
+            } else {
+                Some(WrapParamRef::<Cookie, _>::from(arg_cookie))
+            };
+            let arg_cookie = arg_cookie.as_ref().map(|arg| arg.as_ref());
+            ImplCookieAccessFilter::can_save_cookie(
+                &arg_self_.interface,
+                arg_browser,
+                arg_frame,
+                arg_request,
+                arg_response,
+                arg_cookie,
+            )
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
 }
 impl ImplCookieAccessFilter for CookieAccessFilter {
@@ -26930,28 +27741,33 @@ mod impl_cef_request_handler_t {
         user_gesture: ::std::os::raw::c_int,
         is_redirect: ::std::os::raw::c_int,
     ) -> ::std::os::raw::c_int {
-        let (arg_self_, arg_browser, arg_frame, arg_request, arg_user_gesture, arg_is_redirect) =
-            (self_, browser, frame, request, user_gesture, is_redirect);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_browser =
-            unsafe { arg_browser.as_mut() }.map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
-        let arg_browser = arg_browser.as_mut();
-        let mut arg_frame =
-            unsafe { arg_frame.as_mut() }.map(|arg| Frame(unsafe { RefGuard::from_raw(arg) }));
-        let arg_frame = arg_frame.as_mut();
-        let mut arg_request =
-            unsafe { arg_request.as_mut() }.map(|arg| Request(unsafe { RefGuard::from_raw(arg) }));
-        let arg_request = arg_request.as_mut();
-        let arg_user_gesture = arg_user_gesture.into_raw();
-        let arg_is_redirect = arg_is_redirect.into_raw();
-        ImplRequestHandler::on_before_browse(
-            &arg_self_.interface,
-            arg_browser,
-            arg_frame,
-            arg_request,
-            arg_user_gesture,
-            arg_is_redirect,
-        )
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_browser, arg_frame, arg_request, arg_user_gesture, arg_is_redirect) =
+                (self_, browser, frame, request, user_gesture, is_redirect);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_browser = unsafe { arg_browser.as_mut() }
+                .map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
+            let arg_browser = arg_browser.as_mut();
+            let mut arg_frame =
+                unsafe { arg_frame.as_mut() }.map(|arg| Frame(unsafe { RefGuard::from_raw(arg) }));
+            let arg_frame = arg_frame.as_mut();
+            let mut arg_request = unsafe { arg_request.as_mut() }
+                .map(|arg| Request(unsafe { RefGuard::from_raw(arg) }));
+            let arg_request = arg_request.as_mut();
+            let arg_user_gesture = arg_user_gesture.into_raw();
+            let arg_is_redirect = arg_is_redirect.into_raw();
+            ImplRequestHandler::on_before_browse(
+                &arg_self_.interface,
+                arg_browser,
+                arg_frame,
+                arg_request,
+                arg_user_gesture,
+                arg_is_redirect,
+            )
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn on_open_urlfrom_tab<I: ImplRequestHandler, R: Rc>(
         self_: *mut _cef_request_handler_t,
@@ -26961,44 +27777,49 @@ mod impl_cef_request_handler_t {
         target_disposition: cef_window_open_disposition_t,
         user_gesture: ::std::os::raw::c_int,
     ) -> ::std::os::raw::c_int {
-        let (
-            arg_self_,
-            arg_browser,
-            arg_frame,
-            arg_target_url,
-            arg_target_disposition,
-            arg_user_gesture,
-        ) = (
-            self_,
-            browser,
-            frame,
-            target_url,
-            target_disposition,
-            user_gesture,
-        );
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_browser =
-            unsafe { arg_browser.as_mut() }.map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
-        let arg_browser = arg_browser.as_mut();
-        let mut arg_frame =
-            unsafe { arg_frame.as_mut() }.map(|arg| Frame(unsafe { RefGuard::from_raw(arg) }));
-        let arg_frame = arg_frame.as_mut();
-        let arg_target_url = if arg_target_url.is_null() {
-            None
-        } else {
-            Some(arg_target_url.into())
-        };
-        let arg_target_url = arg_target_url.as_ref();
-        let arg_target_disposition = arg_target_disposition.into_raw();
-        let arg_user_gesture = arg_user_gesture.into_raw();
-        ImplRequestHandler::on_open_urlfrom_tab(
-            &arg_self_.interface,
-            arg_browser,
-            arg_frame,
-            arg_target_url,
-            arg_target_disposition,
-            arg_user_gesture,
-        )
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (
+                arg_self_,
+                arg_browser,
+                arg_frame,
+                arg_target_url,
+                arg_target_disposition,
+                arg_user_gesture,
+            ) = (
+                self_,
+                browser,
+                frame,
+                target_url,
+                target_disposition,
+                user_gesture,
+            );
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_browser = unsafe { arg_browser.as_mut() }
+                .map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
+            let arg_browser = arg_browser.as_mut();
+            let mut arg_frame =
+                unsafe { arg_frame.as_mut() }.map(|arg| Frame(unsafe { RefGuard::from_raw(arg) }));
+            let arg_frame = arg_frame.as_mut();
+            let arg_target_url = if arg_target_url.is_null() {
+                None
+            } else {
+                Some(arg_target_url.into())
+            };
+            let arg_target_url = arg_target_url.as_ref();
+            let arg_target_disposition = arg_target_disposition.into_raw();
+            let arg_user_gesture = arg_user_gesture.into_raw();
+            ImplRequestHandler::on_open_urlfrom_tab(
+                &arg_self_.interface,
+                arg_browser,
+                arg_frame,
+                arg_target_url,
+                arg_target_disposition,
+                arg_user_gesture,
+            )
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn get_resource_request_handler<I: ImplRequestHandler, R: Rc>(
         self_: *mut _cef_request_handler_t,
@@ -27010,66 +27831,71 @@ mod impl_cef_request_handler_t {
         request_initiator: *const cef_string_t,
         disable_default_handling: *mut ::std::os::raw::c_int,
     ) -> *mut _cef_resource_request_handler_t {
-        let (
-            arg_self_,
-            arg_browser,
-            arg_frame,
-            arg_request,
-            arg_is_navigation,
-            arg_is_download,
-            arg_request_initiator,
-            arg_disable_default_handling,
-        ) = (
-            self_,
-            browser,
-            frame,
-            request,
-            is_navigation,
-            is_download,
-            request_initiator,
-            disable_default_handling,
-        );
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_browser =
-            unsafe { arg_browser.as_mut() }.map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
-        let arg_browser = arg_browser.as_mut();
-        let mut arg_frame =
-            unsafe { arg_frame.as_mut() }.map(|arg| Frame(unsafe { RefGuard::from_raw(arg) }));
-        let arg_frame = arg_frame.as_mut();
-        let mut arg_request =
-            unsafe { arg_request.as_mut() }.map(|arg| Request(unsafe { RefGuard::from_raw(arg) }));
-        let arg_request = arg_request.as_mut();
-        let arg_is_navigation = arg_is_navigation.into_raw();
-        let arg_is_download = arg_is_download.into_raw();
-        let arg_request_initiator = if arg_request_initiator.is_null() {
-            None
-        } else {
-            Some(arg_request_initiator.into())
-        };
-        let arg_request_initiator = arg_request_initiator.as_ref();
-        let mut arg_disable_default_handling = if arg_disable_default_handling.is_null() {
-            None
-        } else {
-            Some(WrapParamRef::<::std::os::raw::c_int, _>::from(
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (
+                arg_self_,
+                arg_browser,
+                arg_frame,
+                arg_request,
+                arg_is_navigation,
+                arg_is_download,
+                arg_request_initiator,
                 arg_disable_default_handling,
-            ))
-        };
-        let arg_disable_default_handling = arg_disable_default_handling
-            .as_mut()
-            .map(|arg| arg.as_mut());
-        let result = ImplRequestHandler::resource_request_handler(
-            &arg_self_.interface,
-            arg_browser,
-            arg_frame,
-            arg_request,
-            arg_is_navigation,
-            arg_is_download,
-            arg_request_initiator,
-            arg_disable_default_handling,
-        );
-        result
-            .map(|result| result.into())
-            .unwrap_or(std::ptr::null_mut())
+            ) = (
+                self_,
+                browser,
+                frame,
+                request,
+                is_navigation,
+                is_download,
+                request_initiator,
+                disable_default_handling,
+            );
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_browser = unsafe { arg_browser.as_mut() }
+                .map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
+            let arg_browser = arg_browser.as_mut();
+            let mut arg_frame =
+                unsafe { arg_frame.as_mut() }.map(|arg| Frame(unsafe { RefGuard::from_raw(arg) }));
+            let arg_frame = arg_frame.as_mut();
+            let mut arg_request = unsafe { arg_request.as_mut() }
+                .map(|arg| Request(unsafe { RefGuard::from_raw(arg) }));
+            let arg_request = arg_request.as_mut();
+            let arg_is_navigation = arg_is_navigation.into_raw();
+            let arg_is_download = arg_is_download.into_raw();
+            let arg_request_initiator = if arg_request_initiator.is_null() {
+                None
+            } else {
+                Some(arg_request_initiator.into())
+            };
+            let arg_request_initiator = arg_request_initiator.as_ref();
+            let mut arg_disable_default_handling = if arg_disable_default_handling.is_null() {
+                None
+            } else {
+                Some(WrapParamRef::<::std::os::raw::c_int, _>::from(
+                    arg_disable_default_handling,
+                ))
+            };
+            let arg_disable_default_handling = arg_disable_default_handling
+                .as_mut()
+                .map(|arg| arg.as_mut());
+            let result = ImplRequestHandler::resource_request_handler(
+                &arg_self_.interface,
+                arg_browser,
+                arg_frame,
+                arg_request,
+                arg_is_navigation,
+                arg_is_download,
+                arg_request_initiator,
+                arg_disable_default_handling,
+            );
+            result
+                .map(|result| result.into())
+                .unwrap_or(std::ptr::null_mut())
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn get_auth_credentials<I: ImplRequestHandler, R: Rc>(
         self_: *mut _cef_request_handler_t,
@@ -27082,63 +27908,68 @@ mod impl_cef_request_handler_t {
         scheme: *const cef_string_t,
         callback: *mut _cef_auth_callback_t,
     ) -> ::std::os::raw::c_int {
-        let (
-            arg_self_,
-            arg_browser,
-            arg_origin_url,
-            arg_is_proxy,
-            arg_host,
-            arg_port,
-            arg_realm,
-            arg_scheme,
-            arg_callback,
-        ) = (
-            self_, browser, origin_url, is_proxy, host, port, realm, scheme, callback,
-        );
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_browser =
-            unsafe { arg_browser.as_mut() }.map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
-        let arg_browser = arg_browser.as_mut();
-        let arg_origin_url = if arg_origin_url.is_null() {
-            None
-        } else {
-            Some(arg_origin_url.into())
-        };
-        let arg_origin_url = arg_origin_url.as_ref();
-        let arg_is_proxy = arg_is_proxy.into_raw();
-        let arg_host = if arg_host.is_null() {
-            None
-        } else {
-            Some(arg_host.into())
-        };
-        let arg_host = arg_host.as_ref();
-        let arg_port = arg_port.into_raw();
-        let arg_realm = if arg_realm.is_null() {
-            None
-        } else {
-            Some(arg_realm.into())
-        };
-        let arg_realm = arg_realm.as_ref();
-        let arg_scheme = if arg_scheme.is_null() {
-            None
-        } else {
-            Some(arg_scheme.into())
-        };
-        let arg_scheme = arg_scheme.as_ref();
-        let mut arg_callback = unsafe { arg_callback.as_mut() }
-            .map(|arg| AuthCallback(unsafe { RefGuard::from_raw(arg) }));
-        let arg_callback = arg_callback.as_mut();
-        ImplRequestHandler::auth_credentials(
-            &arg_self_.interface,
-            arg_browser,
-            arg_origin_url,
-            arg_is_proxy,
-            arg_host,
-            arg_port,
-            arg_realm,
-            arg_scheme,
-            arg_callback,
-        )
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (
+                arg_self_,
+                arg_browser,
+                arg_origin_url,
+                arg_is_proxy,
+                arg_host,
+                arg_port,
+                arg_realm,
+                arg_scheme,
+                arg_callback,
+            ) = (
+                self_, browser, origin_url, is_proxy, host, port, realm, scheme, callback,
+            );
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_browser = unsafe { arg_browser.as_mut() }
+                .map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
+            let arg_browser = arg_browser.as_mut();
+            let arg_origin_url = if arg_origin_url.is_null() {
+                None
+            } else {
+                Some(arg_origin_url.into())
+            };
+            let arg_origin_url = arg_origin_url.as_ref();
+            let arg_is_proxy = arg_is_proxy.into_raw();
+            let arg_host = if arg_host.is_null() {
+                None
+            } else {
+                Some(arg_host.into())
+            };
+            let arg_host = arg_host.as_ref();
+            let arg_port = arg_port.into_raw();
+            let arg_realm = if arg_realm.is_null() {
+                None
+            } else {
+                Some(arg_realm.into())
+            };
+            let arg_realm = arg_realm.as_ref();
+            let arg_scheme = if arg_scheme.is_null() {
+                None
+            } else {
+                Some(arg_scheme.into())
+            };
+            let arg_scheme = arg_scheme.as_ref();
+            let mut arg_callback = unsafe { arg_callback.as_mut() }
+                .map(|arg| AuthCallback(unsafe { RefGuard::from_raw(arg) }));
+            let arg_callback = arg_callback.as_mut();
+            ImplRequestHandler::auth_credentials(
+                &arg_self_.interface,
+                arg_browser,
+                arg_origin_url,
+                arg_is_proxy,
+                arg_host,
+                arg_port,
+                arg_realm,
+                arg_scheme,
+                arg_callback,
+            )
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn on_certificate_error<I: ImplRequestHandler, R: Rc>(
         self_: *mut _cef_request_handler_t,
@@ -27148,33 +27979,44 @@ mod impl_cef_request_handler_t {
         ssl_info: *mut _cef_sslinfo_t,
         callback: *mut _cef_callback_t,
     ) -> ::std::os::raw::c_int {
-        let (arg_self_, arg_browser, arg_cert_error, arg_request_url, arg_ssl_info, arg_callback) =
-            (self_, browser, cert_error, request_url, ssl_info, callback);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_browser =
-            unsafe { arg_browser.as_mut() }.map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
-        let arg_browser = arg_browser.as_mut();
-        let arg_cert_error = arg_cert_error.into_raw();
-        let arg_request_url = if arg_request_url.is_null() {
-            None
-        } else {
-            Some(arg_request_url.into())
-        };
-        let arg_request_url = arg_request_url.as_ref();
-        let mut arg_ssl_info =
-            unsafe { arg_ssl_info.as_mut() }.map(|arg| Sslinfo(unsafe { RefGuard::from_raw(arg) }));
-        let arg_ssl_info = arg_ssl_info.as_mut();
-        let mut arg_callback = unsafe { arg_callback.as_mut() }
-            .map(|arg| Callback(unsafe { RefGuard::from_raw(arg) }));
-        let arg_callback = arg_callback.as_mut();
-        ImplRequestHandler::on_certificate_error(
-            &arg_self_.interface,
-            arg_browser,
-            arg_cert_error,
-            arg_request_url,
-            arg_ssl_info,
-            arg_callback,
-        )
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (
+                arg_self_,
+                arg_browser,
+                arg_cert_error,
+                arg_request_url,
+                arg_ssl_info,
+                arg_callback,
+            ) = (self_, browser, cert_error, request_url, ssl_info, callback);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_browser = unsafe { arg_browser.as_mut() }
+                .map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
+            let arg_browser = arg_browser.as_mut();
+            let arg_cert_error = arg_cert_error.into_raw();
+            let arg_request_url = if arg_request_url.is_null() {
+                None
+            } else {
+                Some(arg_request_url.into())
+            };
+            let arg_request_url = arg_request_url.as_ref();
+            let mut arg_ssl_info = unsafe { arg_ssl_info.as_mut() }
+                .map(|arg| Sslinfo(unsafe { RefGuard::from_raw(arg) }));
+            let arg_ssl_info = arg_ssl_info.as_mut();
+            let mut arg_callback = unsafe { arg_callback.as_mut() }
+                .map(|arg| Callback(unsafe { RefGuard::from_raw(arg) }));
+            let arg_callback = arg_callback.as_mut();
+            ImplRequestHandler::on_certificate_error(
+                &arg_self_.interface,
+                arg_browser,
+                arg_cert_error,
+                arg_request_url,
+                arg_ssl_info,
+                arg_callback,
+            )
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn on_select_client_certificate<I: ImplRequestHandler, R: Rc>(
         self_: *mut _cef_request_handler_t,
@@ -27186,105 +28028,125 @@ mod impl_cef_request_handler_t {
         certificates: *const *mut _cef_x509_certificate_t,
         callback: *mut _cef_select_client_certificate_callback_t,
     ) -> ::std::os::raw::c_int {
-        let (
-            arg_self_,
-            arg_browser,
-            arg_is_proxy,
-            arg_host,
-            arg_port,
-            arg_certificates_count,
-            arg_certificates,
-            arg_callback,
-        ) = (
-            self_,
-            browser,
-            is_proxy,
-            host,
-            port,
-            certificates_count,
-            certificates,
-            callback,
-        );
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_browser =
-            unsafe { arg_browser.as_mut() }.map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
-        let arg_browser = arg_browser.as_mut();
-        let arg_is_proxy = arg_is_proxy.into_raw();
-        let arg_host = if arg_host.is_null() {
-            None
-        } else {
-            Some(arg_host.into())
-        };
-        let arg_host = arg_host.as_ref();
-        let arg_port = arg_port.into_raw();
-        let vec_certificates = unsafe { arg_certificates.as_ref() }.map(|arg| {
-            let arg = unsafe {
-                std::slice::from_raw_parts(std::ptr::from_ref(arg), arg_certificates_count)
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (
+                arg_self_,
+                arg_browser,
+                arg_is_proxy,
+                arg_host,
+                arg_port,
+                arg_certificates_count,
+                arg_certificates,
+                arg_callback,
+            ) = (
+                self_,
+                browser,
+                is_proxy,
+                host,
+                port,
+                certificates_count,
+                certificates,
+                callback,
+            );
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_browser = unsafe { arg_browser.as_mut() }
+                .map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
+            let arg_browser = arg_browser.as_mut();
+            let arg_is_proxy = arg_is_proxy.into_raw();
+            let arg_host = if arg_host.is_null() {
+                None
+            } else {
+                Some(arg_host.into())
             };
-            arg.iter()
-                .map(|arg| {
-                    if arg.is_null() {
-                        None
-                    } else {
-                        Some(X509Certificate(unsafe { RefGuard::from_raw(*arg) }))
-                    }
-                })
-                .collect::<Vec<_>>()
-        });
-        let arg_certificates = vec_certificates.as_deref();
-        let mut arg_callback = unsafe { arg_callback.as_mut() }
-            .map(|arg| SelectClientCertificateCallback(unsafe { RefGuard::from_raw(arg) }));
-        let arg_callback = arg_callback.as_mut();
-        ImplRequestHandler::on_select_client_certificate(
-            &arg_self_.interface,
-            arg_browser,
-            arg_is_proxy,
-            arg_host,
-            arg_port,
-            arg_certificates,
-            arg_callback,
-        )
+            let arg_host = arg_host.as_ref();
+            let arg_port = arg_port.into_raw();
+            let vec_certificates = unsafe { arg_certificates.as_ref() }.map(|arg| {
+                let arg = unsafe {
+                    std::slice::from_raw_parts(std::ptr::from_ref(arg), arg_certificates_count)
+                };
+                arg.iter()
+                    .map(|arg| {
+                        if arg.is_null() {
+                            None
+                        } else {
+                            Some(X509Certificate(unsafe { RefGuard::from_raw(*arg) }))
+                        }
+                    })
+                    .collect::<Vec<_>>()
+            });
+            let arg_certificates = vec_certificates.as_deref();
+            let mut arg_callback = unsafe { arg_callback.as_mut() }
+                .map(|arg| SelectClientCertificateCallback(unsafe { RefGuard::from_raw(arg) }));
+            let arg_callback = arg_callback.as_mut();
+            ImplRequestHandler::on_select_client_certificate(
+                &arg_self_.interface,
+                arg_browser,
+                arg_is_proxy,
+                arg_host,
+                arg_port,
+                arg_certificates,
+                arg_callback,
+            )
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn on_render_view_ready<I: ImplRequestHandler, R: Rc>(
         self_: *mut _cef_request_handler_t,
         browser: *mut _cef_browser_t,
     ) {
-        let (arg_self_, arg_browser) = (self_, browser);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_browser =
-            unsafe { arg_browser.as_mut() }.map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
-        let arg_browser = arg_browser.as_mut();
-        ImplRequestHandler::on_render_view_ready(&arg_self_.interface, arg_browser)
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_browser) = (self_, browser);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_browser = unsafe { arg_browser.as_mut() }
+                .map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
+            let arg_browser = arg_browser.as_mut();
+            ImplRequestHandler::on_render_view_ready(&arg_self_.interface, arg_browser)
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn on_render_process_unresponsive<I: ImplRequestHandler, R: Rc>(
         self_: *mut _cef_request_handler_t,
         browser: *mut _cef_browser_t,
         callback: *mut _cef_unresponsive_process_callback_t,
     ) -> ::std::os::raw::c_int {
-        let (arg_self_, arg_browser, arg_callback) = (self_, browser, callback);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_browser =
-            unsafe { arg_browser.as_mut() }.map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
-        let arg_browser = arg_browser.as_mut();
-        let mut arg_callback = unsafe { arg_callback.as_mut() }
-            .map(|arg| UnresponsiveProcessCallback(unsafe { RefGuard::from_raw(arg) }));
-        let arg_callback = arg_callback.as_mut();
-        ImplRequestHandler::on_render_process_unresponsive(
-            &arg_self_.interface,
-            arg_browser,
-            arg_callback,
-        )
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_browser, arg_callback) = (self_, browser, callback);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_browser = unsafe { arg_browser.as_mut() }
+                .map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
+            let arg_browser = arg_browser.as_mut();
+            let mut arg_callback = unsafe { arg_callback.as_mut() }
+                .map(|arg| UnresponsiveProcessCallback(unsafe { RefGuard::from_raw(arg) }));
+            let arg_callback = arg_callback.as_mut();
+            ImplRequestHandler::on_render_process_unresponsive(
+                &arg_self_.interface,
+                arg_browser,
+                arg_callback,
+            )
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn on_render_process_responsive<I: ImplRequestHandler, R: Rc>(
         self_: *mut _cef_request_handler_t,
         browser: *mut _cef_browser_t,
     ) {
-        let (arg_self_, arg_browser) = (self_, browser);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_browser =
-            unsafe { arg_browser.as_mut() }.map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
-        let arg_browser = arg_browser.as_mut();
-        ImplRequestHandler::on_render_process_responsive(&arg_self_.interface, arg_browser)
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_browser) = (self_, browser);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_browser = unsafe { arg_browser.as_mut() }
+                .map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
+            let arg_browser = arg_browser.as_mut();
+            ImplRequestHandler::on_render_process_responsive(&arg_self_.interface, arg_browser)
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn on_render_process_terminated<I: ImplRequestHandler, R: Rc>(
         self_: *mut _cef_request_handler_t,
@@ -27293,38 +28155,51 @@ mod impl_cef_request_handler_t {
         error_code: ::std::os::raw::c_int,
         error_string: *const cef_string_t,
     ) {
-        let (arg_self_, arg_browser, arg_status, arg_error_code, arg_error_string) =
-            (self_, browser, status, error_code, error_string);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_browser =
-            unsafe { arg_browser.as_mut() }.map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
-        let arg_browser = arg_browser.as_mut();
-        let arg_status = arg_status.into_raw();
-        let arg_error_code = arg_error_code.into_raw();
-        let arg_error_string = if arg_error_string.is_null() {
-            None
-        } else {
-            Some(arg_error_string.into())
-        };
-        let arg_error_string = arg_error_string.as_ref();
-        ImplRequestHandler::on_render_process_terminated(
-            &arg_self_.interface,
-            arg_browser,
-            arg_status,
-            arg_error_code,
-            arg_error_string,
-        )
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_browser, arg_status, arg_error_code, arg_error_string) =
+                (self_, browser, status, error_code, error_string);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_browser = unsafe { arg_browser.as_mut() }
+                .map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
+            let arg_browser = arg_browser.as_mut();
+            let arg_status = arg_status.into_raw();
+            let arg_error_code = arg_error_code.into_raw();
+            let arg_error_string = if arg_error_string.is_null() {
+                None
+            } else {
+                Some(arg_error_string.into())
+            };
+            let arg_error_string = arg_error_string.as_ref();
+            ImplRequestHandler::on_render_process_terminated(
+                &arg_self_.interface,
+                arg_browser,
+                arg_status,
+                arg_error_code,
+                arg_error_string,
+            )
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn on_document_available_in_main_frame<I: ImplRequestHandler, R: Rc>(
         self_: *mut _cef_request_handler_t,
         browser: *mut _cef_browser_t,
     ) {
-        let (arg_self_, arg_browser) = (self_, browser);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_browser =
-            unsafe { arg_browser.as_mut() }.map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
-        let arg_browser = arg_browser.as_mut();
-        ImplRequestHandler::on_document_available_in_main_frame(&arg_self_.interface, arg_browser)
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_browser) = (self_, browser);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_browser = unsafe { arg_browser.as_mut() }
+                .map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
+            let arg_browser = arg_browser.as_mut();
+            ImplRequestHandler::on_document_available_in_main_frame(
+                &arg_self_.interface,
+                arg_browser,
+            )
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
 }
 impl ImplRequestHandler for RequestHandler {
@@ -27973,182 +28848,272 @@ mod impl_cef_client_t {
     extern "C" fn get_audio_handler<I: ImplClient, R: Rc>(
         self_: *mut _cef_client_t,
     ) -> *mut _cef_audio_handler_t {
-        let arg_self_ = self_;
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let result = ImplClient::audio_handler(&arg_self_.interface);
-        result
-            .map(|result| result.into())
-            .unwrap_or(std::ptr::null_mut())
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let arg_self_ = self_;
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let result = ImplClient::audio_handler(&arg_self_.interface);
+            result
+                .map(|result| result.into())
+                .unwrap_or(std::ptr::null_mut())
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn get_command_handler<I: ImplClient, R: Rc>(
         self_: *mut _cef_client_t,
     ) -> *mut _cef_command_handler_t {
-        let arg_self_ = self_;
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let result = ImplClient::command_handler(&arg_self_.interface);
-        result
-            .map(|result| result.into())
-            .unwrap_or(std::ptr::null_mut())
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let arg_self_ = self_;
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let result = ImplClient::command_handler(&arg_self_.interface);
+            result
+                .map(|result| result.into())
+                .unwrap_or(std::ptr::null_mut())
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn get_context_menu_handler<I: ImplClient, R: Rc>(
         self_: *mut _cef_client_t,
     ) -> *mut _cef_context_menu_handler_t {
-        let arg_self_ = self_;
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let result = ImplClient::context_menu_handler(&arg_self_.interface);
-        result
-            .map(|result| result.into())
-            .unwrap_or(std::ptr::null_mut())
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let arg_self_ = self_;
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let result = ImplClient::context_menu_handler(&arg_self_.interface);
+            result
+                .map(|result| result.into())
+                .unwrap_or(std::ptr::null_mut())
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn get_dialog_handler<I: ImplClient, R: Rc>(
         self_: *mut _cef_client_t,
     ) -> *mut _cef_dialog_handler_t {
-        let arg_self_ = self_;
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let result = ImplClient::dialog_handler(&arg_self_.interface);
-        result
-            .map(|result| result.into())
-            .unwrap_or(std::ptr::null_mut())
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let arg_self_ = self_;
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let result = ImplClient::dialog_handler(&arg_self_.interface);
+            result
+                .map(|result| result.into())
+                .unwrap_or(std::ptr::null_mut())
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn get_display_handler<I: ImplClient, R: Rc>(
         self_: *mut _cef_client_t,
     ) -> *mut _cef_display_handler_t {
-        let arg_self_ = self_;
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let result = ImplClient::display_handler(&arg_self_.interface);
-        result
-            .map(|result| result.into())
-            .unwrap_or(std::ptr::null_mut())
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let arg_self_ = self_;
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let result = ImplClient::display_handler(&arg_self_.interface);
+            result
+                .map(|result| result.into())
+                .unwrap_or(std::ptr::null_mut())
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn get_download_handler<I: ImplClient, R: Rc>(
         self_: *mut _cef_client_t,
     ) -> *mut _cef_download_handler_t {
-        let arg_self_ = self_;
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let result = ImplClient::download_handler(&arg_self_.interface);
-        result
-            .map(|result| result.into())
-            .unwrap_or(std::ptr::null_mut())
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let arg_self_ = self_;
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let result = ImplClient::download_handler(&arg_self_.interface);
+            result
+                .map(|result| result.into())
+                .unwrap_or(std::ptr::null_mut())
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn get_drag_handler<I: ImplClient, R: Rc>(
         self_: *mut _cef_client_t,
     ) -> *mut _cef_drag_handler_t {
-        let arg_self_ = self_;
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let result = ImplClient::drag_handler(&arg_self_.interface);
-        result
-            .map(|result| result.into())
-            .unwrap_or(std::ptr::null_mut())
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let arg_self_ = self_;
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let result = ImplClient::drag_handler(&arg_self_.interface);
+            result
+                .map(|result| result.into())
+                .unwrap_or(std::ptr::null_mut())
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn get_find_handler<I: ImplClient, R: Rc>(
         self_: *mut _cef_client_t,
     ) -> *mut _cef_find_handler_t {
-        let arg_self_ = self_;
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let result = ImplClient::find_handler(&arg_self_.interface);
-        result
-            .map(|result| result.into())
-            .unwrap_or(std::ptr::null_mut())
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let arg_self_ = self_;
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let result = ImplClient::find_handler(&arg_self_.interface);
+            result
+                .map(|result| result.into())
+                .unwrap_or(std::ptr::null_mut())
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn get_focus_handler<I: ImplClient, R: Rc>(
         self_: *mut _cef_client_t,
     ) -> *mut _cef_focus_handler_t {
-        let arg_self_ = self_;
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let result = ImplClient::focus_handler(&arg_self_.interface);
-        result
-            .map(|result| result.into())
-            .unwrap_or(std::ptr::null_mut())
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let arg_self_ = self_;
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let result = ImplClient::focus_handler(&arg_self_.interface);
+            result
+                .map(|result| result.into())
+                .unwrap_or(std::ptr::null_mut())
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn get_frame_handler<I: ImplClient, R: Rc>(
         self_: *mut _cef_client_t,
     ) -> *mut _cef_frame_handler_t {
-        let arg_self_ = self_;
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let result = ImplClient::frame_handler(&arg_self_.interface);
-        result
-            .map(|result| result.into())
-            .unwrap_or(std::ptr::null_mut())
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let arg_self_ = self_;
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let result = ImplClient::frame_handler(&arg_self_.interface);
+            result
+                .map(|result| result.into())
+                .unwrap_or(std::ptr::null_mut())
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn get_permission_handler<I: ImplClient, R: Rc>(
         self_: *mut _cef_client_t,
     ) -> *mut _cef_permission_handler_t {
-        let arg_self_ = self_;
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let result = ImplClient::permission_handler(&arg_self_.interface);
-        result
-            .map(|result| result.into())
-            .unwrap_or(std::ptr::null_mut())
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let arg_self_ = self_;
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let result = ImplClient::permission_handler(&arg_self_.interface);
+            result
+                .map(|result| result.into())
+                .unwrap_or(std::ptr::null_mut())
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn get_jsdialog_handler<I: ImplClient, R: Rc>(
         self_: *mut _cef_client_t,
     ) -> *mut _cef_jsdialog_handler_t {
-        let arg_self_ = self_;
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let result = ImplClient::jsdialog_handler(&arg_self_.interface);
-        result
-            .map(|result| result.into())
-            .unwrap_or(std::ptr::null_mut())
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let arg_self_ = self_;
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let result = ImplClient::jsdialog_handler(&arg_self_.interface);
+            result
+                .map(|result| result.into())
+                .unwrap_or(std::ptr::null_mut())
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn get_keyboard_handler<I: ImplClient, R: Rc>(
         self_: *mut _cef_client_t,
     ) -> *mut _cef_keyboard_handler_t {
-        let arg_self_ = self_;
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let result = ImplClient::keyboard_handler(&arg_self_.interface);
-        result
-            .map(|result| result.into())
-            .unwrap_or(std::ptr::null_mut())
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let arg_self_ = self_;
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let result = ImplClient::keyboard_handler(&arg_self_.interface);
+            result
+                .map(|result| result.into())
+                .unwrap_or(std::ptr::null_mut())
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn get_life_span_handler<I: ImplClient, R: Rc>(
         self_: *mut _cef_client_t,
     ) -> *mut _cef_life_span_handler_t {
-        let arg_self_ = self_;
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let result = ImplClient::life_span_handler(&arg_self_.interface);
-        result
-            .map(|result| result.into())
-            .unwrap_or(std::ptr::null_mut())
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let arg_self_ = self_;
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let result = ImplClient::life_span_handler(&arg_self_.interface);
+            result
+                .map(|result| result.into())
+                .unwrap_or(std::ptr::null_mut())
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn get_load_handler<I: ImplClient, R: Rc>(
         self_: *mut _cef_client_t,
     ) -> *mut _cef_load_handler_t {
-        let arg_self_ = self_;
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let result = ImplClient::load_handler(&arg_self_.interface);
-        result
-            .map(|result| result.into())
-            .unwrap_or(std::ptr::null_mut())
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let arg_self_ = self_;
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let result = ImplClient::load_handler(&arg_self_.interface);
+            result
+                .map(|result| result.into())
+                .unwrap_or(std::ptr::null_mut())
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn get_print_handler<I: ImplClient, R: Rc>(
         self_: *mut _cef_client_t,
     ) -> *mut _cef_print_handler_t {
-        let arg_self_ = self_;
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let result = ImplClient::print_handler(&arg_self_.interface);
-        result
-            .map(|result| result.into())
-            .unwrap_or(std::ptr::null_mut())
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let arg_self_ = self_;
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let result = ImplClient::print_handler(&arg_self_.interface);
+            result
+                .map(|result| result.into())
+                .unwrap_or(std::ptr::null_mut())
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn get_render_handler<I: ImplClient, R: Rc>(
         self_: *mut _cef_client_t,
     ) -> *mut _cef_render_handler_t {
-        let arg_self_ = self_;
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let result = ImplClient::render_handler(&arg_self_.interface);
-        result
-            .map(|result| result.into())
-            .unwrap_or(std::ptr::null_mut())
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let arg_self_ = self_;
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let result = ImplClient::render_handler(&arg_self_.interface);
+            result
+                .map(|result| result.into())
+                .unwrap_or(std::ptr::null_mut())
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn get_request_handler<I: ImplClient, R: Rc>(
         self_: *mut _cef_client_t,
     ) -> *mut _cef_request_handler_t {
-        let arg_self_ = self_;
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let result = ImplClient::request_handler(&arg_self_.interface);
-        result
-            .map(|result| result.into())
-            .unwrap_or(std::ptr::null_mut())
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let arg_self_ = self_;
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let result = ImplClient::request_handler(&arg_self_.interface);
+            result
+                .map(|result| result.into())
+                .unwrap_or(std::ptr::null_mut())
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn on_process_message_received<I: ImplClient, R: Rc>(
         self_: *mut _cef_client_t,
@@ -28157,26 +29122,31 @@ mod impl_cef_client_t {
         source_process: cef_process_id_t,
         message: *mut _cef_process_message_t,
     ) -> ::std::os::raw::c_int {
-        let (arg_self_, arg_browser, arg_frame, arg_source_process, arg_message) =
-            (self_, browser, frame, source_process, message);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_browser =
-            unsafe { arg_browser.as_mut() }.map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
-        let arg_browser = arg_browser.as_mut();
-        let mut arg_frame =
-            unsafe { arg_frame.as_mut() }.map(|arg| Frame(unsafe { RefGuard::from_raw(arg) }));
-        let arg_frame = arg_frame.as_mut();
-        let arg_source_process = arg_source_process.into_raw();
-        let mut arg_message = unsafe { arg_message.as_mut() }
-            .map(|arg| ProcessMessage(unsafe { RefGuard::from_raw(arg) }));
-        let arg_message = arg_message.as_mut();
-        ImplClient::on_process_message_received(
-            &arg_self_.interface,
-            arg_browser,
-            arg_frame,
-            arg_source_process,
-            arg_message,
-        )
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_browser, arg_frame, arg_source_process, arg_message) =
+                (self_, browser, frame, source_process, message);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_browser = unsafe { arg_browser.as_mut() }
+                .map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
+            let arg_browser = arg_browser.as_mut();
+            let mut arg_frame =
+                unsafe { arg_frame.as_mut() }.map(|arg| Frame(unsafe { RefGuard::from_raw(arg) }));
+            let arg_frame = arg_frame.as_mut();
+            let arg_source_process = arg_source_process.into_raw();
+            let mut arg_message = unsafe { arg_message.as_mut() }
+                .map(|arg| ProcessMessage(unsafe { RefGuard::from_raw(arg) }));
+            let arg_message = arg_message.as_mut();
+            ImplClient::on_process_message_received(
+                &arg_self_.interface,
+                arg_browser,
+                arg_frame,
+                arg_source_process,
+                arg_message,
+            )
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
 }
 impl ImplClient for Client {
@@ -28964,15 +29934,20 @@ mod impl_cef_request_context_handler_t {
         self_: *mut _cef_request_context_handler_t,
         request_context: *mut _cef_request_context_t,
     ) {
-        let (arg_self_, arg_request_context) = (self_, request_context);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_request_context = unsafe { arg_request_context.as_mut() }
-            .map(|arg| RequestContext(unsafe { RefGuard::from_raw(arg) }));
-        let arg_request_context = arg_request_context.as_mut();
-        ImplRequestContextHandler::on_request_context_initialized(
-            &arg_self_.interface,
-            arg_request_context,
-        )
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_request_context) = (self_, request_context);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_request_context = unsafe { arg_request_context.as_mut() }
+                .map(|arg| RequestContext(unsafe { RefGuard::from_raw(arg) }));
+            let arg_request_context = arg_request_context.as_mut();
+            ImplRequestContextHandler::on_request_context_initialized(
+                &arg_self_.interface,
+                arg_request_context,
+            )
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn get_resource_request_handler<I: ImplRequestContextHandler, R: Rc>(
         self_: *mut _cef_request_context_handler_t,
@@ -28984,66 +29959,71 @@ mod impl_cef_request_context_handler_t {
         request_initiator: *const cef_string_t,
         disable_default_handling: *mut ::std::os::raw::c_int,
     ) -> *mut _cef_resource_request_handler_t {
-        let (
-            arg_self_,
-            arg_browser,
-            arg_frame,
-            arg_request,
-            arg_is_navigation,
-            arg_is_download,
-            arg_request_initiator,
-            arg_disable_default_handling,
-        ) = (
-            self_,
-            browser,
-            frame,
-            request,
-            is_navigation,
-            is_download,
-            request_initiator,
-            disable_default_handling,
-        );
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_browser =
-            unsafe { arg_browser.as_mut() }.map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
-        let arg_browser = arg_browser.as_mut();
-        let mut arg_frame =
-            unsafe { arg_frame.as_mut() }.map(|arg| Frame(unsafe { RefGuard::from_raw(arg) }));
-        let arg_frame = arg_frame.as_mut();
-        let mut arg_request =
-            unsafe { arg_request.as_mut() }.map(|arg| Request(unsafe { RefGuard::from_raw(arg) }));
-        let arg_request = arg_request.as_mut();
-        let arg_is_navigation = arg_is_navigation.into_raw();
-        let arg_is_download = arg_is_download.into_raw();
-        let arg_request_initiator = if arg_request_initiator.is_null() {
-            None
-        } else {
-            Some(arg_request_initiator.into())
-        };
-        let arg_request_initiator = arg_request_initiator.as_ref();
-        let mut arg_disable_default_handling = if arg_disable_default_handling.is_null() {
-            None
-        } else {
-            Some(WrapParamRef::<::std::os::raw::c_int, _>::from(
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (
+                arg_self_,
+                arg_browser,
+                arg_frame,
+                arg_request,
+                arg_is_navigation,
+                arg_is_download,
+                arg_request_initiator,
                 arg_disable_default_handling,
-            ))
-        };
-        let arg_disable_default_handling = arg_disable_default_handling
-            .as_mut()
-            .map(|arg| arg.as_mut());
-        let result = ImplRequestContextHandler::resource_request_handler(
-            &arg_self_.interface,
-            arg_browser,
-            arg_frame,
-            arg_request,
-            arg_is_navigation,
-            arg_is_download,
-            arg_request_initiator,
-            arg_disable_default_handling,
-        );
-        result
-            .map(|result| result.into())
-            .unwrap_or(std::ptr::null_mut())
+            ) = (
+                self_,
+                browser,
+                frame,
+                request,
+                is_navigation,
+                is_download,
+                request_initiator,
+                disable_default_handling,
+            );
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_browser = unsafe { arg_browser.as_mut() }
+                .map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
+            let arg_browser = arg_browser.as_mut();
+            let mut arg_frame =
+                unsafe { arg_frame.as_mut() }.map(|arg| Frame(unsafe { RefGuard::from_raw(arg) }));
+            let arg_frame = arg_frame.as_mut();
+            let mut arg_request = unsafe { arg_request.as_mut() }
+                .map(|arg| Request(unsafe { RefGuard::from_raw(arg) }));
+            let arg_request = arg_request.as_mut();
+            let arg_is_navigation = arg_is_navigation.into_raw();
+            let arg_is_download = arg_is_download.into_raw();
+            let arg_request_initiator = if arg_request_initiator.is_null() {
+                None
+            } else {
+                Some(arg_request_initiator.into())
+            };
+            let arg_request_initiator = arg_request_initiator.as_ref();
+            let mut arg_disable_default_handling = if arg_disable_default_handling.is_null() {
+                None
+            } else {
+                Some(WrapParamRef::<::std::os::raw::c_int, _>::from(
+                    arg_disable_default_handling,
+                ))
+            };
+            let arg_disable_default_handling = arg_disable_default_handling
+                .as_mut()
+                .map(|arg| arg.as_mut());
+            let result = ImplRequestContextHandler::resource_request_handler(
+                &arg_self_.interface,
+                arg_browser,
+                arg_frame,
+                arg_request,
+                arg_is_navigation,
+                arg_is_download,
+                arg_request_initiator,
+                arg_disable_default_handling,
+            );
+            result
+                .map(|result| result.into())
+                .unwrap_or(std::ptr::null_mut())
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
 }
 impl ImplRequestContextHandler for RequestContextHandler {
@@ -29254,94 +30234,132 @@ mod impl_cef_browser_process_handler_t {
         type_: cef_preferences_type_t,
         registrar: *mut _cef_preference_registrar_t,
     ) {
-        let (arg_self_, arg_type_, arg_registrar) = (self_, type_, registrar);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let arg_type_ = arg_type_.into_raw();
-        let mut arg_registrar = if arg_registrar.is_null() {
-            None
-        } else {
-            Some(PreferenceRegistrar(arg_registrar))
-        };
-        let arg_registrar = arg_registrar.as_mut();
-        ImplBrowserProcessHandler::on_register_custom_preferences(
-            &arg_self_.interface,
-            arg_type_,
-            arg_registrar,
-        )
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_type_, arg_registrar) = (self_, type_, registrar);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let arg_type_ = arg_type_.into_raw();
+            let mut arg_registrar = if arg_registrar.is_null() {
+                None
+            } else {
+                Some(PreferenceRegistrar(arg_registrar))
+            };
+            let arg_registrar = arg_registrar.as_mut();
+            ImplBrowserProcessHandler::on_register_custom_preferences(
+                &arg_self_.interface,
+                arg_type_,
+                arg_registrar,
+            )
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn on_context_initialized<I: ImplBrowserProcessHandler, R: Rc>(
         self_: *mut _cef_browser_process_handler_t,
     ) {
-        let arg_self_ = self_;
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        ImplBrowserProcessHandler::on_context_initialized(&arg_self_.interface)
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let arg_self_ = self_;
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            ImplBrowserProcessHandler::on_context_initialized(&arg_self_.interface)
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn on_before_child_process_launch<I: ImplBrowserProcessHandler, R: Rc>(
         self_: *mut _cef_browser_process_handler_t,
         command_line: *mut _cef_command_line_t,
     ) {
-        let (arg_self_, arg_command_line) = (self_, command_line);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_command_line = unsafe { arg_command_line.as_mut() }
-            .map(|arg| CommandLine(unsafe { RefGuard::from_raw(arg) }));
-        let arg_command_line = arg_command_line.as_mut();
-        ImplBrowserProcessHandler::on_before_child_process_launch(
-            &arg_self_.interface,
-            arg_command_line,
-        )
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_command_line) = (self_, command_line);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_command_line = unsafe { arg_command_line.as_mut() }
+                .map(|arg| CommandLine(unsafe { RefGuard::from_raw(arg) }));
+            let arg_command_line = arg_command_line.as_mut();
+            ImplBrowserProcessHandler::on_before_child_process_launch(
+                &arg_self_.interface,
+                arg_command_line,
+            )
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn on_already_running_app_relaunch<I: ImplBrowserProcessHandler, R: Rc>(
         self_: *mut _cef_browser_process_handler_t,
         command_line: *mut _cef_command_line_t,
         current_directory: *const cef_string_t,
     ) -> ::std::os::raw::c_int {
-        let (arg_self_, arg_command_line, arg_current_directory) =
-            (self_, command_line, current_directory);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_command_line = unsafe { arg_command_line.as_mut() }
-            .map(|arg| CommandLine(unsafe { RefGuard::from_raw(arg) }));
-        let arg_command_line = arg_command_line.as_mut();
-        let arg_current_directory = if arg_current_directory.is_null() {
-            None
-        } else {
-            Some(arg_current_directory.into())
-        };
-        let arg_current_directory = arg_current_directory.as_ref();
-        ImplBrowserProcessHandler::on_already_running_app_relaunch(
-            &arg_self_.interface,
-            arg_command_line,
-            arg_current_directory,
-        )
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_command_line, arg_current_directory) =
+                (self_, command_line, current_directory);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_command_line = unsafe { arg_command_line.as_mut() }
+                .map(|arg| CommandLine(unsafe { RefGuard::from_raw(arg) }));
+            let arg_command_line = arg_command_line.as_mut();
+            let arg_current_directory = if arg_current_directory.is_null() {
+                None
+            } else {
+                Some(arg_current_directory.into())
+            };
+            let arg_current_directory = arg_current_directory.as_ref();
+            ImplBrowserProcessHandler::on_already_running_app_relaunch(
+                &arg_self_.interface,
+                arg_command_line,
+                arg_current_directory,
+            )
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn on_schedule_message_pump_work<I: ImplBrowserProcessHandler, R: Rc>(
         self_: *mut _cef_browser_process_handler_t,
         delay_ms: i64,
     ) {
-        let (arg_self_, arg_delay_ms) = (self_, delay_ms);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let arg_delay_ms = arg_delay_ms.into_raw();
-        ImplBrowserProcessHandler::on_schedule_message_pump_work(&arg_self_.interface, arg_delay_ms)
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_delay_ms) = (self_, delay_ms);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let arg_delay_ms = arg_delay_ms.into_raw();
+            ImplBrowserProcessHandler::on_schedule_message_pump_work(
+                &arg_self_.interface,
+                arg_delay_ms,
+            )
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn get_default_client<I: ImplBrowserProcessHandler, R: Rc>(
         self_: *mut _cef_browser_process_handler_t,
     ) -> *mut _cef_client_t {
-        let arg_self_ = self_;
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let result = ImplBrowserProcessHandler::default_client(&arg_self_.interface);
-        result
-            .map(|result| result.into())
-            .unwrap_or(std::ptr::null_mut())
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let arg_self_ = self_;
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let result = ImplBrowserProcessHandler::default_client(&arg_self_.interface);
+            result
+                .map(|result| result.into())
+                .unwrap_or(std::ptr::null_mut())
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn get_default_request_context_handler<I: ImplBrowserProcessHandler, R: Rc>(
         self_: *mut _cef_browser_process_handler_t,
     ) -> *mut _cef_request_context_handler_t {
-        let arg_self_ = self_;
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let result =
-            ImplBrowserProcessHandler::default_request_context_handler(&arg_self_.interface);
-        result
-            .map(|result| result.into())
-            .unwrap_or(std::ptr::null_mut())
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let arg_self_ = self_;
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let result =
+                ImplBrowserProcessHandler::default_request_context_handler(&arg_self_.interface);
+            result
+                .map(|result| result.into())
+                .unwrap_or(std::ptr::null_mut())
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
 }
 impl ImplBrowserProcessHandler for BrowserProcessHandler {
@@ -29528,9 +30546,14 @@ mod impl_cef_task_t {
         object.execute = Some(execute::<I, R>);
     }
     extern "C" fn execute<I: ImplTask, R: Rc>(self_: *mut _cef_task_t) {
-        let arg_self_ = self_;
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        ImplTask::execute(&arg_self_.interface)
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let arg_self_ = self_;
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            ImplTask::execute(&arg_self_.interface)
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
 }
 impl ImplTask for Task {
@@ -30034,78 +31057,84 @@ mod impl_cef_v8_handler_t {
         retval: *mut *mut _cef_v8_value_t,
         exception: *mut cef_string_t,
     ) -> ::std::os::raw::c_int {
-        let (
-            arg_self_,
-            arg_name,
-            arg_object,
-            arg_arguments_count,
-            arg_arguments,
-            arg_retval,
-            arg_exception,
-        ) = (
-            self_,
-            name,
-            object,
-            arguments_count,
-            arguments,
-            retval,
-            exception,
-        );
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let arg_name = if arg_name.is_null() {
-            None
-        } else {
-            Some(arg_name.into())
-        };
-        let arg_name = arg_name.as_ref();
-        let mut arg_object =
-            unsafe { arg_object.as_mut() }.map(|arg| V8Value(unsafe { RefGuard::from_raw(arg) }));
-        let arg_object = arg_object.as_mut();
-        let vec_arguments = unsafe { arg_arguments.as_ref() }.map(|arg| {
-            let arg =
-                unsafe { std::slice::from_raw_parts(std::ptr::from_ref(arg), arg_arguments_count) };
-            arg.iter()
-                .map(|arg| {
-                    if arg.is_null() {
-                        None
-                    } else {
-                        Some(V8Value(unsafe { RefGuard::from_raw(*arg) }))
-                    }
-                })
-                .collect::<Vec<_>>()
-        });
-        let arg_arguments = vec_arguments.as_deref();
-        let out_retval = arg_retval;
-        let mut wrap_retval = unsafe { arg_retval.as_mut() }.and_then(|ptr| {
-            if ptr.is_null() {
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (
+                arg_self_,
+                arg_name,
+                arg_object,
+                arg_arguments_count,
+                arg_arguments,
+                arg_retval,
+                arg_exception,
+            ) = (
+                self_,
+                name,
+                object,
+                arguments_count,
+                arguments,
+                retval,
+                exception,
+            );
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let arg_name = if arg_name.is_null() {
                 None
             } else {
-                Some(V8Value(unsafe { RefGuard::from_raw(*ptr) }))
+                Some(arg_name.into())
+            };
+            let arg_name = arg_name.as_ref();
+            let mut arg_object = unsafe { arg_object.as_mut() }
+                .map(|arg| V8Value(unsafe { RefGuard::from_raw(arg) }));
+            let arg_object = arg_object.as_mut();
+            let vec_arguments = unsafe { arg_arguments.as_ref() }.map(|arg| {
+                let arg = unsafe {
+                    std::slice::from_raw_parts(std::ptr::from_ref(arg), arg_arguments_count)
+                };
+                arg.iter()
+                    .map(|arg| {
+                        if arg.is_null() {
+                            None
+                        } else {
+                            Some(V8Value(unsafe { RefGuard::from_raw(*arg) }))
+                        }
+                    })
+                    .collect::<Vec<_>>()
+            });
+            let arg_arguments = vec_arguments.as_deref();
+            let out_retval = arg_retval;
+            let mut wrap_retval = unsafe { arg_retval.as_mut() }.and_then(|ptr| {
+                if ptr.is_null() {
+                    None
+                } else {
+                    Some(V8Value(unsafe { RefGuard::from_raw(*ptr) }))
+                }
+            });
+            let arg_retval = Some(&mut wrap_retval);
+            let mut arg_exception = if arg_exception.is_null() {
+                None
+            } else {
+                Some(arg_exception.into())
+            };
+            let arg_exception = arg_exception.as_mut();
+            let result = ImplV8Handler::execute(
+                &arg_self_.interface,
+                arg_name,
+                arg_object,
+                arg_arguments,
+                arg_retval,
+                arg_exception,
+            );
+            if let Some(out_retval) = unsafe { out_retval.as_mut() } {
+                match wrap_retval {
+                    Some(wrap_retval) if wrap_retval.get_raw() == *out_retval => drop(wrap_retval),
+                    Some(wrap_retval) => *out_retval = wrap_retval.wrap_result(),
+                    None => *out_retval = std::ptr::null_mut(),
+                }
             }
-        });
-        let arg_retval = Some(&mut wrap_retval);
-        let mut arg_exception = if arg_exception.is_null() {
-            None
-        } else {
-            Some(arg_exception.into())
-        };
-        let arg_exception = arg_exception.as_mut();
-        let result = ImplV8Handler::execute(
-            &arg_self_.interface,
-            arg_name,
-            arg_object,
-            arg_arguments,
-            arg_retval,
-            arg_exception,
-        );
-        if let Some(out_retval) = unsafe { out_retval.as_mut() } {
-            match wrap_retval {
-                Some(wrap_retval) if wrap_retval.get_raw() == *out_retval => drop(wrap_retval),
-                Some(wrap_retval) => *out_retval = wrap_retval.wrap_result(),
-                None => *out_retval = std::ptr::null_mut(),
-            }
+            result
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
         }
-        result
     }
 }
 impl ImplV8Handler for V8Handler {
@@ -30294,48 +31323,53 @@ mod impl_cef_v8_accessor_t {
         retval: *mut *mut _cef_v8_value_t,
         exception: *mut cef_string_t,
     ) -> ::std::os::raw::c_int {
-        let (arg_self_, arg_name, arg_object, arg_retval, arg_exception) =
-            (self_, name, object, retval, exception);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let arg_name = if arg_name.is_null() {
-            None
-        } else {
-            Some(arg_name.into())
-        };
-        let arg_name = arg_name.as_ref();
-        let mut arg_object =
-            unsafe { arg_object.as_mut() }.map(|arg| V8Value(unsafe { RefGuard::from_raw(arg) }));
-        let arg_object = arg_object.as_mut();
-        let out_retval = arg_retval;
-        let mut wrap_retval = unsafe { arg_retval.as_mut() }.and_then(|ptr| {
-            if ptr.is_null() {
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_name, arg_object, arg_retval, arg_exception) =
+                (self_, name, object, retval, exception);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let arg_name = if arg_name.is_null() {
                 None
             } else {
-                Some(V8Value(unsafe { RefGuard::from_raw(*ptr) }))
+                Some(arg_name.into())
+            };
+            let arg_name = arg_name.as_ref();
+            let mut arg_object = unsafe { arg_object.as_mut() }
+                .map(|arg| V8Value(unsafe { RefGuard::from_raw(arg) }));
+            let arg_object = arg_object.as_mut();
+            let out_retval = arg_retval;
+            let mut wrap_retval = unsafe { arg_retval.as_mut() }.and_then(|ptr| {
+                if ptr.is_null() {
+                    None
+                } else {
+                    Some(V8Value(unsafe { RefGuard::from_raw(*ptr) }))
+                }
+            });
+            let arg_retval = Some(&mut wrap_retval);
+            let mut arg_exception = if arg_exception.is_null() {
+                None
+            } else {
+                Some(arg_exception.into())
+            };
+            let arg_exception = arg_exception.as_mut();
+            let result = ImplV8Accessor::get(
+                &arg_self_.interface,
+                arg_name,
+                arg_object,
+                arg_retval,
+                arg_exception,
+            );
+            if let Some(out_retval) = unsafe { out_retval.as_mut() } {
+                match wrap_retval {
+                    Some(wrap_retval) if wrap_retval.get_raw() == *out_retval => drop(wrap_retval),
+                    Some(wrap_retval) => *out_retval = wrap_retval.wrap_result(),
+                    None => *out_retval = std::ptr::null_mut(),
+                }
             }
-        });
-        let arg_retval = Some(&mut wrap_retval);
-        let mut arg_exception = if arg_exception.is_null() {
-            None
-        } else {
-            Some(arg_exception.into())
-        };
-        let arg_exception = arg_exception.as_mut();
-        let result = ImplV8Accessor::get(
-            &arg_self_.interface,
-            arg_name,
-            arg_object,
-            arg_retval,
-            arg_exception,
-        );
-        if let Some(out_retval) = unsafe { out_retval.as_mut() } {
-            match wrap_retval {
-                Some(wrap_retval) if wrap_retval.get_raw() == *out_retval => drop(wrap_retval),
-                Some(wrap_retval) => *out_retval = wrap_retval.wrap_result(),
-                None => *out_retval = std::ptr::null_mut(),
-            }
+            result
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
         }
-        result
     }
     extern "C" fn set<I: ImplV8Accessor, R: Rc>(
         self_: *mut _cef_v8_accessor_t,
@@ -30344,34 +31378,39 @@ mod impl_cef_v8_accessor_t {
         value: *mut _cef_v8_value_t,
         exception: *mut cef_string_t,
     ) -> ::std::os::raw::c_int {
-        let (arg_self_, arg_name, arg_object, arg_value, arg_exception) =
-            (self_, name, object, value, exception);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let arg_name = if arg_name.is_null() {
-            None
-        } else {
-            Some(arg_name.into())
-        };
-        let arg_name = arg_name.as_ref();
-        let mut arg_object =
-            unsafe { arg_object.as_mut() }.map(|arg| V8Value(unsafe { RefGuard::from_raw(arg) }));
-        let arg_object = arg_object.as_mut();
-        let mut arg_value =
-            unsafe { arg_value.as_mut() }.map(|arg| V8Value(unsafe { RefGuard::from_raw(arg) }));
-        let arg_value = arg_value.as_mut();
-        let mut arg_exception = if arg_exception.is_null() {
-            None
-        } else {
-            Some(arg_exception.into())
-        };
-        let arg_exception = arg_exception.as_mut();
-        ImplV8Accessor::set(
-            &arg_self_.interface,
-            arg_name,
-            arg_object,
-            arg_value,
-            arg_exception,
-        )
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_name, arg_object, arg_value, arg_exception) =
+                (self_, name, object, value, exception);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let arg_name = if arg_name.is_null() {
+                None
+            } else {
+                Some(arg_name.into())
+            };
+            let arg_name = arg_name.as_ref();
+            let mut arg_object = unsafe { arg_object.as_mut() }
+                .map(|arg| V8Value(unsafe { RefGuard::from_raw(arg) }));
+            let arg_object = arg_object.as_mut();
+            let mut arg_value = unsafe { arg_value.as_mut() }
+                .map(|arg| V8Value(unsafe { RefGuard::from_raw(arg) }));
+            let arg_value = arg_value.as_mut();
+            let mut arg_exception = if arg_exception.is_null() {
+                None
+            } else {
+                Some(arg_exception.into())
+            };
+            let arg_exception = arg_exception.as_mut();
+            ImplV8Accessor::set(
+                &arg_self_.interface,
+                arg_name,
+                arg_object,
+                arg_value,
+                arg_exception,
+            )
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
 }
 impl ImplV8Accessor for V8Accessor {
@@ -30587,48 +31626,53 @@ mod impl_cef_v8_interceptor_t {
         retval: *mut *mut _cef_v8_value_t,
         exception: *mut cef_string_t,
     ) -> ::std::os::raw::c_int {
-        let (arg_self_, arg_name, arg_object, arg_retval, arg_exception) =
-            (self_, name, object, retval, exception);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let arg_name = if arg_name.is_null() {
-            None
-        } else {
-            Some(arg_name.into())
-        };
-        let arg_name = arg_name.as_ref();
-        let mut arg_object =
-            unsafe { arg_object.as_mut() }.map(|arg| V8Value(unsafe { RefGuard::from_raw(arg) }));
-        let arg_object = arg_object.as_mut();
-        let out_retval = arg_retval;
-        let mut wrap_retval = unsafe { arg_retval.as_mut() }.and_then(|ptr| {
-            if ptr.is_null() {
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_name, arg_object, arg_retval, arg_exception) =
+                (self_, name, object, retval, exception);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let arg_name = if arg_name.is_null() {
                 None
             } else {
-                Some(V8Value(unsafe { RefGuard::from_raw(*ptr) }))
+                Some(arg_name.into())
+            };
+            let arg_name = arg_name.as_ref();
+            let mut arg_object = unsafe { arg_object.as_mut() }
+                .map(|arg| V8Value(unsafe { RefGuard::from_raw(arg) }));
+            let arg_object = arg_object.as_mut();
+            let out_retval = arg_retval;
+            let mut wrap_retval = unsafe { arg_retval.as_mut() }.and_then(|ptr| {
+                if ptr.is_null() {
+                    None
+                } else {
+                    Some(V8Value(unsafe { RefGuard::from_raw(*ptr) }))
+                }
+            });
+            let arg_retval = Some(&mut wrap_retval);
+            let mut arg_exception = if arg_exception.is_null() {
+                None
+            } else {
+                Some(arg_exception.into())
+            };
+            let arg_exception = arg_exception.as_mut();
+            let result = ImplV8Interceptor::byname(
+                &arg_self_.interface,
+                arg_name,
+                arg_object,
+                arg_retval,
+                arg_exception,
+            );
+            if let Some(out_retval) = unsafe { out_retval.as_mut() } {
+                match wrap_retval {
+                    Some(wrap_retval) if wrap_retval.get_raw() == *out_retval => drop(wrap_retval),
+                    Some(wrap_retval) => *out_retval = wrap_retval.wrap_result(),
+                    None => *out_retval = std::ptr::null_mut(),
+                }
             }
-        });
-        let arg_retval = Some(&mut wrap_retval);
-        let mut arg_exception = if arg_exception.is_null() {
-            None
-        } else {
-            Some(arg_exception.into())
-        };
-        let arg_exception = arg_exception.as_mut();
-        let result = ImplV8Interceptor::byname(
-            &arg_self_.interface,
-            arg_name,
-            arg_object,
-            arg_retval,
-            arg_exception,
-        );
-        if let Some(out_retval) = unsafe { out_retval.as_mut() } {
-            match wrap_retval {
-                Some(wrap_retval) if wrap_retval.get_raw() == *out_retval => drop(wrap_retval),
-                Some(wrap_retval) => *out_retval = wrap_retval.wrap_result(),
-                None => *out_retval = std::ptr::null_mut(),
-            }
+            result
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
         }
-        result
     }
     extern "C" fn get_byindex<I: ImplV8Interceptor, R: Rc>(
         self_: *mut _cef_v8_interceptor_t,
@@ -30637,43 +31681,48 @@ mod impl_cef_v8_interceptor_t {
         retval: *mut *mut _cef_v8_value_t,
         exception: *mut cef_string_t,
     ) -> ::std::os::raw::c_int {
-        let (arg_self_, arg_index, arg_object, arg_retval, arg_exception) =
-            (self_, index, object, retval, exception);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let arg_index = arg_index.into_raw();
-        let mut arg_object =
-            unsafe { arg_object.as_mut() }.map(|arg| V8Value(unsafe { RefGuard::from_raw(arg) }));
-        let arg_object = arg_object.as_mut();
-        let out_retval = arg_retval;
-        let mut wrap_retval = unsafe { arg_retval.as_mut() }.and_then(|ptr| {
-            if ptr.is_null() {
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_index, arg_object, arg_retval, arg_exception) =
+                (self_, index, object, retval, exception);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let arg_index = arg_index.into_raw();
+            let mut arg_object = unsafe { arg_object.as_mut() }
+                .map(|arg| V8Value(unsafe { RefGuard::from_raw(arg) }));
+            let arg_object = arg_object.as_mut();
+            let out_retval = arg_retval;
+            let mut wrap_retval = unsafe { arg_retval.as_mut() }.and_then(|ptr| {
+                if ptr.is_null() {
+                    None
+                } else {
+                    Some(V8Value(unsafe { RefGuard::from_raw(*ptr) }))
+                }
+            });
+            let arg_retval = Some(&mut wrap_retval);
+            let mut arg_exception = if arg_exception.is_null() {
                 None
             } else {
-                Some(V8Value(unsafe { RefGuard::from_raw(*ptr) }))
+                Some(arg_exception.into())
+            };
+            let arg_exception = arg_exception.as_mut();
+            let result = ImplV8Interceptor::byindex(
+                &arg_self_.interface,
+                arg_index,
+                arg_object,
+                arg_retval,
+                arg_exception,
+            );
+            if let Some(out_retval) = unsafe { out_retval.as_mut() } {
+                match wrap_retval {
+                    Some(wrap_retval) if wrap_retval.get_raw() == *out_retval => drop(wrap_retval),
+                    Some(wrap_retval) => *out_retval = wrap_retval.wrap_result(),
+                    None => *out_retval = std::ptr::null_mut(),
+                }
             }
-        });
-        let arg_retval = Some(&mut wrap_retval);
-        let mut arg_exception = if arg_exception.is_null() {
-            None
-        } else {
-            Some(arg_exception.into())
-        };
-        let arg_exception = arg_exception.as_mut();
-        let result = ImplV8Interceptor::byindex(
-            &arg_self_.interface,
-            arg_index,
-            arg_object,
-            arg_retval,
-            arg_exception,
-        );
-        if let Some(out_retval) = unsafe { out_retval.as_mut() } {
-            match wrap_retval {
-                Some(wrap_retval) if wrap_retval.get_raw() == *out_retval => drop(wrap_retval),
-                Some(wrap_retval) => *out_retval = wrap_retval.wrap_result(),
-                None => *out_retval = std::ptr::null_mut(),
-            }
+            result
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
         }
-        result
     }
     extern "C" fn set_byname<I: ImplV8Interceptor, R: Rc>(
         self_: *mut _cef_v8_interceptor_t,
@@ -30682,34 +31731,39 @@ mod impl_cef_v8_interceptor_t {
         value: *mut _cef_v8_value_t,
         exception: *mut cef_string_t,
     ) -> ::std::os::raw::c_int {
-        let (arg_self_, arg_name, arg_object, arg_value, arg_exception) =
-            (self_, name, object, value, exception);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let arg_name = if arg_name.is_null() {
-            None
-        } else {
-            Some(arg_name.into())
-        };
-        let arg_name = arg_name.as_ref();
-        let mut arg_object =
-            unsafe { arg_object.as_mut() }.map(|arg| V8Value(unsafe { RefGuard::from_raw(arg) }));
-        let arg_object = arg_object.as_mut();
-        let mut arg_value =
-            unsafe { arg_value.as_mut() }.map(|arg| V8Value(unsafe { RefGuard::from_raw(arg) }));
-        let arg_value = arg_value.as_mut();
-        let mut arg_exception = if arg_exception.is_null() {
-            None
-        } else {
-            Some(arg_exception.into())
-        };
-        let arg_exception = arg_exception.as_mut();
-        ImplV8Interceptor::set_byname(
-            &arg_self_.interface,
-            arg_name,
-            arg_object,
-            arg_value,
-            arg_exception,
-        )
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_name, arg_object, arg_value, arg_exception) =
+                (self_, name, object, value, exception);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let arg_name = if arg_name.is_null() {
+                None
+            } else {
+                Some(arg_name.into())
+            };
+            let arg_name = arg_name.as_ref();
+            let mut arg_object = unsafe { arg_object.as_mut() }
+                .map(|arg| V8Value(unsafe { RefGuard::from_raw(arg) }));
+            let arg_object = arg_object.as_mut();
+            let mut arg_value = unsafe { arg_value.as_mut() }
+                .map(|arg| V8Value(unsafe { RefGuard::from_raw(arg) }));
+            let arg_value = arg_value.as_mut();
+            let mut arg_exception = if arg_exception.is_null() {
+                None
+            } else {
+                Some(arg_exception.into())
+            };
+            let arg_exception = arg_exception.as_mut();
+            ImplV8Interceptor::set_byname(
+                &arg_self_.interface,
+                arg_name,
+                arg_object,
+                arg_value,
+                arg_exception,
+            )
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn set_byindex<I: ImplV8Interceptor, R: Rc>(
         self_: *mut _cef_v8_interceptor_t,
@@ -30718,29 +31772,34 @@ mod impl_cef_v8_interceptor_t {
         value: *mut _cef_v8_value_t,
         exception: *mut cef_string_t,
     ) -> ::std::os::raw::c_int {
-        let (arg_self_, arg_index, arg_object, arg_value, arg_exception) =
-            (self_, index, object, value, exception);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let arg_index = arg_index.into_raw();
-        let mut arg_object =
-            unsafe { arg_object.as_mut() }.map(|arg| V8Value(unsafe { RefGuard::from_raw(arg) }));
-        let arg_object = arg_object.as_mut();
-        let mut arg_value =
-            unsafe { arg_value.as_mut() }.map(|arg| V8Value(unsafe { RefGuard::from_raw(arg) }));
-        let arg_value = arg_value.as_mut();
-        let mut arg_exception = if arg_exception.is_null() {
-            None
-        } else {
-            Some(arg_exception.into())
-        };
-        let arg_exception = arg_exception.as_mut();
-        ImplV8Interceptor::set_byindex(
-            &arg_self_.interface,
-            arg_index,
-            arg_object,
-            arg_value,
-            arg_exception,
-        )
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_index, arg_object, arg_value, arg_exception) =
+                (self_, index, object, value, exception);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let arg_index = arg_index.into_raw();
+            let mut arg_object = unsafe { arg_object.as_mut() }
+                .map(|arg| V8Value(unsafe { RefGuard::from_raw(arg) }));
+            let arg_object = arg_object.as_mut();
+            let mut arg_value = unsafe { arg_value.as_mut() }
+                .map(|arg| V8Value(unsafe { RefGuard::from_raw(arg) }));
+            let arg_value = arg_value.as_mut();
+            let mut arg_exception = if arg_exception.is_null() {
+                None
+            } else {
+                Some(arg_exception.into())
+            };
+            let arg_exception = arg_exception.as_mut();
+            ImplV8Interceptor::set_byindex(
+                &arg_self_.interface,
+                arg_index,
+                arg_object,
+                arg_value,
+                arg_exception,
+            )
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
 }
 impl ImplV8Interceptor for V8Interceptor {
@@ -31157,10 +32216,15 @@ mod impl_cef_v8_array_buffer_release_callback_t {
         self_: *mut _cef_v8_array_buffer_release_callback_t,
         buffer: *mut ::std::os::raw::c_void,
     ) {
-        let (arg_self_, arg_buffer) = (self_, buffer);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let arg_buffer = arg_buffer.cast();
-        ImplV8ArrayBufferReleaseCallback::release_buffer(&arg_self_.interface, arg_buffer)
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_buffer) = (self_, buffer);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let arg_buffer = arg_buffer.cast();
+            ImplV8ArrayBufferReleaseCallback::release_buffer(&arg_self_.interface, arg_buffer)
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
 }
 impl ImplV8ArrayBufferReleaseCallback for V8ArrayBufferReleaseCallback {
@@ -32655,49 +33719,69 @@ mod impl_cef_render_process_handler_t {
     extern "C" fn on_web_kit_initialized<I: ImplRenderProcessHandler, R: Rc>(
         self_: *mut _cef_render_process_handler_t,
     ) {
-        let arg_self_ = self_;
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        ImplRenderProcessHandler::on_web_kit_initialized(&arg_self_.interface)
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let arg_self_ = self_;
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            ImplRenderProcessHandler::on_web_kit_initialized(&arg_self_.interface)
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn on_browser_created<I: ImplRenderProcessHandler, R: Rc>(
         self_: *mut _cef_render_process_handler_t,
         browser: *mut _cef_browser_t,
         extra_info: *mut _cef_dictionary_value_t,
     ) {
-        let (arg_self_, arg_browser, arg_extra_info) = (self_, browser, extra_info);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_browser =
-            unsafe { arg_browser.as_mut() }.map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
-        let arg_browser = arg_browser.as_mut();
-        let mut arg_extra_info = unsafe { arg_extra_info.as_mut() }
-            .map(|arg| DictionaryValue(unsafe { RefGuard::from_raw(arg) }));
-        let arg_extra_info = arg_extra_info.as_mut();
-        ImplRenderProcessHandler::on_browser_created(
-            &arg_self_.interface,
-            arg_browser,
-            arg_extra_info,
-        )
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_browser, arg_extra_info) = (self_, browser, extra_info);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_browser = unsafe { arg_browser.as_mut() }
+                .map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
+            let arg_browser = arg_browser.as_mut();
+            let mut arg_extra_info = unsafe { arg_extra_info.as_mut() }
+                .map(|arg| DictionaryValue(unsafe { RefGuard::from_raw(arg) }));
+            let arg_extra_info = arg_extra_info.as_mut();
+            ImplRenderProcessHandler::on_browser_created(
+                &arg_self_.interface,
+                arg_browser,
+                arg_extra_info,
+            )
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn on_browser_destroyed<I: ImplRenderProcessHandler, R: Rc>(
         self_: *mut _cef_render_process_handler_t,
         browser: *mut _cef_browser_t,
     ) {
-        let (arg_self_, arg_browser) = (self_, browser);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_browser =
-            unsafe { arg_browser.as_mut() }.map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
-        let arg_browser = arg_browser.as_mut();
-        ImplRenderProcessHandler::on_browser_destroyed(&arg_self_.interface, arg_browser)
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_browser) = (self_, browser);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_browser = unsafe { arg_browser.as_mut() }
+                .map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
+            let arg_browser = arg_browser.as_mut();
+            ImplRenderProcessHandler::on_browser_destroyed(&arg_self_.interface, arg_browser)
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn get_load_handler<I: ImplRenderProcessHandler, R: Rc>(
         self_: *mut _cef_render_process_handler_t,
     ) -> *mut _cef_load_handler_t {
-        let arg_self_ = self_;
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let result = ImplRenderProcessHandler::load_handler(&arg_self_.interface);
-        result
-            .map(|result| result.into())
-            .unwrap_or(std::ptr::null_mut())
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let arg_self_ = self_;
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let result = ImplRenderProcessHandler::load_handler(&arg_self_.interface);
+            result
+                .map(|result| result.into())
+                .unwrap_or(std::ptr::null_mut())
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn on_context_created<I: ImplRenderProcessHandler, R: Rc>(
         self_: *mut _cef_render_process_handler_t,
@@ -32705,23 +33789,28 @@ mod impl_cef_render_process_handler_t {
         frame: *mut _cef_frame_t,
         context: *mut _cef_v8_context_t,
     ) {
-        let (arg_self_, arg_browser, arg_frame, arg_context) = (self_, browser, frame, context);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_browser =
-            unsafe { arg_browser.as_mut() }.map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
-        let arg_browser = arg_browser.as_mut();
-        let mut arg_frame =
-            unsafe { arg_frame.as_mut() }.map(|arg| Frame(unsafe { RefGuard::from_raw(arg) }));
-        let arg_frame = arg_frame.as_mut();
-        let mut arg_context = unsafe { arg_context.as_mut() }
-            .map(|arg| V8Context(unsafe { RefGuard::from_raw(arg) }));
-        let arg_context = arg_context.as_mut();
-        ImplRenderProcessHandler::on_context_created(
-            &arg_self_.interface,
-            arg_browser,
-            arg_frame,
-            arg_context,
-        )
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_browser, arg_frame, arg_context) = (self_, browser, frame, context);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_browser = unsafe { arg_browser.as_mut() }
+                .map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
+            let arg_browser = arg_browser.as_mut();
+            let mut arg_frame =
+                unsafe { arg_frame.as_mut() }.map(|arg| Frame(unsafe { RefGuard::from_raw(arg) }));
+            let arg_frame = arg_frame.as_mut();
+            let mut arg_context = unsafe { arg_context.as_mut() }
+                .map(|arg| V8Context(unsafe { RefGuard::from_raw(arg) }));
+            let arg_context = arg_context.as_mut();
+            ImplRenderProcessHandler::on_context_created(
+                &arg_self_.interface,
+                arg_browser,
+                arg_frame,
+                arg_context,
+            )
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn on_context_released<I: ImplRenderProcessHandler, R: Rc>(
         self_: *mut _cef_render_process_handler_t,
@@ -32729,23 +33818,28 @@ mod impl_cef_render_process_handler_t {
         frame: *mut _cef_frame_t,
         context: *mut _cef_v8_context_t,
     ) {
-        let (arg_self_, arg_browser, arg_frame, arg_context) = (self_, browser, frame, context);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_browser =
-            unsafe { arg_browser.as_mut() }.map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
-        let arg_browser = arg_browser.as_mut();
-        let mut arg_frame =
-            unsafe { arg_frame.as_mut() }.map(|arg| Frame(unsafe { RefGuard::from_raw(arg) }));
-        let arg_frame = arg_frame.as_mut();
-        let mut arg_context = unsafe { arg_context.as_mut() }
-            .map(|arg| V8Context(unsafe { RefGuard::from_raw(arg) }));
-        let arg_context = arg_context.as_mut();
-        ImplRenderProcessHandler::on_context_released(
-            &arg_self_.interface,
-            arg_browser,
-            arg_frame,
-            arg_context,
-        )
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_browser, arg_frame, arg_context) = (self_, browser, frame, context);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_browser = unsafe { arg_browser.as_mut() }
+                .map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
+            let arg_browser = arg_browser.as_mut();
+            let mut arg_frame =
+                unsafe { arg_frame.as_mut() }.map(|arg| Frame(unsafe { RefGuard::from_raw(arg) }));
+            let arg_frame = arg_frame.as_mut();
+            let mut arg_context = unsafe { arg_context.as_mut() }
+                .map(|arg| V8Context(unsafe { RefGuard::from_raw(arg) }));
+            let arg_context = arg_context.as_mut();
+            ImplRenderProcessHandler::on_context_released(
+                &arg_self_.interface,
+                arg_browser,
+                arg_frame,
+                arg_context,
+            )
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn on_uncaught_exception<I: ImplRenderProcessHandler, R: Rc>(
         self_: *mut _cef_render_process_handler_t,
@@ -32755,32 +33849,37 @@ mod impl_cef_render_process_handler_t {
         exception: *mut _cef_v8_exception_t,
         stack_trace: *mut _cef_v8_stack_trace_t,
     ) {
-        let (arg_self_, arg_browser, arg_frame, arg_context, arg_exception, arg_stack_trace) =
-            (self_, browser, frame, context, exception, stack_trace);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_browser =
-            unsafe { arg_browser.as_mut() }.map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
-        let arg_browser = arg_browser.as_mut();
-        let mut arg_frame =
-            unsafe { arg_frame.as_mut() }.map(|arg| Frame(unsafe { RefGuard::from_raw(arg) }));
-        let arg_frame = arg_frame.as_mut();
-        let mut arg_context = unsafe { arg_context.as_mut() }
-            .map(|arg| V8Context(unsafe { RefGuard::from_raw(arg) }));
-        let arg_context = arg_context.as_mut();
-        let mut arg_exception = unsafe { arg_exception.as_mut() }
-            .map(|arg| V8Exception(unsafe { RefGuard::from_raw(arg) }));
-        let arg_exception = arg_exception.as_mut();
-        let mut arg_stack_trace = unsafe { arg_stack_trace.as_mut() }
-            .map(|arg| V8StackTrace(unsafe { RefGuard::from_raw(arg) }));
-        let arg_stack_trace = arg_stack_trace.as_mut();
-        ImplRenderProcessHandler::on_uncaught_exception(
-            &arg_self_.interface,
-            arg_browser,
-            arg_frame,
-            arg_context,
-            arg_exception,
-            arg_stack_trace,
-        )
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_browser, arg_frame, arg_context, arg_exception, arg_stack_trace) =
+                (self_, browser, frame, context, exception, stack_trace);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_browser = unsafe { arg_browser.as_mut() }
+                .map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
+            let arg_browser = arg_browser.as_mut();
+            let mut arg_frame =
+                unsafe { arg_frame.as_mut() }.map(|arg| Frame(unsafe { RefGuard::from_raw(arg) }));
+            let arg_frame = arg_frame.as_mut();
+            let mut arg_context = unsafe { arg_context.as_mut() }
+                .map(|arg| V8Context(unsafe { RefGuard::from_raw(arg) }));
+            let arg_context = arg_context.as_mut();
+            let mut arg_exception = unsafe { arg_exception.as_mut() }
+                .map(|arg| V8Exception(unsafe { RefGuard::from_raw(arg) }));
+            let arg_exception = arg_exception.as_mut();
+            let mut arg_stack_trace = unsafe { arg_stack_trace.as_mut() }
+                .map(|arg| V8StackTrace(unsafe { RefGuard::from_raw(arg) }));
+            let arg_stack_trace = arg_stack_trace.as_mut();
+            ImplRenderProcessHandler::on_uncaught_exception(
+                &arg_self_.interface,
+                arg_browser,
+                arg_frame,
+                arg_context,
+                arg_exception,
+                arg_stack_trace,
+            )
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn on_focused_node_changed<I: ImplRenderProcessHandler, R: Rc>(
         self_: *mut _cef_render_process_handler_t,
@@ -32788,23 +33887,28 @@ mod impl_cef_render_process_handler_t {
         frame: *mut _cef_frame_t,
         node: *mut _cef_domnode_t,
     ) {
-        let (arg_self_, arg_browser, arg_frame, arg_node) = (self_, browser, frame, node);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_browser =
-            unsafe { arg_browser.as_mut() }.map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
-        let arg_browser = arg_browser.as_mut();
-        let mut arg_frame =
-            unsafe { arg_frame.as_mut() }.map(|arg| Frame(unsafe { RefGuard::from_raw(arg) }));
-        let arg_frame = arg_frame.as_mut();
-        let mut arg_node =
-            unsafe { arg_node.as_mut() }.map(|arg| Domnode(unsafe { RefGuard::from_raw(arg) }));
-        let arg_node = arg_node.as_mut();
-        ImplRenderProcessHandler::on_focused_node_changed(
-            &arg_self_.interface,
-            arg_browser,
-            arg_frame,
-            arg_node,
-        )
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_browser, arg_frame, arg_node) = (self_, browser, frame, node);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_browser = unsafe { arg_browser.as_mut() }
+                .map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
+            let arg_browser = arg_browser.as_mut();
+            let mut arg_frame =
+                unsafe { arg_frame.as_mut() }.map(|arg| Frame(unsafe { RefGuard::from_raw(arg) }));
+            let arg_frame = arg_frame.as_mut();
+            let mut arg_node =
+                unsafe { arg_node.as_mut() }.map(|arg| Domnode(unsafe { RefGuard::from_raw(arg) }));
+            let arg_node = arg_node.as_mut();
+            ImplRenderProcessHandler::on_focused_node_changed(
+                &arg_self_.interface,
+                arg_browser,
+                arg_frame,
+                arg_node,
+            )
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn on_process_message_received<I: ImplRenderProcessHandler, R: Rc>(
         self_: *mut _cef_render_process_handler_t,
@@ -32813,26 +33917,31 @@ mod impl_cef_render_process_handler_t {
         source_process: cef_process_id_t,
         message: *mut _cef_process_message_t,
     ) -> ::std::os::raw::c_int {
-        let (arg_self_, arg_browser, arg_frame, arg_source_process, arg_message) =
-            (self_, browser, frame, source_process, message);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_browser =
-            unsafe { arg_browser.as_mut() }.map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
-        let arg_browser = arg_browser.as_mut();
-        let mut arg_frame =
-            unsafe { arg_frame.as_mut() }.map(|arg| Frame(unsafe { RefGuard::from_raw(arg) }));
-        let arg_frame = arg_frame.as_mut();
-        let arg_source_process = arg_source_process.into_raw();
-        let mut arg_message = unsafe { arg_message.as_mut() }
-            .map(|arg| ProcessMessage(unsafe { RefGuard::from_raw(arg) }));
-        let arg_message = arg_message.as_mut();
-        ImplRenderProcessHandler::on_process_message_received(
-            &arg_self_.interface,
-            arg_browser,
-            arg_frame,
-            arg_source_process,
-            arg_message,
-        )
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_browser, arg_frame, arg_source_process, arg_message) =
+                (self_, browser, frame, source_process, message);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_browser = unsafe { arg_browser.as_mut() }
+                .map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
+            let arg_browser = arg_browser.as_mut();
+            let mut arg_frame =
+                unsafe { arg_frame.as_mut() }.map(|arg| Frame(unsafe { RefGuard::from_raw(arg) }));
+            let arg_frame = arg_frame.as_mut();
+            let arg_source_process = arg_source_process.into_raw();
+            let mut arg_message = unsafe { arg_message.as_mut() }
+                .map(|arg| ProcessMessage(unsafe { RefGuard::from_raw(arg) }));
+            let arg_message = arg_message.as_mut();
+            ImplRenderProcessHandler::on_process_message_received(
+                &arg_self_.interface,
+                arg_browser,
+                arg_frame,
+                arg_source_process,
+                arg_message,
+            )
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
 }
 impl ImplRenderProcessHandler for RenderProcessHandler {
@@ -33203,16 +34312,25 @@ mod impl_cef_resource_bundle_handler_t {
         string_id: ::std::os::raw::c_int,
         string: *mut cef_string_t,
     ) -> ::std::os::raw::c_int {
-        let (arg_self_, arg_string_id, arg_string) = (self_, string_id, string);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let arg_string_id = arg_string_id.into_raw();
-        let mut arg_string = if arg_string.is_null() {
-            None
-        } else {
-            Some(arg_string.into())
-        };
-        let arg_string = arg_string.as_mut();
-        ImplResourceBundleHandler::localized_string(&arg_self_.interface, arg_string_id, arg_string)
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_string_id, arg_string) = (self_, string_id, string);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let arg_string_id = arg_string_id.into_raw();
+            let mut arg_string = if arg_string.is_null() {
+                None
+            } else {
+                Some(arg_string.into())
+            };
+            let arg_string = arg_string.as_mut();
+            ImplResourceBundleHandler::localized_string(
+                &arg_self_.interface,
+                arg_string_id,
+                arg_string,
+            )
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn get_data_resource<I: ImplResourceBundleHandler, R: Rc>(
         self_: *mut _cef_resource_bundle_handler_t,
@@ -33220,31 +34338,36 @@ mod impl_cef_resource_bundle_handler_t {
         data: *mut *mut ::std::os::raw::c_void,
         data_size: *mut usize,
     ) -> ::std::os::raw::c_int {
-        let (arg_self_, arg_resource_id, arg_data, arg_data_size) =
-            (self_, resource_id, data, data_size);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let arg_resource_id = arg_resource_id.into_raw();
-        let out_data_size = unsafe { arg_data_size.as_mut() };
-        let arg_data_size = out_data_size
-            .as_ref()
-            .map(|size| **size)
-            .unwrap_or_default();
-        let out_data = (!arg_data.is_null() && arg_data_size > 0)
-            .then(|| unsafe { std::slice::from_raw_parts_mut(arg_data.cast(), arg_data_size) });
-        let mut vec_data = out_data.as_ref().map(|arg| arg.to_vec());
-        let arg_data = vec_data.as_mut();
-        let result = ImplResourceBundleHandler::data_resource(
-            &arg_self_.interface,
-            arg_resource_id,
-            arg_data,
-        );
-        if let (Some(out_data_size), Some(out_data), Some(vec_data)) =
-            (out_data_size, out_data, vec_data.as_mut())
-        {
-            *out_data_size = vec_data.len().min(*out_data_size);
-            out_data[..(*out_data_size)].copy_from_slice(&vec_data[..(*out_data_size)]);
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_resource_id, arg_data, arg_data_size) =
+                (self_, resource_id, data, data_size);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let arg_resource_id = arg_resource_id.into_raw();
+            let out_data_size = unsafe { arg_data_size.as_mut() };
+            let arg_data_size = out_data_size
+                .as_ref()
+                .map(|size| **size)
+                .unwrap_or_default();
+            let out_data = (!arg_data.is_null() && arg_data_size > 0)
+                .then(|| unsafe { std::slice::from_raw_parts_mut(arg_data.cast(), arg_data_size) });
+            let mut vec_data = out_data.as_ref().map(|arg| arg.to_vec());
+            let arg_data = vec_data.as_mut();
+            let result = ImplResourceBundleHandler::data_resource(
+                &arg_self_.interface,
+                arg_resource_id,
+                arg_data,
+            );
+            if let (Some(out_data_size), Some(out_data), Some(vec_data)) =
+                (out_data_size, out_data, vec_data.as_mut())
+            {
+                *out_data_size = vec_data.len().min(*out_data_size);
+                out_data[..(*out_data_size)].copy_from_slice(&vec_data[..(*out_data_size)]);
+            }
+            result
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
         }
-        result
     }
     extern "C" fn get_data_resource_for_scale<I: ImplResourceBundleHandler, R: Rc>(
         self_: *mut _cef_resource_bundle_handler_t,
@@ -33253,33 +34376,38 @@ mod impl_cef_resource_bundle_handler_t {
         data: *mut *mut ::std::os::raw::c_void,
         data_size: *mut usize,
     ) -> ::std::os::raw::c_int {
-        let (arg_self_, arg_resource_id, arg_scale_factor, arg_data, arg_data_size) =
-            (self_, resource_id, scale_factor, data, data_size);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let arg_resource_id = arg_resource_id.into_raw();
-        let arg_scale_factor = arg_scale_factor.into_raw();
-        let out_data_size = unsafe { arg_data_size.as_mut() };
-        let arg_data_size = out_data_size
-            .as_ref()
-            .map(|size| **size)
-            .unwrap_or_default();
-        let out_data = (!arg_data.is_null() && arg_data_size > 0)
-            .then(|| unsafe { std::slice::from_raw_parts_mut(arg_data.cast(), arg_data_size) });
-        let mut vec_data = out_data.as_ref().map(|arg| arg.to_vec());
-        let arg_data = vec_data.as_mut();
-        let result = ImplResourceBundleHandler::data_resource_for_scale(
-            &arg_self_.interface,
-            arg_resource_id,
-            arg_scale_factor,
-            arg_data,
-        );
-        if let (Some(out_data_size), Some(out_data), Some(vec_data)) =
-            (out_data_size, out_data, vec_data.as_mut())
-        {
-            *out_data_size = vec_data.len().min(*out_data_size);
-            out_data[..(*out_data_size)].copy_from_slice(&vec_data[..(*out_data_size)]);
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_resource_id, arg_scale_factor, arg_data, arg_data_size) =
+                (self_, resource_id, scale_factor, data, data_size);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let arg_resource_id = arg_resource_id.into_raw();
+            let arg_scale_factor = arg_scale_factor.into_raw();
+            let out_data_size = unsafe { arg_data_size.as_mut() };
+            let arg_data_size = out_data_size
+                .as_ref()
+                .map(|size| **size)
+                .unwrap_or_default();
+            let out_data = (!arg_data.is_null() && arg_data_size > 0)
+                .then(|| unsafe { std::slice::from_raw_parts_mut(arg_data.cast(), arg_data_size) });
+            let mut vec_data = out_data.as_ref().map(|arg| arg.to_vec());
+            let arg_data = vec_data.as_mut();
+            let result = ImplResourceBundleHandler::data_resource_for_scale(
+                &arg_self_.interface,
+                arg_resource_id,
+                arg_scale_factor,
+                arg_data,
+            );
+            if let (Some(out_data_size), Some(out_data), Some(vec_data)) =
+                (out_data_size, out_data, vec_data.as_mut())
+            {
+                *out_data_size = vec_data.len().min(*out_data_size);
+                out_data[..(*out_data_size)].copy_from_slice(&vec_data[..(*out_data_size)]);
+            }
+            result
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
         }
-        result
     }
 }
 impl ImplResourceBundleHandler for ResourceBundleHandler {
@@ -33442,16 +34570,25 @@ mod impl_cef_scheme_registrar_t {
         scheme_name: *const cef_string_t,
         options: ::std::os::raw::c_int,
     ) -> ::std::os::raw::c_int {
-        let (arg_self_, arg_scheme_name, arg_options) = (self_, scheme_name, options);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let arg_scheme_name = if arg_scheme_name.is_null() {
-            None
-        } else {
-            Some(arg_scheme_name.into())
-        };
-        let arg_scheme_name = arg_scheme_name.as_ref();
-        let arg_options = arg_options.into_raw();
-        ImplSchemeRegistrar::add_custom_scheme(&arg_self_.interface, arg_scheme_name, arg_options)
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_scheme_name, arg_options) = (self_, scheme_name, options);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let arg_scheme_name = if arg_scheme_name.is_null() {
+                None
+            } else {
+                Some(arg_scheme_name.into())
+            };
+            let arg_scheme_name = arg_scheme_name.as_ref();
+            let arg_options = arg_options.into_raw();
+            ImplSchemeRegistrar::add_custom_scheme(
+                &arg_self_.interface,
+                arg_scheme_name,
+                arg_options,
+            )
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
 }
 impl ImplSchemeRegistrar for SchemeRegistrar {
@@ -33557,34 +34694,39 @@ mod impl_cef_scheme_handler_factory_t {
         scheme_name: *const cef_string_t,
         request: *mut _cef_request_t,
     ) -> *mut _cef_resource_handler_t {
-        let (arg_self_, arg_browser, arg_frame, arg_scheme_name, arg_request) =
-            (self_, browser, frame, scheme_name, request);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_browser =
-            unsafe { arg_browser.as_mut() }.map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
-        let arg_browser = arg_browser.as_mut();
-        let mut arg_frame =
-            unsafe { arg_frame.as_mut() }.map(|arg| Frame(unsafe { RefGuard::from_raw(arg) }));
-        let arg_frame = arg_frame.as_mut();
-        let arg_scheme_name = if arg_scheme_name.is_null() {
-            None
-        } else {
-            Some(arg_scheme_name.into())
-        };
-        let arg_scheme_name = arg_scheme_name.as_ref();
-        let mut arg_request =
-            unsafe { arg_request.as_mut() }.map(|arg| Request(unsafe { RefGuard::from_raw(arg) }));
-        let arg_request = arg_request.as_mut();
-        let result = ImplSchemeHandlerFactory::create(
-            &arg_self_.interface,
-            arg_browser,
-            arg_frame,
-            arg_scheme_name,
-            arg_request,
-        );
-        result
-            .map(|result| result.into())
-            .unwrap_or(std::ptr::null_mut())
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_browser, arg_frame, arg_scheme_name, arg_request) =
+                (self_, browser, frame, scheme_name, request);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_browser = unsafe { arg_browser.as_mut() }
+                .map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
+            let arg_browser = arg_browser.as_mut();
+            let mut arg_frame =
+                unsafe { arg_frame.as_mut() }.map(|arg| Frame(unsafe { RefGuard::from_raw(arg) }));
+            let arg_frame = arg_frame.as_mut();
+            let arg_scheme_name = if arg_scheme_name.is_null() {
+                None
+            } else {
+                Some(arg_scheme_name.into())
+            };
+            let arg_scheme_name = arg_scheme_name.as_ref();
+            let mut arg_request = unsafe { arg_request.as_mut() }
+                .map(|arg| Request(unsafe { RefGuard::from_raw(arg) }));
+            let arg_request = arg_request.as_mut();
+            let result = ImplSchemeHandlerFactory::create(
+                &arg_self_.interface,
+                arg_browser,
+                arg_frame,
+                arg_scheme_name,
+                arg_request,
+            );
+            result
+                .map(|result| result.into())
+                .unwrap_or(std::ptr::null_mut())
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
 }
 impl ImplSchemeHandlerFactory for SchemeHandlerFactory {
@@ -33741,66 +34883,92 @@ mod impl_cef_app_t {
         process_type: *const cef_string_t,
         command_line: *mut _cef_command_line_t,
     ) {
-        let (arg_self_, arg_process_type, arg_command_line) = (self_, process_type, command_line);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let arg_process_type = if arg_process_type.is_null() {
-            None
-        } else {
-            Some(arg_process_type.into())
-        };
-        let arg_process_type = arg_process_type.as_ref();
-        let mut arg_command_line = unsafe { arg_command_line.as_mut() }
-            .map(|arg| CommandLine(unsafe { RefGuard::from_raw(arg) }));
-        let arg_command_line = arg_command_line.as_mut();
-        ImplApp::on_before_command_line_processing(
-            &arg_self_.interface,
-            arg_process_type,
-            arg_command_line,
-        )
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_process_type, arg_command_line) =
+                (self_, process_type, command_line);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let arg_process_type = if arg_process_type.is_null() {
+                None
+            } else {
+                Some(arg_process_type.into())
+            };
+            let arg_process_type = arg_process_type.as_ref();
+            let mut arg_command_line = unsafe { arg_command_line.as_mut() }
+                .map(|arg| CommandLine(unsafe { RefGuard::from_raw(arg) }));
+            let arg_command_line = arg_command_line.as_mut();
+            ImplApp::on_before_command_line_processing(
+                &arg_self_.interface,
+                arg_process_type,
+                arg_command_line,
+            )
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn on_register_custom_schemes<I: ImplApp, R: Rc>(
         self_: *mut _cef_app_t,
         registrar: *mut _cef_scheme_registrar_t,
     ) {
-        let (arg_self_, arg_registrar) = (self_, registrar);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_registrar = if arg_registrar.is_null() {
-            None
-        } else {
-            Some(SchemeRegistrar(arg_registrar))
-        };
-        let arg_registrar = arg_registrar.as_mut();
-        ImplApp::on_register_custom_schemes(&arg_self_.interface, arg_registrar)
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_registrar) = (self_, registrar);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_registrar = if arg_registrar.is_null() {
+                None
+            } else {
+                Some(SchemeRegistrar(arg_registrar))
+            };
+            let arg_registrar = arg_registrar.as_mut();
+            ImplApp::on_register_custom_schemes(&arg_self_.interface, arg_registrar)
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn get_resource_bundle_handler<I: ImplApp, R: Rc>(
         self_: *mut _cef_app_t,
     ) -> *mut _cef_resource_bundle_handler_t {
-        let arg_self_ = self_;
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let result = ImplApp::resource_bundle_handler(&arg_self_.interface);
-        result
-            .map(|result| result.into())
-            .unwrap_or(std::ptr::null_mut())
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let arg_self_ = self_;
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let result = ImplApp::resource_bundle_handler(&arg_self_.interface);
+            result
+                .map(|result| result.into())
+                .unwrap_or(std::ptr::null_mut())
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn get_browser_process_handler<I: ImplApp, R: Rc>(
         self_: *mut _cef_app_t,
     ) -> *mut _cef_browser_process_handler_t {
-        let arg_self_ = self_;
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let result = ImplApp::browser_process_handler(&arg_self_.interface);
-        result
-            .map(|result| result.into())
-            .unwrap_or(std::ptr::null_mut())
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let arg_self_ = self_;
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let result = ImplApp::browser_process_handler(&arg_self_.interface);
+            result
+                .map(|result| result.into())
+                .unwrap_or(std::ptr::null_mut())
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn get_render_process_handler<I: ImplApp, R: Rc>(
         self_: *mut _cef_app_t,
     ) -> *mut _cef_render_process_handler_t {
-        let arg_self_ = self_;
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let result = ImplApp::render_process_handler(&arg_self_.interface);
-        result
-            .map(|result| result.into())
-            .unwrap_or(std::ptr::null_mut())
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let arg_self_ = self_;
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let result = ImplApp::render_process_handler(&arg_self_.interface);
+            result
+                .map(|result| result.into())
+                .unwrap_or(std::ptr::null_mut())
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
 }
 impl ImplApp for App {
@@ -33969,16 +35137,25 @@ mod impl_cef_component_update_callback_t {
         component_id: *const cef_string_t,
         error: cef_component_update_error_t,
     ) {
-        let (arg_self_, arg_component_id, arg_error) = (self_, component_id, error);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let arg_component_id = if arg_component_id.is_null() {
-            None
-        } else {
-            Some(arg_component_id.into())
-        };
-        let arg_component_id = arg_component_id.as_ref();
-        let arg_error = arg_error.into_raw();
-        ImplComponentUpdateCallback::on_complete(&arg_self_.interface, arg_component_id, arg_error)
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_component_id, arg_error) = (self_, component_id, error);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let arg_component_id = if arg_component_id.is_null() {
+                None
+            } else {
+                Some(arg_component_id.into())
+            };
+            let arg_component_id = arg_component_id.as_ref();
+            let arg_error = arg_error.into_raw();
+            ImplComponentUpdateCallback::on_complete(
+                &arg_self_.interface,
+                arg_component_id,
+                arg_error,
+            )
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
 }
 impl ImplComponentUpdateCallback for ComponentUpdateCallback {
@@ -34804,53 +35981,77 @@ mod impl_cef_server_handler_t {
         self_: *mut _cef_server_handler_t,
         server: *mut _cef_server_t,
     ) {
-        let (arg_self_, arg_server) = (self_, server);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_server =
-            unsafe { arg_server.as_mut() }.map(|arg| Server(unsafe { RefGuard::from_raw(arg) }));
-        let arg_server = arg_server.as_mut();
-        ImplServerHandler::on_server_created(&arg_self_.interface, arg_server)
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_server) = (self_, server);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_server = unsafe { arg_server.as_mut() }
+                .map(|arg| Server(unsafe { RefGuard::from_raw(arg) }));
+            let arg_server = arg_server.as_mut();
+            ImplServerHandler::on_server_created(&arg_self_.interface, arg_server)
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn on_server_destroyed<I: ImplServerHandler, R: Rc>(
         self_: *mut _cef_server_handler_t,
         server: *mut _cef_server_t,
     ) {
-        let (arg_self_, arg_server) = (self_, server);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_server =
-            unsafe { arg_server.as_mut() }.map(|arg| Server(unsafe { RefGuard::from_raw(arg) }));
-        let arg_server = arg_server.as_mut();
-        ImplServerHandler::on_server_destroyed(&arg_self_.interface, arg_server)
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_server) = (self_, server);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_server = unsafe { arg_server.as_mut() }
+                .map(|arg| Server(unsafe { RefGuard::from_raw(arg) }));
+            let arg_server = arg_server.as_mut();
+            ImplServerHandler::on_server_destroyed(&arg_self_.interface, arg_server)
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn on_client_connected<I: ImplServerHandler, R: Rc>(
         self_: *mut _cef_server_handler_t,
         server: *mut _cef_server_t,
         connection_id: ::std::os::raw::c_int,
     ) {
-        let (arg_self_, arg_server, arg_connection_id) = (self_, server, connection_id);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_server =
-            unsafe { arg_server.as_mut() }.map(|arg| Server(unsafe { RefGuard::from_raw(arg) }));
-        let arg_server = arg_server.as_mut();
-        let arg_connection_id = arg_connection_id.into_raw();
-        ImplServerHandler::on_client_connected(&arg_self_.interface, arg_server, arg_connection_id)
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_server, arg_connection_id) = (self_, server, connection_id);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_server = unsafe { arg_server.as_mut() }
+                .map(|arg| Server(unsafe { RefGuard::from_raw(arg) }));
+            let arg_server = arg_server.as_mut();
+            let arg_connection_id = arg_connection_id.into_raw();
+            ImplServerHandler::on_client_connected(
+                &arg_self_.interface,
+                arg_server,
+                arg_connection_id,
+            )
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn on_client_disconnected<I: ImplServerHandler, R: Rc>(
         self_: *mut _cef_server_handler_t,
         server: *mut _cef_server_t,
         connection_id: ::std::os::raw::c_int,
     ) {
-        let (arg_self_, arg_server, arg_connection_id) = (self_, server, connection_id);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_server =
-            unsafe { arg_server.as_mut() }.map(|arg| Server(unsafe { RefGuard::from_raw(arg) }));
-        let arg_server = arg_server.as_mut();
-        let arg_connection_id = arg_connection_id.into_raw();
-        ImplServerHandler::on_client_disconnected(
-            &arg_self_.interface,
-            arg_server,
-            arg_connection_id,
-        )
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_server, arg_connection_id) = (self_, server, connection_id);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_server = unsafe { arg_server.as_mut() }
+                .map(|arg| Server(unsafe { RefGuard::from_raw(arg) }));
+            let arg_server = arg_server.as_mut();
+            let arg_connection_id = arg_connection_id.into_raw();
+            ImplServerHandler::on_client_disconnected(
+                &arg_self_.interface,
+                arg_server,
+                arg_connection_id,
+            )
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn on_http_request<I: ImplServerHandler, R: Rc>(
         self_: *mut _cef_server_handler_t,
@@ -34859,29 +36060,34 @@ mod impl_cef_server_handler_t {
         client_address: *const cef_string_t,
         request: *mut _cef_request_t,
     ) {
-        let (arg_self_, arg_server, arg_connection_id, arg_client_address, arg_request) =
-            (self_, server, connection_id, client_address, request);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_server =
-            unsafe { arg_server.as_mut() }.map(|arg| Server(unsafe { RefGuard::from_raw(arg) }));
-        let arg_server = arg_server.as_mut();
-        let arg_connection_id = arg_connection_id.into_raw();
-        let arg_client_address = if arg_client_address.is_null() {
-            None
-        } else {
-            Some(arg_client_address.into())
-        };
-        let arg_client_address = arg_client_address.as_ref();
-        let mut arg_request =
-            unsafe { arg_request.as_mut() }.map(|arg| Request(unsafe { RefGuard::from_raw(arg) }));
-        let arg_request = arg_request.as_mut();
-        ImplServerHandler::on_http_request(
-            &arg_self_.interface,
-            arg_server,
-            arg_connection_id,
-            arg_client_address,
-            arg_request,
-        )
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_server, arg_connection_id, arg_client_address, arg_request) =
+                (self_, server, connection_id, client_address, request);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_server = unsafe { arg_server.as_mut() }
+                .map(|arg| Server(unsafe { RefGuard::from_raw(arg) }));
+            let arg_server = arg_server.as_mut();
+            let arg_connection_id = arg_connection_id.into_raw();
+            let arg_client_address = if arg_client_address.is_null() {
+                None
+            } else {
+                Some(arg_client_address.into())
+            };
+            let arg_client_address = arg_client_address.as_ref();
+            let mut arg_request = unsafe { arg_request.as_mut() }
+                .map(|arg| Request(unsafe { RefGuard::from_raw(arg) }));
+            let arg_request = arg_request.as_mut();
+            ImplServerHandler::on_http_request(
+                &arg_self_.interface,
+                arg_server,
+                arg_connection_id,
+                arg_client_address,
+                arg_request,
+            )
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn on_web_socket_request<I: ImplServerHandler, R: Rc>(
         self_: *mut _cef_server_handler_t,
@@ -34891,63 +36097,73 @@ mod impl_cef_server_handler_t {
         request: *mut _cef_request_t,
         callback: *mut _cef_callback_t,
     ) {
-        let (
-            arg_self_,
-            arg_server,
-            arg_connection_id,
-            arg_client_address,
-            arg_request,
-            arg_callback,
-        ) = (
-            self_,
-            server,
-            connection_id,
-            client_address,
-            request,
-            callback,
-        );
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_server =
-            unsafe { arg_server.as_mut() }.map(|arg| Server(unsafe { RefGuard::from_raw(arg) }));
-        let arg_server = arg_server.as_mut();
-        let arg_connection_id = arg_connection_id.into_raw();
-        let arg_client_address = if arg_client_address.is_null() {
-            None
-        } else {
-            Some(arg_client_address.into())
-        };
-        let arg_client_address = arg_client_address.as_ref();
-        let mut arg_request =
-            unsafe { arg_request.as_mut() }.map(|arg| Request(unsafe { RefGuard::from_raw(arg) }));
-        let arg_request = arg_request.as_mut();
-        let mut arg_callback = unsafe { arg_callback.as_mut() }
-            .map(|arg| Callback(unsafe { RefGuard::from_raw(arg) }));
-        let arg_callback = arg_callback.as_mut();
-        ImplServerHandler::on_web_socket_request(
-            &arg_self_.interface,
-            arg_server,
-            arg_connection_id,
-            arg_client_address,
-            arg_request,
-            arg_callback,
-        )
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (
+                arg_self_,
+                arg_server,
+                arg_connection_id,
+                arg_client_address,
+                arg_request,
+                arg_callback,
+            ) = (
+                self_,
+                server,
+                connection_id,
+                client_address,
+                request,
+                callback,
+            );
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_server = unsafe { arg_server.as_mut() }
+                .map(|arg| Server(unsafe { RefGuard::from_raw(arg) }));
+            let arg_server = arg_server.as_mut();
+            let arg_connection_id = arg_connection_id.into_raw();
+            let arg_client_address = if arg_client_address.is_null() {
+                None
+            } else {
+                Some(arg_client_address.into())
+            };
+            let arg_client_address = arg_client_address.as_ref();
+            let mut arg_request = unsafe { arg_request.as_mut() }
+                .map(|arg| Request(unsafe { RefGuard::from_raw(arg) }));
+            let arg_request = arg_request.as_mut();
+            let mut arg_callback = unsafe { arg_callback.as_mut() }
+                .map(|arg| Callback(unsafe { RefGuard::from_raw(arg) }));
+            let arg_callback = arg_callback.as_mut();
+            ImplServerHandler::on_web_socket_request(
+                &arg_self_.interface,
+                arg_server,
+                arg_connection_id,
+                arg_client_address,
+                arg_request,
+                arg_callback,
+            )
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn on_web_socket_connected<I: ImplServerHandler, R: Rc>(
         self_: *mut _cef_server_handler_t,
         server: *mut _cef_server_t,
         connection_id: ::std::os::raw::c_int,
     ) {
-        let (arg_self_, arg_server, arg_connection_id) = (self_, server, connection_id);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_server =
-            unsafe { arg_server.as_mut() }.map(|arg| Server(unsafe { RefGuard::from_raw(arg) }));
-        let arg_server = arg_server.as_mut();
-        let arg_connection_id = arg_connection_id.into_raw();
-        ImplServerHandler::on_web_socket_connected(
-            &arg_self_.interface,
-            arg_server,
-            arg_connection_id,
-        )
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_server, arg_connection_id) = (self_, server, connection_id);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_server = unsafe { arg_server.as_mut() }
+                .map(|arg| Server(unsafe { RefGuard::from_raw(arg) }));
+            let arg_server = arg_server.as_mut();
+            let arg_connection_id = arg_connection_id.into_raw();
+            ImplServerHandler::on_web_socket_connected(
+                &arg_self_.interface,
+                arg_server,
+                arg_connection_id,
+            )
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn on_web_socket_message<I: ImplServerHandler, R: Rc>(
         self_: *mut _cef_server_handler_t,
@@ -34956,21 +36172,26 @@ mod impl_cef_server_handler_t {
         data: *const ::std::os::raw::c_void,
         data_size: usize,
     ) {
-        let (arg_self_, arg_server, arg_connection_id, arg_data, arg_data_size) =
-            (self_, server, connection_id, data, data_size);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_server =
-            unsafe { arg_server.as_mut() }.map(|arg| Server(unsafe { RefGuard::from_raw(arg) }));
-        let arg_server = arg_server.as_mut();
-        let arg_connection_id = arg_connection_id.into_raw();
-        let arg_data = (!arg_data.is_null() && arg_data_size > 0)
-            .then(|| unsafe { std::slice::from_raw_parts(arg_data.cast(), arg_data_size) });
-        ImplServerHandler::on_web_socket_message(
-            &arg_self_.interface,
-            arg_server,
-            arg_connection_id,
-            arg_data,
-        )
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_server, arg_connection_id, arg_data, arg_data_size) =
+                (self_, server, connection_id, data, data_size);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_server = unsafe { arg_server.as_mut() }
+                .map(|arg| Server(unsafe { RefGuard::from_raw(arg) }));
+            let arg_server = arg_server.as_mut();
+            let arg_connection_id = arg_connection_id.into_raw();
+            let arg_data = (!arg_data.is_null() && arg_data_size > 0)
+                .then(|| unsafe { std::slice::from_raw_parts(arg_data.cast(), arg_data_size) });
+            ImplServerHandler::on_web_socket_message(
+                &arg_self_.interface,
+                arg_server,
+                arg_connection_id,
+                arg_data,
+            )
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
 }
 impl ImplServerHandler for ServerHandler {
@@ -35610,15 +36831,20 @@ mod impl_cef_end_tracing_callback_t {
         self_: *mut _cef_end_tracing_callback_t,
         tracing_file: *const cef_string_t,
     ) {
-        let (arg_self_, arg_tracing_file) = (self_, tracing_file);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let arg_tracing_file = if arg_tracing_file.is_null() {
-            None
-        } else {
-            Some(arg_tracing_file.into())
-        };
-        let arg_tracing_file = arg_tracing_file.as_ref();
-        ImplEndTracingCallback::on_end_tracing_complete(&arg_self_.interface, arg_tracing_file)
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_tracing_file) = (self_, tracing_file);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let arg_tracing_file = if arg_tracing_file.is_null() {
+                None
+            } else {
+                Some(arg_tracing_file.into())
+            };
+            let arg_tracing_file = arg_tracing_file.as_ref();
+            ImplEndTracingCallback::on_end_tracing_complete(&arg_self_.interface, arg_tracing_file)
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
 }
 impl ImplEndTracingCallback for EndTracingCallback {
@@ -35890,12 +37116,17 @@ mod impl_cef_urlrequest_client_t {
         self_: *mut _cef_urlrequest_client_t,
         request: *mut _cef_urlrequest_t,
     ) {
-        let (arg_self_, arg_request) = (self_, request);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_request = unsafe { arg_request.as_mut() }
-            .map(|arg| Urlrequest(unsafe { RefGuard::from_raw(arg) }));
-        let arg_request = arg_request.as_mut();
-        ImplUrlrequestClient::on_request_complete(&arg_self_.interface, arg_request)
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_request) = (self_, request);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_request = unsafe { arg_request.as_mut() }
+                .map(|arg| Urlrequest(unsafe { RefGuard::from_raw(arg) }));
+            let arg_request = arg_request.as_mut();
+            ImplUrlrequestClient::on_request_complete(&arg_self_.interface, arg_request)
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn on_upload_progress<I: ImplUrlrequestClient, R: Rc>(
         self_: *mut _cef_urlrequest_client_t,
@@ -35903,19 +37134,24 @@ mod impl_cef_urlrequest_client_t {
         current: i64,
         total: i64,
     ) {
-        let (arg_self_, arg_request, arg_current, arg_total) = (self_, request, current, total);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_request = unsafe { arg_request.as_mut() }
-            .map(|arg| Urlrequest(unsafe { RefGuard::from_raw(arg) }));
-        let arg_request = arg_request.as_mut();
-        let arg_current = arg_current.into_raw();
-        let arg_total = arg_total.into_raw();
-        ImplUrlrequestClient::on_upload_progress(
-            &arg_self_.interface,
-            arg_request,
-            arg_current,
-            arg_total,
-        )
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_request, arg_current, arg_total) = (self_, request, current, total);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_request = unsafe { arg_request.as_mut() }
+                .map(|arg| Urlrequest(unsafe { RefGuard::from_raw(arg) }));
+            let arg_request = arg_request.as_mut();
+            let arg_current = arg_current.into_raw();
+            let arg_total = arg_total.into_raw();
+            ImplUrlrequestClient::on_upload_progress(
+                &arg_self_.interface,
+                arg_request,
+                arg_current,
+                arg_total,
+            )
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn on_download_progress<I: ImplUrlrequestClient, R: Rc>(
         self_: *mut _cef_urlrequest_client_t,
@@ -35923,19 +37159,24 @@ mod impl_cef_urlrequest_client_t {
         current: i64,
         total: i64,
     ) {
-        let (arg_self_, arg_request, arg_current, arg_total) = (self_, request, current, total);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_request = unsafe { arg_request.as_mut() }
-            .map(|arg| Urlrequest(unsafe { RefGuard::from_raw(arg) }));
-        let arg_request = arg_request.as_mut();
-        let arg_current = arg_current.into_raw();
-        let arg_total = arg_total.into_raw();
-        ImplUrlrequestClient::on_download_progress(
-            &arg_self_.interface,
-            arg_request,
-            arg_current,
-            arg_total,
-        )
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_request, arg_current, arg_total) = (self_, request, current, total);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_request = unsafe { arg_request.as_mut() }
+                .map(|arg| Urlrequest(unsafe { RefGuard::from_raw(arg) }));
+            let arg_request = arg_request.as_mut();
+            let arg_current = arg_current.into_raw();
+            let arg_total = arg_total.into_raw();
+            ImplUrlrequestClient::on_download_progress(
+                &arg_self_.interface,
+                arg_request,
+                arg_current,
+                arg_total,
+            )
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn on_download_data<I: ImplUrlrequestClient, R: Rc>(
         self_: *mut _cef_urlrequest_client_t,
@@ -35943,20 +37184,25 @@ mod impl_cef_urlrequest_client_t {
         data: *const ::std::os::raw::c_void,
         data_length: usize,
     ) {
-        let (arg_self_, arg_request, arg_data, arg_data_length) =
-            (self_, request, data, data_length);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_request = unsafe { arg_request.as_mut() }
-            .map(|arg| Urlrequest(unsafe { RefGuard::from_raw(arg) }));
-        let arg_request = arg_request.as_mut();
-        let arg_data = arg_data.cast();
-        let arg_data_length = arg_data_length.into_raw();
-        ImplUrlrequestClient::on_download_data(
-            &arg_self_.interface,
-            arg_request,
-            arg_data,
-            arg_data_length,
-        )
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_request, arg_data, arg_data_length) =
+                (self_, request, data, data_length);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_request = unsafe { arg_request.as_mut() }
+                .map(|arg| Urlrequest(unsafe { RefGuard::from_raw(arg) }));
+            let arg_request = arg_request.as_mut();
+            let arg_data = arg_data.cast();
+            let arg_data_length = arg_data_length.into_raw();
+            ImplUrlrequestClient::on_download_data(
+                &arg_self_.interface,
+                arg_request,
+                arg_data,
+                arg_data_length,
+            )
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn get_auth_credentials<I: ImplUrlrequestClient, R: Rc>(
         self_: *mut _cef_urlrequest_client_t,
@@ -35967,41 +37213,46 @@ mod impl_cef_urlrequest_client_t {
         scheme: *const cef_string_t,
         callback: *mut _cef_auth_callback_t,
     ) -> ::std::os::raw::c_int {
-        let (arg_self_, arg_is_proxy, arg_host, arg_port, arg_realm, arg_scheme, arg_callback) =
-            (self_, is_proxy, host, port, realm, scheme, callback);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let arg_is_proxy = arg_is_proxy.into_raw();
-        let arg_host = if arg_host.is_null() {
-            None
-        } else {
-            Some(arg_host.into())
-        };
-        let arg_host = arg_host.as_ref();
-        let arg_port = arg_port.into_raw();
-        let arg_realm = if arg_realm.is_null() {
-            None
-        } else {
-            Some(arg_realm.into())
-        };
-        let arg_realm = arg_realm.as_ref();
-        let arg_scheme = if arg_scheme.is_null() {
-            None
-        } else {
-            Some(arg_scheme.into())
-        };
-        let arg_scheme = arg_scheme.as_ref();
-        let mut arg_callback = unsafe { arg_callback.as_mut() }
-            .map(|arg| AuthCallback(unsafe { RefGuard::from_raw(arg) }));
-        let arg_callback = arg_callback.as_mut();
-        ImplUrlrequestClient::auth_credentials(
-            &arg_self_.interface,
-            arg_is_proxy,
-            arg_host,
-            arg_port,
-            arg_realm,
-            arg_scheme,
-            arg_callback,
-        )
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_is_proxy, arg_host, arg_port, arg_realm, arg_scheme, arg_callback) =
+                (self_, is_proxy, host, port, realm, scheme, callback);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let arg_is_proxy = arg_is_proxy.into_raw();
+            let arg_host = if arg_host.is_null() {
+                None
+            } else {
+                Some(arg_host.into())
+            };
+            let arg_host = arg_host.as_ref();
+            let arg_port = arg_port.into_raw();
+            let arg_realm = if arg_realm.is_null() {
+                None
+            } else {
+                Some(arg_realm.into())
+            };
+            let arg_realm = arg_realm.as_ref();
+            let arg_scheme = if arg_scheme.is_null() {
+                None
+            } else {
+                Some(arg_scheme.into())
+            };
+            let arg_scheme = arg_scheme.as_ref();
+            let mut arg_callback = unsafe { arg_callback.as_mut() }
+                .map(|arg| AuthCallback(unsafe { RefGuard::from_raw(arg) }));
+            let arg_callback = arg_callback.as_mut();
+            ImplUrlrequestClient::auth_credentials(
+                &arg_self_.interface,
+                arg_is_proxy,
+                arg_host,
+                arg_port,
+                arg_realm,
+                arg_scheme,
+                arg_callback,
+            )
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
 }
 impl ImplUrlrequestClient for UrlrequestClient {
@@ -37282,50 +38533,70 @@ mod impl_cef_view_delegate_t {
         self_: *mut _cef_view_delegate_t,
         view: *mut _cef_view_t,
     ) -> _cef_size_t {
-        let (arg_self_, arg_view) = (self_, view);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_view =
-            unsafe { arg_view.as_mut() }.map(|arg| View(unsafe { RefGuard::from_raw(arg) }));
-        let arg_view = arg_view.as_mut();
-        let result = ImplViewDelegate::preferred_size(&arg_self_.interface, arg_view);
-        result.into()
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_view) = (self_, view);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_view =
+                unsafe { arg_view.as_mut() }.map(|arg| View(unsafe { RefGuard::from_raw(arg) }));
+            let arg_view = arg_view.as_mut();
+            let result = ImplViewDelegate::preferred_size(&arg_self_.interface, arg_view);
+            result.into()
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn get_minimum_size<I: ImplViewDelegate, R: Rc>(
         self_: *mut _cef_view_delegate_t,
         view: *mut _cef_view_t,
     ) -> _cef_size_t {
-        let (arg_self_, arg_view) = (self_, view);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_view =
-            unsafe { arg_view.as_mut() }.map(|arg| View(unsafe { RefGuard::from_raw(arg) }));
-        let arg_view = arg_view.as_mut();
-        let result = ImplViewDelegate::minimum_size(&arg_self_.interface, arg_view);
-        result.into()
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_view) = (self_, view);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_view =
+                unsafe { arg_view.as_mut() }.map(|arg| View(unsafe { RefGuard::from_raw(arg) }));
+            let arg_view = arg_view.as_mut();
+            let result = ImplViewDelegate::minimum_size(&arg_self_.interface, arg_view);
+            result.into()
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn get_maximum_size<I: ImplViewDelegate, R: Rc>(
         self_: *mut _cef_view_delegate_t,
         view: *mut _cef_view_t,
     ) -> _cef_size_t {
-        let (arg_self_, arg_view) = (self_, view);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_view =
-            unsafe { arg_view.as_mut() }.map(|arg| View(unsafe { RefGuard::from_raw(arg) }));
-        let arg_view = arg_view.as_mut();
-        let result = ImplViewDelegate::maximum_size(&arg_self_.interface, arg_view);
-        result.into()
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_view) = (self_, view);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_view =
+                unsafe { arg_view.as_mut() }.map(|arg| View(unsafe { RefGuard::from_raw(arg) }));
+            let arg_view = arg_view.as_mut();
+            let result = ImplViewDelegate::maximum_size(&arg_self_.interface, arg_view);
+            result.into()
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn get_height_for_width<I: ImplViewDelegate, R: Rc>(
         self_: *mut _cef_view_delegate_t,
         view: *mut _cef_view_t,
         width: ::std::os::raw::c_int,
     ) -> ::std::os::raw::c_int {
-        let (arg_self_, arg_view, arg_width) = (self_, view, width);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_view =
-            unsafe { arg_view.as_mut() }.map(|arg| View(unsafe { RefGuard::from_raw(arg) }));
-        let arg_view = arg_view.as_mut();
-        let arg_width = arg_width.into_raw();
-        ImplViewDelegate::height_for_width(&arg_self_.interface, arg_view, arg_width)
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_view, arg_width) = (self_, view, width);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_view =
+                unsafe { arg_view.as_mut() }.map(|arg| View(unsafe { RefGuard::from_raw(arg) }));
+            let arg_view = arg_view.as_mut();
+            let arg_width = arg_width.into_raw();
+            ImplViewDelegate::height_for_width(&arg_self_.interface, arg_view, arg_width)
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn on_parent_view_changed<I: ImplViewDelegate, R: Rc>(
         self_: *mut _cef_view_delegate_t,
@@ -37333,21 +38604,26 @@ mod impl_cef_view_delegate_t {
         added: ::std::os::raw::c_int,
         parent: *mut _cef_view_t,
     ) {
-        let (arg_self_, arg_view, arg_added, arg_parent) = (self_, view, added, parent);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_view =
-            unsafe { arg_view.as_mut() }.map(|arg| View(unsafe { RefGuard::from_raw(arg) }));
-        let arg_view = arg_view.as_mut();
-        let arg_added = arg_added.into_raw();
-        let mut arg_parent =
-            unsafe { arg_parent.as_mut() }.map(|arg| View(unsafe { RefGuard::from_raw(arg) }));
-        let arg_parent = arg_parent.as_mut();
-        ImplViewDelegate::on_parent_view_changed(
-            &arg_self_.interface,
-            arg_view,
-            arg_added,
-            arg_parent,
-        )
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_view, arg_added, arg_parent) = (self_, view, added, parent);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_view =
+                unsafe { arg_view.as_mut() }.map(|arg| View(unsafe { RefGuard::from_raw(arg) }));
+            let arg_view = arg_view.as_mut();
+            let arg_added = arg_added.into_raw();
+            let mut arg_parent =
+                unsafe { arg_parent.as_mut() }.map(|arg| View(unsafe { RefGuard::from_raw(arg) }));
+            let arg_parent = arg_parent.as_mut();
+            ImplViewDelegate::on_parent_view_changed(
+                &arg_self_.interface,
+                arg_view,
+                arg_added,
+                arg_parent,
+            )
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn on_child_view_changed<I: ImplViewDelegate, R: Rc>(
         self_: *mut _cef_view_delegate_t,
@@ -37355,85 +38631,115 @@ mod impl_cef_view_delegate_t {
         added: ::std::os::raw::c_int,
         child: *mut _cef_view_t,
     ) {
-        let (arg_self_, arg_view, arg_added, arg_child) = (self_, view, added, child);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_view =
-            unsafe { arg_view.as_mut() }.map(|arg| View(unsafe { RefGuard::from_raw(arg) }));
-        let arg_view = arg_view.as_mut();
-        let arg_added = arg_added.into_raw();
-        let mut arg_child =
-            unsafe { arg_child.as_mut() }.map(|arg| View(unsafe { RefGuard::from_raw(arg) }));
-        let arg_child = arg_child.as_mut();
-        ImplViewDelegate::on_child_view_changed(
-            &arg_self_.interface,
-            arg_view,
-            arg_added,
-            arg_child,
-        )
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_view, arg_added, arg_child) = (self_, view, added, child);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_view =
+                unsafe { arg_view.as_mut() }.map(|arg| View(unsafe { RefGuard::from_raw(arg) }));
+            let arg_view = arg_view.as_mut();
+            let arg_added = arg_added.into_raw();
+            let mut arg_child =
+                unsafe { arg_child.as_mut() }.map(|arg| View(unsafe { RefGuard::from_raw(arg) }));
+            let arg_child = arg_child.as_mut();
+            ImplViewDelegate::on_child_view_changed(
+                &arg_self_.interface,
+                arg_view,
+                arg_added,
+                arg_child,
+            )
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn on_window_changed<I: ImplViewDelegate, R: Rc>(
         self_: *mut _cef_view_delegate_t,
         view: *mut _cef_view_t,
         added: ::std::os::raw::c_int,
     ) {
-        let (arg_self_, arg_view, arg_added) = (self_, view, added);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_view =
-            unsafe { arg_view.as_mut() }.map(|arg| View(unsafe { RefGuard::from_raw(arg) }));
-        let arg_view = arg_view.as_mut();
-        let arg_added = arg_added.into_raw();
-        ImplViewDelegate::on_window_changed(&arg_self_.interface, arg_view, arg_added)
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_view, arg_added) = (self_, view, added);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_view =
+                unsafe { arg_view.as_mut() }.map(|arg| View(unsafe { RefGuard::from_raw(arg) }));
+            let arg_view = arg_view.as_mut();
+            let arg_added = arg_added.into_raw();
+            ImplViewDelegate::on_window_changed(&arg_self_.interface, arg_view, arg_added)
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn on_layout_changed<I: ImplViewDelegate, R: Rc>(
         self_: *mut _cef_view_delegate_t,
         view: *mut _cef_view_t,
         new_bounds: *const _cef_rect_t,
     ) {
-        let (arg_self_, arg_view, arg_new_bounds) = (self_, view, new_bounds);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_view =
-            unsafe { arg_view.as_mut() }.map(|arg| View(unsafe { RefGuard::from_raw(arg) }));
-        let arg_view = arg_view.as_mut();
-        let arg_new_bounds = if arg_new_bounds.is_null() {
-            None
-        } else {
-            Some(WrapParamRef::<Rect, _>::from(arg_new_bounds))
-        };
-        let arg_new_bounds = arg_new_bounds.as_ref().map(|arg| arg.as_ref());
-        ImplViewDelegate::on_layout_changed(&arg_self_.interface, arg_view, arg_new_bounds)
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_view, arg_new_bounds) = (self_, view, new_bounds);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_view =
+                unsafe { arg_view.as_mut() }.map(|arg| View(unsafe { RefGuard::from_raw(arg) }));
+            let arg_view = arg_view.as_mut();
+            let arg_new_bounds = if arg_new_bounds.is_null() {
+                None
+            } else {
+                Some(WrapParamRef::<Rect, _>::from(arg_new_bounds))
+            };
+            let arg_new_bounds = arg_new_bounds.as_ref().map(|arg| arg.as_ref());
+            ImplViewDelegate::on_layout_changed(&arg_self_.interface, arg_view, arg_new_bounds)
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn on_focus<I: ImplViewDelegate, R: Rc>(
         self_: *mut _cef_view_delegate_t,
         view: *mut _cef_view_t,
     ) {
-        let (arg_self_, arg_view) = (self_, view);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_view =
-            unsafe { arg_view.as_mut() }.map(|arg| View(unsafe { RefGuard::from_raw(arg) }));
-        let arg_view = arg_view.as_mut();
-        ImplViewDelegate::on_focus(&arg_self_.interface, arg_view)
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_view) = (self_, view);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_view =
+                unsafe { arg_view.as_mut() }.map(|arg| View(unsafe { RefGuard::from_raw(arg) }));
+            let arg_view = arg_view.as_mut();
+            ImplViewDelegate::on_focus(&arg_self_.interface, arg_view)
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn on_blur<I: ImplViewDelegate, R: Rc>(
         self_: *mut _cef_view_delegate_t,
         view: *mut _cef_view_t,
     ) {
-        let (arg_self_, arg_view) = (self_, view);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_view =
-            unsafe { arg_view.as_mut() }.map(|arg| View(unsafe { RefGuard::from_raw(arg) }));
-        let arg_view = arg_view.as_mut();
-        ImplViewDelegate::on_blur(&arg_self_.interface, arg_view)
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_view) = (self_, view);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_view =
+                unsafe { arg_view.as_mut() }.map(|arg| View(unsafe { RefGuard::from_raw(arg) }));
+            let arg_view = arg_view.as_mut();
+            ImplViewDelegate::on_blur(&arg_self_.interface, arg_view)
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn on_theme_changed<I: ImplViewDelegate, R: Rc>(
         self_: *mut _cef_view_delegate_t,
         view: *mut _cef_view_t,
     ) {
-        let (arg_self_, arg_view) = (self_, view);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_view =
-            unsafe { arg_view.as_mut() }.map(|arg| View(unsafe { RefGuard::from_raw(arg) }));
-        let arg_view = arg_view.as_mut();
-        ImplViewDelegate::on_theme_changed(&arg_self_.interface, arg_view)
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_view) = (self_, view);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_view =
+                unsafe { arg_view.as_mut() }.map(|arg| View(unsafe { RefGuard::from_raw(arg) }));
+            let arg_view = arg_view.as_mut();
+            ImplViewDelegate::on_theme_changed(&arg_self_.interface, arg_view)
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
 }
 impl ImplViewDelegate for ViewDelegate {
@@ -37817,38 +39123,48 @@ mod impl_cef_browser_view_delegate_t {
         browser_view: *mut _cef_browser_view_t,
         browser: *mut _cef_browser_t,
     ) {
-        let (arg_self_, arg_browser_view, arg_browser) = (self_, browser_view, browser);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_browser_view = unsafe { arg_browser_view.as_mut() }
-            .map(|arg| BrowserView(unsafe { RefGuard::from_raw(arg) }));
-        let arg_browser_view = arg_browser_view.as_mut();
-        let mut arg_browser =
-            unsafe { arg_browser.as_mut() }.map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
-        let arg_browser = arg_browser.as_mut();
-        ImplBrowserViewDelegate::on_browser_created(
-            &arg_self_.interface,
-            arg_browser_view,
-            arg_browser,
-        )
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_browser_view, arg_browser) = (self_, browser_view, browser);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_browser_view = unsafe { arg_browser_view.as_mut() }
+                .map(|arg| BrowserView(unsafe { RefGuard::from_raw(arg) }));
+            let arg_browser_view = arg_browser_view.as_mut();
+            let mut arg_browser = unsafe { arg_browser.as_mut() }
+                .map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
+            let arg_browser = arg_browser.as_mut();
+            ImplBrowserViewDelegate::on_browser_created(
+                &arg_self_.interface,
+                arg_browser_view,
+                arg_browser,
+            )
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn on_browser_destroyed<I: ImplBrowserViewDelegate, R: Rc>(
         self_: *mut _cef_browser_view_delegate_t,
         browser_view: *mut _cef_browser_view_t,
         browser: *mut _cef_browser_t,
     ) {
-        let (arg_self_, arg_browser_view, arg_browser) = (self_, browser_view, browser);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_browser_view = unsafe { arg_browser_view.as_mut() }
-            .map(|arg| BrowserView(unsafe { RefGuard::from_raw(arg) }));
-        let arg_browser_view = arg_browser_view.as_mut();
-        let mut arg_browser =
-            unsafe { arg_browser.as_mut() }.map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
-        let arg_browser = arg_browser.as_mut();
-        ImplBrowserViewDelegate::on_browser_destroyed(
-            &arg_self_.interface,
-            arg_browser_view,
-            arg_browser,
-        )
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_browser_view, arg_browser) = (self_, browser_view, browser);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_browser_view = unsafe { arg_browser_view.as_mut() }
+                .map(|arg| BrowserView(unsafe { RefGuard::from_raw(arg) }));
+            let arg_browser_view = arg_browser_view.as_mut();
+            let mut arg_browser = unsafe { arg_browser.as_mut() }
+                .map(|arg| Browser(unsafe { RefGuard::from_raw(arg) }));
+            let arg_browser = arg_browser.as_mut();
+            ImplBrowserViewDelegate::on_browser_destroyed(
+                &arg_self_.interface,
+                arg_browser_view,
+                arg_browser,
+            )
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn get_delegate_for_popup_browser_view<I: ImplBrowserViewDelegate, R: Rc>(
         self_: *mut _cef_browser_view_delegate_t,
@@ -37857,32 +39173,37 @@ mod impl_cef_browser_view_delegate_t {
         client: *mut _cef_client_t,
         is_devtools: ::std::os::raw::c_int,
     ) -> *mut _cef_browser_view_delegate_t {
-        let (arg_self_, arg_browser_view, arg_settings, arg_client, arg_is_devtools) =
-            (self_, browser_view, settings, client, is_devtools);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_browser_view = unsafe { arg_browser_view.as_mut() }
-            .map(|arg| BrowserView(unsafe { RefGuard::from_raw(arg) }));
-        let arg_browser_view = arg_browser_view.as_mut();
-        let arg_settings = if arg_settings.is_null() {
-            None
-        } else {
-            Some(WrapParamRef::<BrowserSettings, _>::from(arg_settings))
-        };
-        let arg_settings = arg_settings.as_ref().map(|arg| arg.as_ref());
-        let mut arg_client =
-            unsafe { arg_client.as_mut() }.map(|arg| Client(unsafe { RefGuard::from_raw(arg) }));
-        let arg_client = arg_client.as_mut();
-        let arg_is_devtools = arg_is_devtools.into_raw();
-        let result = ImplBrowserViewDelegate::delegate_for_popup_browser_view(
-            &arg_self_.interface,
-            arg_browser_view,
-            arg_settings,
-            arg_client,
-            arg_is_devtools,
-        );
-        result
-            .map(|result| result.into())
-            .unwrap_or(std::ptr::null_mut())
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_browser_view, arg_settings, arg_client, arg_is_devtools) =
+                (self_, browser_view, settings, client, is_devtools);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_browser_view = unsafe { arg_browser_view.as_mut() }
+                .map(|arg| BrowserView(unsafe { RefGuard::from_raw(arg) }));
+            let arg_browser_view = arg_browser_view.as_mut();
+            let arg_settings = if arg_settings.is_null() {
+                None
+            } else {
+                Some(WrapParamRef::<BrowserSettings, _>::from(arg_settings))
+            };
+            let arg_settings = arg_settings.as_ref().map(|arg| arg.as_ref());
+            let mut arg_client = unsafe { arg_client.as_mut() }
+                .map(|arg| Client(unsafe { RefGuard::from_raw(arg) }));
+            let arg_client = arg_client.as_mut();
+            let arg_is_devtools = arg_is_devtools.into_raw();
+            let result = ImplBrowserViewDelegate::delegate_for_popup_browser_view(
+                &arg_self_.interface,
+                arg_browser_view,
+                arg_settings,
+                arg_client,
+                arg_is_devtools,
+            );
+            result
+                .map(|result| result.into())
+                .unwrap_or(std::ptr::null_mut())
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn on_popup_browser_view_created<I: ImplBrowserViewDelegate, R: Rc>(
         self_: *mut _cef_browser_view_delegate_t,
@@ -37890,89 +39211,121 @@ mod impl_cef_browser_view_delegate_t {
         popup_browser_view: *mut _cef_browser_view_t,
         is_devtools: ::std::os::raw::c_int,
     ) -> ::std::os::raw::c_int {
-        let (arg_self_, arg_browser_view, arg_popup_browser_view, arg_is_devtools) =
-            (self_, browser_view, popup_browser_view, is_devtools);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_browser_view = unsafe { arg_browser_view.as_mut() }
-            .map(|arg| BrowserView(unsafe { RefGuard::from_raw(arg) }));
-        let arg_browser_view = arg_browser_view.as_mut();
-        let mut arg_popup_browser_view = unsafe { arg_popup_browser_view.as_mut() }
-            .map(|arg| BrowserView(unsafe { RefGuard::from_raw(arg) }));
-        let arg_popup_browser_view = arg_popup_browser_view.as_mut();
-        let arg_is_devtools = arg_is_devtools.into_raw();
-        ImplBrowserViewDelegate::on_popup_browser_view_created(
-            &arg_self_.interface,
-            arg_browser_view,
-            arg_popup_browser_view,
-            arg_is_devtools,
-        )
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_browser_view, arg_popup_browser_view, arg_is_devtools) =
+                (self_, browser_view, popup_browser_view, is_devtools);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_browser_view = unsafe { arg_browser_view.as_mut() }
+                .map(|arg| BrowserView(unsafe { RefGuard::from_raw(arg) }));
+            let arg_browser_view = arg_browser_view.as_mut();
+            let mut arg_popup_browser_view = unsafe { arg_popup_browser_view.as_mut() }
+                .map(|arg| BrowserView(unsafe { RefGuard::from_raw(arg) }));
+            let arg_popup_browser_view = arg_popup_browser_view.as_mut();
+            let arg_is_devtools = arg_is_devtools.into_raw();
+            ImplBrowserViewDelegate::on_popup_browser_view_created(
+                &arg_self_.interface,
+                arg_browser_view,
+                arg_popup_browser_view,
+                arg_is_devtools,
+            )
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn get_chrome_toolbar_type<I: ImplBrowserViewDelegate, R: Rc>(
         self_: *mut _cef_browser_view_delegate_t,
         browser_view: *mut _cef_browser_view_t,
     ) -> cef_chrome_toolbar_type_t {
-        let (arg_self_, arg_browser_view) = (self_, browser_view);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_browser_view = unsafe { arg_browser_view.as_mut() }
-            .map(|arg| BrowserView(unsafe { RefGuard::from_raw(arg) }));
-        let arg_browser_view = arg_browser_view.as_mut();
-        let result =
-            ImplBrowserViewDelegate::chrome_toolbar_type(&arg_self_.interface, arg_browser_view);
-        result.into()
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_browser_view) = (self_, browser_view);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_browser_view = unsafe { arg_browser_view.as_mut() }
+                .map(|arg| BrowserView(unsafe { RefGuard::from_raw(arg) }));
+            let arg_browser_view = arg_browser_view.as_mut();
+            let result = ImplBrowserViewDelegate::chrome_toolbar_type(
+                &arg_self_.interface,
+                arg_browser_view,
+            );
+            result.into()
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn use_frameless_window_for_picture_in_picture<I: ImplBrowserViewDelegate, R: Rc>(
         self_: *mut _cef_browser_view_delegate_t,
         browser_view: *mut _cef_browser_view_t,
     ) -> ::std::os::raw::c_int {
-        let (arg_self_, arg_browser_view) = (self_, browser_view);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_browser_view = unsafe { arg_browser_view.as_mut() }
-            .map(|arg| BrowserView(unsafe { RefGuard::from_raw(arg) }));
-        let arg_browser_view = arg_browser_view.as_mut();
-        ImplBrowserViewDelegate::use_frameless_window_for_picture_in_picture(
-            &arg_self_.interface,
-            arg_browser_view,
-        )
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_browser_view) = (self_, browser_view);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_browser_view = unsafe { arg_browser_view.as_mut() }
+                .map(|arg| BrowserView(unsafe { RefGuard::from_raw(arg) }));
+            let arg_browser_view = arg_browser_view.as_mut();
+            ImplBrowserViewDelegate::use_frameless_window_for_picture_in_picture(
+                &arg_self_.interface,
+                arg_browser_view,
+            )
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn on_gesture_command<I: ImplBrowserViewDelegate, R: Rc>(
         self_: *mut _cef_browser_view_delegate_t,
         browser_view: *mut _cef_browser_view_t,
         gesture_command: cef_gesture_command_t,
     ) -> ::std::os::raw::c_int {
-        let (arg_self_, arg_browser_view, arg_gesture_command) =
-            (self_, browser_view, gesture_command);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_browser_view = unsafe { arg_browser_view.as_mut() }
-            .map(|arg| BrowserView(unsafe { RefGuard::from_raw(arg) }));
-        let arg_browser_view = arg_browser_view.as_mut();
-        let arg_gesture_command = arg_gesture_command.into_raw();
-        ImplBrowserViewDelegate::on_gesture_command(
-            &arg_self_.interface,
-            arg_browser_view,
-            arg_gesture_command,
-        )
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_browser_view, arg_gesture_command) =
+                (self_, browser_view, gesture_command);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_browser_view = unsafe { arg_browser_view.as_mut() }
+                .map(|arg| BrowserView(unsafe { RefGuard::from_raw(arg) }));
+            let arg_browser_view = arg_browser_view.as_mut();
+            let arg_gesture_command = arg_gesture_command.into_raw();
+            ImplBrowserViewDelegate::on_gesture_command(
+                &arg_self_.interface,
+                arg_browser_view,
+                arg_gesture_command,
+            )
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn get_browser_runtime_style<I: ImplBrowserViewDelegate, R: Rc>(
         self_: *mut _cef_browser_view_delegate_t,
     ) -> cef_runtime_style_t {
-        let arg_self_ = self_;
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let result = ImplBrowserViewDelegate::browser_runtime_style(&arg_self_.interface);
-        result.into()
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let arg_self_ = self_;
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let result = ImplBrowserViewDelegate::browser_runtime_style(&arg_self_.interface);
+            result.into()
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn allow_move_for_picture_in_picture<I: ImplBrowserViewDelegate, R: Rc>(
         self_: *mut _cef_browser_view_delegate_t,
         browser_view: *mut _cef_browser_view_t,
     ) -> ::std::os::raw::c_int {
-        let (arg_self_, arg_browser_view) = (self_, browser_view);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_browser_view = unsafe { arg_browser_view.as_mut() }
-            .map(|arg| BrowserView(unsafe { RefGuard::from_raw(arg) }));
-        let arg_browser_view = arg_browser_view.as_mut();
-        ImplBrowserViewDelegate::allow_move_for_picture_in_picture(
-            &arg_self_.interface,
-            arg_browser_view,
-        )
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_browser_view) = (self_, browser_view);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_browser_view = unsafe { arg_browser_view.as_mut() }
+                .map(|arg| BrowserView(unsafe { RefGuard::from_raw(arg) }));
+            let arg_browser_view = arg_browser_view.as_mut();
+            ImplBrowserViewDelegate::allow_move_for_picture_in_picture(
+                &arg_self_.interface,
+                arg_browser_view,
+            )
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn allow_picture_in_picture_without_user_activation<
         I: ImplBrowserViewDelegate,
@@ -37981,15 +39334,20 @@ mod impl_cef_browser_view_delegate_t {
         self_: *mut _cef_browser_view_delegate_t,
         browser_view: *mut _cef_browser_view_t,
     ) -> ::std::os::raw::c_int {
-        let (arg_self_, arg_browser_view) = (self_, browser_view);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_browser_view = unsafe { arg_browser_view.as_mut() }
-            .map(|arg| BrowserView(unsafe { RefGuard::from_raw(arg) }));
-        let arg_browser_view = arg_browser_view.as_mut();
-        ImplBrowserViewDelegate::allow_picture_in_picture_without_user_activation(
-            &arg_self_.interface,
-            arg_browser_view,
-        )
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_browser_view) = (self_, browser_view);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_browser_view = unsafe { arg_browser_view.as_mut() }
+                .map(|arg| BrowserView(unsafe { RefGuard::from_raw(arg) }));
+            let arg_browser_view = arg_browser_view.as_mut();
+            ImplBrowserViewDelegate::allow_picture_in_picture_without_user_activation(
+                &arg_self_.interface,
+                arg_browser_view,
+            )
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
 }
 impl ImplViewDelegate for BrowserViewDelegate {
@@ -39839,23 +41197,33 @@ mod impl_cef_button_delegate_t {
         self_: *mut _cef_button_delegate_t,
         button: *mut _cef_button_t,
     ) {
-        let (arg_self_, arg_button) = (self_, button);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_button =
-            unsafe { arg_button.as_mut() }.map(|arg| Button(unsafe { RefGuard::from_raw(arg) }));
-        let arg_button = arg_button.as_mut();
-        ImplButtonDelegate::on_button_pressed(&arg_self_.interface, arg_button)
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_button) = (self_, button);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_button = unsafe { arg_button.as_mut() }
+                .map(|arg| Button(unsafe { RefGuard::from_raw(arg) }));
+            let arg_button = arg_button.as_mut();
+            ImplButtonDelegate::on_button_pressed(&arg_self_.interface, arg_button)
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn on_button_state_changed<I: ImplButtonDelegate, R: Rc>(
         self_: *mut _cef_button_delegate_t,
         button: *mut _cef_button_t,
     ) {
-        let (arg_self_, arg_button) = (self_, button);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_button =
-            unsafe { arg_button.as_mut() }.map(|arg| Button(unsafe { RefGuard::from_raw(arg) }));
-        let arg_button = arg_button.as_mut();
-        ImplButtonDelegate::on_button_state_changed(&arg_self_.interface, arg_button)
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_button) = (self_, button);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_button = unsafe { arg_button.as_mut() }
+                .map(|arg| Button(unsafe { RefGuard::from_raw(arg) }));
+            let arg_button = arg_button.as_mut();
+            ImplButtonDelegate::on_button_state_changed(&arg_self_.interface, arg_button)
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
 }
 impl ImplViewDelegate for ButtonDelegate {
@@ -40716,27 +42084,32 @@ mod impl_cef_menu_button_delegate_t {
         screen_point: *const _cef_point_t,
         button_pressed_lock: *mut _cef_menu_button_pressed_lock_t,
     ) {
-        let (arg_self_, arg_menu_button, arg_screen_point, arg_button_pressed_lock) =
-            (self_, menu_button, screen_point, button_pressed_lock);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_menu_button = unsafe { arg_menu_button.as_mut() }
-            .map(|arg| MenuButton(unsafe { RefGuard::from_raw(arg) }));
-        let arg_menu_button = arg_menu_button.as_mut();
-        let arg_screen_point = if arg_screen_point.is_null() {
-            None
-        } else {
-            Some(WrapParamRef::<Point, _>::from(arg_screen_point))
-        };
-        let arg_screen_point = arg_screen_point.as_ref().map(|arg| arg.as_ref());
-        let mut arg_button_pressed_lock = unsafe { arg_button_pressed_lock.as_mut() }
-            .map(|arg| MenuButtonPressedLock(unsafe { RefGuard::from_raw(arg) }));
-        let arg_button_pressed_lock = arg_button_pressed_lock.as_mut();
-        ImplMenuButtonDelegate::on_menu_button_pressed(
-            &arg_self_.interface,
-            arg_menu_button,
-            arg_screen_point,
-            arg_button_pressed_lock,
-        )
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_menu_button, arg_screen_point, arg_button_pressed_lock) =
+                (self_, menu_button, screen_point, button_pressed_lock);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_menu_button = unsafe { arg_menu_button.as_mut() }
+                .map(|arg| MenuButton(unsafe { RefGuard::from_raw(arg) }));
+            let arg_menu_button = arg_menu_button.as_mut();
+            let arg_screen_point = if arg_screen_point.is_null() {
+                None
+            } else {
+                Some(WrapParamRef::<Point, _>::from(arg_screen_point))
+            };
+            let arg_screen_point = arg_screen_point.as_ref().map(|arg| arg.as_ref());
+            let mut arg_button_pressed_lock = unsafe { arg_button_pressed_lock.as_mut() }
+                .map(|arg| MenuButtonPressedLock(unsafe { RefGuard::from_raw(arg) }));
+            let arg_button_pressed_lock = arg_button_pressed_lock.as_mut();
+            ImplMenuButtonDelegate::on_menu_button_pressed(
+                &arg_self_.interface,
+                arg_menu_button,
+                arg_screen_point,
+                arg_button_pressed_lock,
+            )
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
 }
 impl ImplViewDelegate for MenuButtonDelegate {
@@ -42488,29 +43861,39 @@ mod impl_cef_textfield_delegate_t {
         textfield: *mut _cef_textfield_t,
         event: *const _cef_key_event_t,
     ) -> ::std::os::raw::c_int {
-        let (arg_self_, arg_textfield, arg_event) = (self_, textfield, event);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_textfield = unsafe { arg_textfield.as_mut() }
-            .map(|arg| Textfield(unsafe { RefGuard::from_raw(arg) }));
-        let arg_textfield = arg_textfield.as_mut();
-        let arg_event = if arg_event.is_null() {
-            None
-        } else {
-            Some(WrapParamRef::<KeyEvent, _>::from(arg_event))
-        };
-        let arg_event = arg_event.as_ref().map(|arg| arg.as_ref());
-        ImplTextfieldDelegate::on_key_event(&arg_self_.interface, arg_textfield, arg_event)
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_textfield, arg_event) = (self_, textfield, event);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_textfield = unsafe { arg_textfield.as_mut() }
+                .map(|arg| Textfield(unsafe { RefGuard::from_raw(arg) }));
+            let arg_textfield = arg_textfield.as_mut();
+            let arg_event = if arg_event.is_null() {
+                None
+            } else {
+                Some(WrapParamRef::<KeyEvent, _>::from(arg_event))
+            };
+            let arg_event = arg_event.as_ref().map(|arg| arg.as_ref());
+            ImplTextfieldDelegate::on_key_event(&arg_self_.interface, arg_textfield, arg_event)
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn on_after_user_action<I: ImplTextfieldDelegate, R: Rc>(
         self_: *mut _cef_textfield_delegate_t,
         textfield: *mut _cef_textfield_t,
     ) {
-        let (arg_self_, arg_textfield) = (self_, textfield);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_textfield = unsafe { arg_textfield.as_mut() }
-            .map(|arg| Textfield(unsafe { RefGuard::from_raw(arg) }));
-        let arg_textfield = arg_textfield.as_mut();
-        ImplTextfieldDelegate::on_after_user_action(&arg_self_.interface, arg_textfield)
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_textfield) = (self_, textfield);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_textfield = unsafe { arg_textfield.as_mut() }
+                .map(|arg| Textfield(unsafe { RefGuard::from_raw(arg) }));
+            let arg_textfield = arg_textfield.as_mut();
+            ImplTextfieldDelegate::on_after_user_action(&arg_self_.interface, arg_textfield)
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
 }
 impl ImplViewDelegate for TextfieldDelegate {
@@ -43389,90 +44772,120 @@ mod impl_cef_window_delegate_t {
         self_: *mut _cef_window_delegate_t,
         window: *mut _cef_window_t,
     ) {
-        let (arg_self_, arg_window) = (self_, window);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_window =
-            unsafe { arg_window.as_mut() }.map(|arg| Window(unsafe { RefGuard::from_raw(arg) }));
-        let arg_window = arg_window.as_mut();
-        ImplWindowDelegate::on_window_created(&arg_self_.interface, arg_window)
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_window) = (self_, window);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_window = unsafe { arg_window.as_mut() }
+                .map(|arg| Window(unsafe { RefGuard::from_raw(arg) }));
+            let arg_window = arg_window.as_mut();
+            ImplWindowDelegate::on_window_created(&arg_self_.interface, arg_window)
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn on_window_closing<I: ImplWindowDelegate, R: Rc>(
         self_: *mut _cef_window_delegate_t,
         window: *mut _cef_window_t,
     ) {
-        let (arg_self_, arg_window) = (self_, window);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_window =
-            unsafe { arg_window.as_mut() }.map(|arg| Window(unsafe { RefGuard::from_raw(arg) }));
-        let arg_window = arg_window.as_mut();
-        ImplWindowDelegate::on_window_closing(&arg_self_.interface, arg_window)
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_window) = (self_, window);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_window = unsafe { arg_window.as_mut() }
+                .map(|arg| Window(unsafe { RefGuard::from_raw(arg) }));
+            let arg_window = arg_window.as_mut();
+            ImplWindowDelegate::on_window_closing(&arg_self_.interface, arg_window)
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn on_window_destroyed<I: ImplWindowDelegate, R: Rc>(
         self_: *mut _cef_window_delegate_t,
         window: *mut _cef_window_t,
     ) {
-        let (arg_self_, arg_window) = (self_, window);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_window =
-            unsafe { arg_window.as_mut() }.map(|arg| Window(unsafe { RefGuard::from_raw(arg) }));
-        let arg_window = arg_window.as_mut();
-        ImplWindowDelegate::on_window_destroyed(&arg_self_.interface, arg_window)
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_window) = (self_, window);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_window = unsafe { arg_window.as_mut() }
+                .map(|arg| Window(unsafe { RefGuard::from_raw(arg) }));
+            let arg_window = arg_window.as_mut();
+            ImplWindowDelegate::on_window_destroyed(&arg_self_.interface, arg_window)
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn on_window_activation_changed<I: ImplWindowDelegate, R: Rc>(
         self_: *mut _cef_window_delegate_t,
         window: *mut _cef_window_t,
         active: ::std::os::raw::c_int,
     ) {
-        let (arg_self_, arg_window, arg_active) = (self_, window, active);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_window =
-            unsafe { arg_window.as_mut() }.map(|arg| Window(unsafe { RefGuard::from_raw(arg) }));
-        let arg_window = arg_window.as_mut();
-        let arg_active = arg_active.into_raw();
-        ImplWindowDelegate::on_window_activation_changed(
-            &arg_self_.interface,
-            arg_window,
-            arg_active,
-        )
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_window, arg_active) = (self_, window, active);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_window = unsafe { arg_window.as_mut() }
+                .map(|arg| Window(unsafe { RefGuard::from_raw(arg) }));
+            let arg_window = arg_window.as_mut();
+            let arg_active = arg_active.into_raw();
+            ImplWindowDelegate::on_window_activation_changed(
+                &arg_self_.interface,
+                arg_window,
+                arg_active,
+            )
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn on_window_bounds_changed<I: ImplWindowDelegate, R: Rc>(
         self_: *mut _cef_window_delegate_t,
         window: *mut _cef_window_t,
         new_bounds: *const _cef_rect_t,
     ) {
-        let (arg_self_, arg_window, arg_new_bounds) = (self_, window, new_bounds);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_window =
-            unsafe { arg_window.as_mut() }.map(|arg| Window(unsafe { RefGuard::from_raw(arg) }));
-        let arg_window = arg_window.as_mut();
-        let arg_new_bounds = if arg_new_bounds.is_null() {
-            None
-        } else {
-            Some(WrapParamRef::<Rect, _>::from(arg_new_bounds))
-        };
-        let arg_new_bounds = arg_new_bounds.as_ref().map(|arg| arg.as_ref());
-        ImplWindowDelegate::on_window_bounds_changed(
-            &arg_self_.interface,
-            arg_window,
-            arg_new_bounds,
-        )
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_window, arg_new_bounds) = (self_, window, new_bounds);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_window = unsafe { arg_window.as_mut() }
+                .map(|arg| Window(unsafe { RefGuard::from_raw(arg) }));
+            let arg_window = arg_window.as_mut();
+            let arg_new_bounds = if arg_new_bounds.is_null() {
+                None
+            } else {
+                Some(WrapParamRef::<Rect, _>::from(arg_new_bounds))
+            };
+            let arg_new_bounds = arg_new_bounds.as_ref().map(|arg| arg.as_ref());
+            ImplWindowDelegate::on_window_bounds_changed(
+                &arg_self_.interface,
+                arg_window,
+                arg_new_bounds,
+            )
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn on_window_fullscreen_transition<I: ImplWindowDelegate, R: Rc>(
         self_: *mut _cef_window_delegate_t,
         window: *mut _cef_window_t,
         is_completed: ::std::os::raw::c_int,
     ) {
-        let (arg_self_, arg_window, arg_is_completed) = (self_, window, is_completed);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_window =
-            unsafe { arg_window.as_mut() }.map(|arg| Window(unsafe { RefGuard::from_raw(arg) }));
-        let arg_window = arg_window.as_mut();
-        let arg_is_completed = arg_is_completed.into_raw();
-        ImplWindowDelegate::on_window_fullscreen_transition(
-            &arg_self_.interface,
-            arg_window,
-            arg_is_completed,
-        )
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_window, arg_is_completed) = (self_, window, is_completed);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_window = unsafe { arg_window.as_mut() }
+                .map(|arg| Window(unsafe { RefGuard::from_raw(arg) }));
+            let arg_window = arg_window.as_mut();
+            let arg_is_completed = arg_is_completed.into_raw();
+            ImplWindowDelegate::on_window_fullscreen_transition(
+                &arg_self_.interface,
+                arg_window,
+                arg_is_completed,
+            )
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn get_parent_window<I: ImplWindowDelegate, R: Rc>(
         self_: *mut _cef_window_delegate_t,
@@ -43480,246 +44893,335 @@ mod impl_cef_window_delegate_t {
         is_menu: *mut ::std::os::raw::c_int,
         can_activate_menu: *mut ::std::os::raw::c_int,
     ) -> *mut _cef_window_t {
-        let (arg_self_, arg_window, arg_is_menu, arg_can_activate_menu) =
-            (self_, window, is_menu, can_activate_menu);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_window =
-            unsafe { arg_window.as_mut() }.map(|arg| Window(unsafe { RefGuard::from_raw(arg) }));
-        let arg_window = arg_window.as_mut();
-        let mut arg_is_menu = if arg_is_menu.is_null() {
-            None
-        } else {
-            Some(WrapParamRef::<::std::os::raw::c_int, _>::from(arg_is_menu))
-        };
-        let arg_is_menu = arg_is_menu.as_mut().map(|arg| arg.as_mut());
-        let mut arg_can_activate_menu = if arg_can_activate_menu.is_null() {
-            None
-        } else {
-            Some(WrapParamRef::<::std::os::raw::c_int, _>::from(
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_window, arg_is_menu, arg_can_activate_menu) =
+                (self_, window, is_menu, can_activate_menu);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_window = unsafe { arg_window.as_mut() }
+                .map(|arg| Window(unsafe { RefGuard::from_raw(arg) }));
+            let arg_window = arg_window.as_mut();
+            let mut arg_is_menu = if arg_is_menu.is_null() {
+                None
+            } else {
+                Some(WrapParamRef::<::std::os::raw::c_int, _>::from(arg_is_menu))
+            };
+            let arg_is_menu = arg_is_menu.as_mut().map(|arg| arg.as_mut());
+            let mut arg_can_activate_menu = if arg_can_activate_menu.is_null() {
+                None
+            } else {
+                Some(WrapParamRef::<::std::os::raw::c_int, _>::from(
+                    arg_can_activate_menu,
+                ))
+            };
+            let arg_can_activate_menu = arg_can_activate_menu.as_mut().map(|arg| arg.as_mut());
+            let result = ImplWindowDelegate::parent_window(
+                &arg_self_.interface,
+                arg_window,
+                arg_is_menu,
                 arg_can_activate_menu,
-            ))
-        };
-        let arg_can_activate_menu = arg_can_activate_menu.as_mut().map(|arg| arg.as_mut());
-        let result = ImplWindowDelegate::parent_window(
-            &arg_self_.interface,
-            arg_window,
-            arg_is_menu,
-            arg_can_activate_menu,
-        );
-        result
-            .map(|result| result.into())
-            .unwrap_or(std::ptr::null_mut())
+            );
+            result
+                .map(|result| result.into())
+                .unwrap_or(std::ptr::null_mut())
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn is_window_modal_dialog<I: ImplWindowDelegate, R: Rc>(
         self_: *mut _cef_window_delegate_t,
         window: *mut _cef_window_t,
     ) -> ::std::os::raw::c_int {
-        let (arg_self_, arg_window) = (self_, window);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_window =
-            unsafe { arg_window.as_mut() }.map(|arg| Window(unsafe { RefGuard::from_raw(arg) }));
-        let arg_window = arg_window.as_mut();
-        ImplWindowDelegate::is_window_modal_dialog(&arg_self_.interface, arg_window)
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_window) = (self_, window);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_window = unsafe { arg_window.as_mut() }
+                .map(|arg| Window(unsafe { RefGuard::from_raw(arg) }));
+            let arg_window = arg_window.as_mut();
+            ImplWindowDelegate::is_window_modal_dialog(&arg_self_.interface, arg_window)
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn get_initial_bounds<I: ImplWindowDelegate, R: Rc>(
         self_: *mut _cef_window_delegate_t,
         window: *mut _cef_window_t,
     ) -> _cef_rect_t {
-        let (arg_self_, arg_window) = (self_, window);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_window =
-            unsafe { arg_window.as_mut() }.map(|arg| Window(unsafe { RefGuard::from_raw(arg) }));
-        let arg_window = arg_window.as_mut();
-        let result = ImplWindowDelegate::initial_bounds(&arg_self_.interface, arg_window);
-        result.into()
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_window) = (self_, window);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_window = unsafe { arg_window.as_mut() }
+                .map(|arg| Window(unsafe { RefGuard::from_raw(arg) }));
+            let arg_window = arg_window.as_mut();
+            let result = ImplWindowDelegate::initial_bounds(&arg_self_.interface, arg_window);
+            result.into()
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn get_initial_show_state<I: ImplWindowDelegate, R: Rc>(
         self_: *mut _cef_window_delegate_t,
         window: *mut _cef_window_t,
     ) -> cef_show_state_t {
-        let (arg_self_, arg_window) = (self_, window);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_window =
-            unsafe { arg_window.as_mut() }.map(|arg| Window(unsafe { RefGuard::from_raw(arg) }));
-        let arg_window = arg_window.as_mut();
-        let result = ImplWindowDelegate::initial_show_state(&arg_self_.interface, arg_window);
-        result.into()
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_window) = (self_, window);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_window = unsafe { arg_window.as_mut() }
+                .map(|arg| Window(unsafe { RefGuard::from_raw(arg) }));
+            let arg_window = arg_window.as_mut();
+            let result = ImplWindowDelegate::initial_show_state(&arg_self_.interface, arg_window);
+            result.into()
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn is_frameless<I: ImplWindowDelegate, R: Rc>(
         self_: *mut _cef_window_delegate_t,
         window: *mut _cef_window_t,
     ) -> ::std::os::raw::c_int {
-        let (arg_self_, arg_window) = (self_, window);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_window =
-            unsafe { arg_window.as_mut() }.map(|arg| Window(unsafe { RefGuard::from_raw(arg) }));
-        let arg_window = arg_window.as_mut();
-        ImplWindowDelegate::is_frameless(&arg_self_.interface, arg_window)
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_window) = (self_, window);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_window = unsafe { arg_window.as_mut() }
+                .map(|arg| Window(unsafe { RefGuard::from_raw(arg) }));
+            let arg_window = arg_window.as_mut();
+            ImplWindowDelegate::is_frameless(&arg_self_.interface, arg_window)
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn with_standard_window_buttons<I: ImplWindowDelegate, R: Rc>(
         self_: *mut _cef_window_delegate_t,
         window: *mut _cef_window_t,
     ) -> ::std::os::raw::c_int {
-        let (arg_self_, arg_window) = (self_, window);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_window =
-            unsafe { arg_window.as_mut() }.map(|arg| Window(unsafe { RefGuard::from_raw(arg) }));
-        let arg_window = arg_window.as_mut();
-        ImplWindowDelegate::with_standard_window_buttons(&arg_self_.interface, arg_window)
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_window) = (self_, window);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_window = unsafe { arg_window.as_mut() }
+                .map(|arg| Window(unsafe { RefGuard::from_raw(arg) }));
+            let arg_window = arg_window.as_mut();
+            ImplWindowDelegate::with_standard_window_buttons(&arg_self_.interface, arg_window)
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn get_titlebar_height<I: ImplWindowDelegate, R: Rc>(
         self_: *mut _cef_window_delegate_t,
         window: *mut _cef_window_t,
         titlebar_height: *mut f32,
     ) -> ::std::os::raw::c_int {
-        let (arg_self_, arg_window, arg_titlebar_height) = (self_, window, titlebar_height);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_window =
-            unsafe { arg_window.as_mut() }.map(|arg| Window(unsafe { RefGuard::from_raw(arg) }));
-        let arg_window = arg_window.as_mut();
-        let mut arg_titlebar_height = if arg_titlebar_height.is_null() {
-            None
-        } else {
-            Some(WrapParamRef::<f32, _>::from(arg_titlebar_height))
-        };
-        let arg_titlebar_height = arg_titlebar_height.as_mut().map(|arg| arg.as_mut());
-        ImplWindowDelegate::titlebar_height(&arg_self_.interface, arg_window, arg_titlebar_height)
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_window, arg_titlebar_height) = (self_, window, titlebar_height);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_window = unsafe { arg_window.as_mut() }
+                .map(|arg| Window(unsafe { RefGuard::from_raw(arg) }));
+            let arg_window = arg_window.as_mut();
+            let mut arg_titlebar_height = if arg_titlebar_height.is_null() {
+                None
+            } else {
+                Some(WrapParamRef::<f32, _>::from(arg_titlebar_height))
+            };
+            let arg_titlebar_height = arg_titlebar_height.as_mut().map(|arg| arg.as_mut());
+            ImplWindowDelegate::titlebar_height(
+                &arg_self_.interface,
+                arg_window,
+                arg_titlebar_height,
+            )
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn accepts_first_mouse<I: ImplWindowDelegate, R: Rc>(
         self_: *mut _cef_window_delegate_t,
         window: *mut _cef_window_t,
     ) -> cef_state_t {
-        let (arg_self_, arg_window) = (self_, window);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_window =
-            unsafe { arg_window.as_mut() }.map(|arg| Window(unsafe { RefGuard::from_raw(arg) }));
-        let arg_window = arg_window.as_mut();
-        let result = ImplWindowDelegate::accepts_first_mouse(&arg_self_.interface, arg_window);
-        result.into()
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_window) = (self_, window);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_window = unsafe { arg_window.as_mut() }
+                .map(|arg| Window(unsafe { RefGuard::from_raw(arg) }));
+            let arg_window = arg_window.as_mut();
+            let result = ImplWindowDelegate::accepts_first_mouse(&arg_self_.interface, arg_window);
+            result.into()
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn can_resize<I: ImplWindowDelegate, R: Rc>(
         self_: *mut _cef_window_delegate_t,
         window: *mut _cef_window_t,
     ) -> ::std::os::raw::c_int {
-        let (arg_self_, arg_window) = (self_, window);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_window =
-            unsafe { arg_window.as_mut() }.map(|arg| Window(unsafe { RefGuard::from_raw(arg) }));
-        let arg_window = arg_window.as_mut();
-        ImplWindowDelegate::can_resize(&arg_self_.interface, arg_window)
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_window) = (self_, window);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_window = unsafe { arg_window.as_mut() }
+                .map(|arg| Window(unsafe { RefGuard::from_raw(arg) }));
+            let arg_window = arg_window.as_mut();
+            ImplWindowDelegate::can_resize(&arg_self_.interface, arg_window)
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn can_maximize<I: ImplWindowDelegate, R: Rc>(
         self_: *mut _cef_window_delegate_t,
         window: *mut _cef_window_t,
     ) -> ::std::os::raw::c_int {
-        let (arg_self_, arg_window) = (self_, window);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_window =
-            unsafe { arg_window.as_mut() }.map(|arg| Window(unsafe { RefGuard::from_raw(arg) }));
-        let arg_window = arg_window.as_mut();
-        ImplWindowDelegate::can_maximize(&arg_self_.interface, arg_window)
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_window) = (self_, window);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_window = unsafe { arg_window.as_mut() }
+                .map(|arg| Window(unsafe { RefGuard::from_raw(arg) }));
+            let arg_window = arg_window.as_mut();
+            ImplWindowDelegate::can_maximize(&arg_self_.interface, arg_window)
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn can_minimize<I: ImplWindowDelegate, R: Rc>(
         self_: *mut _cef_window_delegate_t,
         window: *mut _cef_window_t,
     ) -> ::std::os::raw::c_int {
-        let (arg_self_, arg_window) = (self_, window);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_window =
-            unsafe { arg_window.as_mut() }.map(|arg| Window(unsafe { RefGuard::from_raw(arg) }));
-        let arg_window = arg_window.as_mut();
-        ImplWindowDelegate::can_minimize(&arg_self_.interface, arg_window)
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_window) = (self_, window);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_window = unsafe { arg_window.as_mut() }
+                .map(|arg| Window(unsafe { RefGuard::from_raw(arg) }));
+            let arg_window = arg_window.as_mut();
+            ImplWindowDelegate::can_minimize(&arg_self_.interface, arg_window)
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn can_close<I: ImplWindowDelegate, R: Rc>(
         self_: *mut _cef_window_delegate_t,
         window: *mut _cef_window_t,
     ) -> ::std::os::raw::c_int {
-        let (arg_self_, arg_window) = (self_, window);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_window =
-            unsafe { arg_window.as_mut() }.map(|arg| Window(unsafe { RefGuard::from_raw(arg) }));
-        let arg_window = arg_window.as_mut();
-        ImplWindowDelegate::can_close(&arg_self_.interface, arg_window)
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_window) = (self_, window);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_window = unsafe { arg_window.as_mut() }
+                .map(|arg| Window(unsafe { RefGuard::from_raw(arg) }));
+            let arg_window = arg_window.as_mut();
+            ImplWindowDelegate::can_close(&arg_self_.interface, arg_window)
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn on_accelerator<I: ImplWindowDelegate, R: Rc>(
         self_: *mut _cef_window_delegate_t,
         window: *mut _cef_window_t,
         command_id: ::std::os::raw::c_int,
     ) -> ::std::os::raw::c_int {
-        let (arg_self_, arg_window, arg_command_id) = (self_, window, command_id);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_window =
-            unsafe { arg_window.as_mut() }.map(|arg| Window(unsafe { RefGuard::from_raw(arg) }));
-        let arg_window = arg_window.as_mut();
-        let arg_command_id = arg_command_id.into_raw();
-        ImplWindowDelegate::on_accelerator(&arg_self_.interface, arg_window, arg_command_id)
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_window, arg_command_id) = (self_, window, command_id);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_window = unsafe { arg_window.as_mut() }
+                .map(|arg| Window(unsafe { RefGuard::from_raw(arg) }));
+            let arg_window = arg_window.as_mut();
+            let arg_command_id = arg_command_id.into_raw();
+            ImplWindowDelegate::on_accelerator(&arg_self_.interface, arg_window, arg_command_id)
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn on_key_event<I: ImplWindowDelegate, R: Rc>(
         self_: *mut _cef_window_delegate_t,
         window: *mut _cef_window_t,
         event: *const _cef_key_event_t,
     ) -> ::std::os::raw::c_int {
-        let (arg_self_, arg_window, arg_event) = (self_, window, event);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_window =
-            unsafe { arg_window.as_mut() }.map(|arg| Window(unsafe { RefGuard::from_raw(arg) }));
-        let arg_window = arg_window.as_mut();
-        let arg_event = if arg_event.is_null() {
-            None
-        } else {
-            Some(WrapParamRef::<KeyEvent, _>::from(arg_event))
-        };
-        let arg_event = arg_event.as_ref().map(|arg| arg.as_ref());
-        ImplWindowDelegate::on_key_event(&arg_self_.interface, arg_window, arg_event)
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_window, arg_event) = (self_, window, event);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_window = unsafe { arg_window.as_mut() }
+                .map(|arg| Window(unsafe { RefGuard::from_raw(arg) }));
+            let arg_window = arg_window.as_mut();
+            let arg_event = if arg_event.is_null() {
+                None
+            } else {
+                Some(WrapParamRef::<KeyEvent, _>::from(arg_event))
+            };
+            let arg_event = arg_event.as_ref().map(|arg| arg.as_ref());
+            ImplWindowDelegate::on_key_event(&arg_self_.interface, arg_window, arg_event)
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn on_theme_colors_changed<I: ImplWindowDelegate, R: Rc>(
         self_: *mut _cef_window_delegate_t,
         window: *mut _cef_window_t,
         chrome_theme: ::std::os::raw::c_int,
     ) {
-        let (arg_self_, arg_window, arg_chrome_theme) = (self_, window, chrome_theme);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_window =
-            unsafe { arg_window.as_mut() }.map(|arg| Window(unsafe { RefGuard::from_raw(arg) }));
-        let arg_window = arg_window.as_mut();
-        let arg_chrome_theme = arg_chrome_theme.into_raw();
-        ImplWindowDelegate::on_theme_colors_changed(
-            &arg_self_.interface,
-            arg_window,
-            arg_chrome_theme,
-        )
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_window, arg_chrome_theme) = (self_, window, chrome_theme);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_window = unsafe { arg_window.as_mut() }
+                .map(|arg| Window(unsafe { RefGuard::from_raw(arg) }));
+            let arg_window = arg_window.as_mut();
+            let arg_chrome_theme = arg_chrome_theme.into_raw();
+            ImplWindowDelegate::on_theme_colors_changed(
+                &arg_self_.interface,
+                arg_window,
+                arg_chrome_theme,
+            )
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn get_window_runtime_style<I: ImplWindowDelegate, R: Rc>(
         self_: *mut _cef_window_delegate_t,
     ) -> cef_runtime_style_t {
-        let arg_self_ = self_;
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let result = ImplWindowDelegate::window_runtime_style(&arg_self_.interface);
-        result.into()
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let arg_self_ = self_;
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let result = ImplWindowDelegate::window_runtime_style(&arg_self_.interface);
+            result.into()
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
     extern "C" fn get_linux_window_properties<I: ImplWindowDelegate, R: Rc>(
         self_: *mut _cef_window_delegate_t,
         window: *mut _cef_window_t,
         properties: *mut _cef_linux_window_properties_t,
     ) -> ::std::os::raw::c_int {
-        let (arg_self_, arg_window, arg_properties) = (self_, window, properties);
-        let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
-        let mut arg_window =
-            unsafe { arg_window.as_mut() }.map(|arg| Window(unsafe { RefGuard::from_raw(arg) }));
-        let arg_window = arg_window.as_mut();
-        let mut arg_properties = if arg_properties.is_null() {
-            None
-        } else {
-            Some(WrapParamRef::<LinuxWindowProperties, _>::from(
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
+            let (arg_self_, arg_window, arg_properties) = (self_, window, properties);
+            let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
+            let mut arg_window = unsafe { arg_window.as_mut() }
+                .map(|arg| Window(unsafe { RefGuard::from_raw(arg) }));
+            let arg_window = arg_window.as_mut();
+            let mut arg_properties = if arg_properties.is_null() {
+                None
+            } else {
+                Some(WrapParamRef::<LinuxWindowProperties, _>::from(
+                    arg_properties,
+                ))
+            };
+            let arg_properties = arg_properties.as_mut().map(|arg| arg.as_mut());
+            ImplWindowDelegate::linux_window_properties(
+                &arg_self_.interface,
+                arg_window,
                 arg_properties,
-            ))
-        };
-        let arg_properties = arg_properties.as_mut().map(|arg| arg.as_mut());
-        ImplWindowDelegate::linux_window_properties(
-            &arg_self_.interface,
-            arg_window,
-            arg_properties,
-        )
+            )
+        })) {
+            Ok(value) => value,
+            Err(_) => std::process::abort(),
+        }
     }
 }
 impl ImplViewDelegate for WindowDelegate {
