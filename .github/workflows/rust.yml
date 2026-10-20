@@ -143,39 +143,46 @@ jobs:
           sudo apt-get update -q
           sudo apt-get install -yq pkg-config libssl-dev
 
-      - name: Patch Kurogane onto this tanso
+      # Kurogane's tanso entries point at this checkout whatever it pins. A
+      # patch applies only while Kurogane's exact pin matches this tanso's
+      # version which tanso's version bump breaks before Kurogane's follows
+      - name: Point Kurogane at this tanso
+        working-directory: kurogane
         run: |
-          TANSO="$GITHUB_WORKSPACE/tanso"
-          PATCH='patch."https://github.com/kurogane-rs/tanso"'
-          # TOML literal strings, so a Windows path's backslashes stay as they are
-          {
-            printf "PATCH_ARGS=--config %s.tanso.path='%s'" "$PATCH" "$TANSO/cef"
-            printf " --config %s.tanso-sys.path='%s'" "$PATCH" "$TANSO/sys"
-            printf " --config %s.tanso-download.path='%s'" "$PATCH" "$TANSO/download-cef"
-            printf " --config %s.tanso-build.path='%s'\n" "$PATCH" "$TANSO/tanso-build"
-          } >> "$GITHUB_ENV"
+          # Forward slashes
+          TANSO="$(cygpath -m "$GITHUB_WORKSPACE" 2>/dev/null || echo "$GITHUB_WORKSPACE")/tanso"
+          sed -i.orig -E \
+            -e "s|^tanso = .*|tanso = { path = \"$TANSO/cef\", default-features = false }|" \
+            -e "s|^tanso-sys = .*|tanso-sys = { path = \"$TANSO/sys\" }|" \
+            -e "s|^tanso-download = .*|tanso-download = { path = \"$TANSO/download-cef\" }|" \
+            -e "s|^tanso-build = .*|tanso-build = { path = \"$TANSO/tanso-build\" }|" \
+            Cargo.toml
+          rm Cargo.toml.orig
+          git diff Cargo.toml
 
-      # A patch Kurogane leaves unused, or a tanso crate it still takes from
-      # git, means the job tests another tanso
+      # A tanso crate taken from anywhere but this checkout, or taken twice,
+      # means the job tests another tanso
       - name: Check that Kurogane takes every tanso crate from this tanso
         working-directory: kurogane
         run: |
-          cargo metadata --format-version 1 $PATCH_ARGS 2>&1 > "$RUNNER_TEMP/metadata.json" \
-            | tee "$RUNNER_TEMP/metadata.log"
-          if grep -q "was not used in the crate graph" "$RUNNER_TEMP/metadata.log" \
-            || grep -q '"id":"git+https://github.com/kurogane-rs/tanso' "$RUNNER_TEMP/metadata.json"; then
-            echo "Kurogane takes a tanso crate from elsewhere, or leaves a patch unused"
-            exit 1
-          fi
+          cargo metadata --format-version 1 > "$RUNNER_TEMP/metadata.json"
+          for crate in tanso tanso-sys tanso-download tanso-build; do
+            if ! jq -e --arg crate "$crate" \
+              '[.packages[] | select(.name == $crate)] | length == 1 and .[0].source == null' \
+              "$RUNNER_TEMP/metadata.json" > /dev/null; then
+              echo "Kurogane takes $crate from elsewhere"
+              exit 1
+            fi
+          done
 
       - name: Clippy
         working-directory: kurogane
         run: |
           cargo clippy -p kurogane -p kurogane-build -p kurogane-layout -p kurogane-cli --all-targets \
-            $PATCH_ARGS -- -D warnings
+            -- -D warnings
 
       - name: Test
         working-directory: kurogane
         run: |
-          cargo test -p kurogane --lib $PATCH_ARGS
-          cargo test -p kurogane-layout -p kurogane-cli $PATCH_ARGS
+          cargo test -p kurogane --lib
+          cargo test -p kurogane-layout -p kurogane-cli
