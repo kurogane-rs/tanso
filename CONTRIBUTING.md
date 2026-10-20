@@ -18,7 +18,7 @@ Hi! We, the maintainers, are really excited that you are interested in contribut
 
 - The title and commits should follow [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0-beta.4/).
 
-- Add changes in CHANGELOG.md. It should be the same as the title.
+- Add the change to CHANGELOG.md under Unreleased, worded as the title.
 
 - It's OK to have multiple small commits as you work on the PR - we will let GitHub automatically squash it before merging.
 
@@ -36,4 +36,15 @@ There are a few types we recommend you learn first before adding any implementat
 
 - [`tanso::string`](cef/src/string.rs)
 - [`tanso::rc`](cef/src/rc.rs)
+
+### Releasing
+
+A release moves the workspace version and the version of any crate with its own that changed. CHANGELOG.md's Unreleased section becomes the version's section. Push it to `dev` and wait for CI, then push a signed tag `v<workspace version>` on that commit. From a clean checkout of the tag, two commands publish every crate in order.
+
+```sh
+cargo publish --workspace --dry-run
+cargo publish --workspace
+```
+
+Every crate needs a version crates.io does not hold yet; the dry run only warns about one, the real run stops at it. Cargo refuses a checkout with uncommitted changes. The GitHub release takes the version's section of CHANGELOG.md. tanso releases in pairs with Kurogane, which pins the release exactly.
 

@@ -23,6 +23,6 @@ cef-rs `f044f89` (2026-10-03, `154.4.0+154.0.33`), the commit tanso forked from.
 1. `get-latest` finds the newest stable CEF published for every target. With `--update-version` it moves the workspace version, `<CEF major>.<minor>.<patch>+<CEF version>`. The scheduled `get-latest` workflow does this and opens a pull request against `dev`.
 2. `update-bindings` regenerates the bindings for each of the eight targets. `cargo run -p update-bindings -- --bindgen --download --target <triple>` runs bindgen on CEF's headers, rewrites the sys bindings to call through the loaded libcef and generates the safe bindings and resources from them. The `update-bindings` workflow runs it on each platform.
 3. tanso's tests run on each platform (`cargo test --workspace`).
-4. Kurogane's parity runs on the new tanso decide its pin. Kurogane moves to a tanso tag only once they pass; tanso is tagged by hand, in pairs with Kurogane.
+4. Kurogane's parity runs on the new tanso decide its pin. Kurogane moves to a tanso release only once they pass; tanso releases in pairs with Kurogane ([CONTRIBUTING.md](CONTRIBUTING.md), "Releasing").
 
 The generator emits tanso's crate names, so a regeneration's diff is CEF's change alone. A patch to the bindings goes into the generator or the hand-written code, never into generated files alone.

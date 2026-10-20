@@ -12,7 +12,7 @@ members = [
 ]
 
 [workspace.package]
-version = "154.4.0+154.0.33"
+version = "154.5.0+154.0.33"
 edition = "2021"
 license = "Apache-2.0 OR MIT"
 authors = [
@@ -23,8 +23,8 @@ authors = [
 repository = "https://github.com/kurogane-rs/tanso"
 
 [workspace.dependencies]
-tanso-sys = { version = "=154.4.0", path = "sys" }
-tanso-download = { version = "3.0", path = "download-cef" }
+tanso-sys = { version = "=154.5.0", path = "sys" }
+tanso-download = { version = "4.0", path = "download-cef" }
 
 anyhow = "1"
 ash = "0.38"
