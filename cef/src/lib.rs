@@ -36,15 +36,15 @@ pub const SEEK_SET: i32 = 0;
 pub const SEEK_CUR: i32 = 1;
 pub const SEEK_END: i32 = 2;
 
+/// Loads libcef once for the tests. Loading sets the API version, which
+/// every other call needs first.
 #[cfg(test)]
 fn test_init_cef() {
-    use std::{ptr, sync::Once};
+    use std::sync::Once;
 
     static INIT: Once = Once::new();
     INIT.call_once(|| {
         let cef = sys::find_cef_dir().expect("CEF not found");
         unsafe { sys::load_libcef(&cef.libcef()) }.expect("cannot load libcef");
-
-        assert_eq!(initialize(None, None, None, ptr::null_mut()), 0);
     });
 }

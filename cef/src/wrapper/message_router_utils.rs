@@ -408,7 +408,7 @@ fn build_browser_list_message(
     request_id: i32,
     payload: MessagePayload,
 ) -> Option<ProcessMessage> {
-    let message = process_message_create(Some(&CefString::from(name)))?;
+    let message = process_message_create(&CefString::from(name))?;
     let args = message.argument_list()?;
     args.set_int(CONTEXT_ID, context_id);
     args.set_int(REQUEST_ID, request_id);
@@ -419,10 +419,10 @@ fn build_browser_list_message(
         MessagePayload::String(value) => {
             args.set_string(BROWSER_PAYLOAD, Some(&CefString::from(&value)))
         }
-        MessagePayload::Binary(value) => args.set_binary(
-            BROWSER_PAYLOAD,
-            binary_value_create(Some(value.data())).as_mut(),
-        ),
+        MessagePayload::Binary(value) => match binary_value_create(Some(value.data())) {
+            Some(mut binary) => args.set_binary(BROWSER_PAYLOAD, &mut binary),
+            None => 0,
+        },
     };
 
     Some(message)
@@ -435,7 +435,7 @@ fn build_render_list_message(
     payload: MessagePayload,
     is_persistent: bool,
 ) -> Option<ProcessMessage> {
-    let message = process_message_create(Some(&CefString::from(name)))?;
+    let message = process_message_create(&CefString::from(name))?;
     let args = message.argument_list()?;
     args.set_int(CONTEXT_ID, context_id);
     args.set_int(REQUEST_ID, request_id);
@@ -445,10 +445,10 @@ fn build_render_list_message(
         MessagePayload::String(value) => {
             args.set_string(RENDERER_PAYLOAD, Some(&CefString::from(&value)))
         }
-        MessagePayload::Binary(value) => args.set_binary(
-            RENDERER_PAYLOAD,
-            binary_value_create(Some(value.data())).as_mut(),
-        ),
+        MessagePayload::Binary(value) => match binary_value_create(Some(value.data())) {
+            Some(mut binary) => args.set_binary(RENDERER_PAYLOAD, &mut binary),
+            None => 0,
+        },
     };
 
     args.set_bool(IS_PERSISTENT, is_persistent.into());
@@ -501,8 +501,7 @@ where
     fn new(name: &str, payload: MessagePayload) -> Self {
         let message_size = Header::SIZE + payload.size();
         let builder =
-            match shared_process_message_builder_create(Some(&CefString::from(name)), message_size)
-            {
+            match shared_process_message_builder_create(&CefString::from(name), message_size) {
                 Some(builder) if builder.is_valid() != 0 => builder,
                 _ => {
                     return Self::Payload(MessagePayloadBuilder {

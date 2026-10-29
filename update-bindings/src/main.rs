@@ -25,10 +25,13 @@ pub enum Error {
     MissingPath(std::path::PathBuf),
     #[error("cannot rewrite {0} to call through the loaded libcef")]
     Unsupported(String),
+    #[error("unreadable annotation line: {0}")]
+    Annotations(String),
 }
 
 pub type Result<T> = std::result::Result<T, Error>;
 
+mod annotations;
 mod dirs;
 mod loader;
 mod parse_tree;
@@ -62,6 +65,10 @@ struct Args {
     version: String,
     #[arg(short, long, default_value = default_download_url())]
     mirror_url: String,
+    /// CEF's C++ include directory to read the annotations from, refreshing
+    /// the committed annotations file
+    #[arg(short, long)]
+    annotations: Option<std::path::PathBuf>,
 }
 
 fn main() -> Result<()> {
@@ -74,7 +81,14 @@ fn main() -> Result<()> {
         }
 
         upgrade::sys_bindgen(target)?;
+        let (os, arch) = upgrade::target_to_os_arch(target);
+        refresh_annotations(&dirs::get_cef_root(os, arch).join("include"))?;
     }
+
+    if let Some(include) = &args.annotations {
+        refresh_annotations(include)?;
+    }
+    let annotations = annotations::Annotations::read(&dirs::get_annotations_file())?;
 
     let bindings_file = upgrade::get_target_bindings(target);
     let mut sys_bindings = dirs::get_sys_dir()?;
@@ -96,7 +110,7 @@ fn main() -> Result<()> {
     cef_resources.push("resources");
     cef_resources.push(&bindings_file);
 
-    let bindings = parse_tree::generate_bindings(&sys_bindings)?;
+    let bindings = parse_tree::generate_bindings(&sys_bindings, &annotations)?;
     let source = read_bindings(&bindings)?;
     let dest = read_bindings(&cef_bindings).unwrap_or_default();
 
@@ -115,6 +129,32 @@ fn main() -> Result<()> {
     }
 
     Ok(())
+}
+
+/// Reads CEF's annotations from the C++ headers in `include` into the
+/// committed annotations file.
+fn refresh_annotations(include: &Path) -> Result<()> {
+    let annotations = annotations::Annotations::extract(include)?;
+    let file = dirs::get_annotations_file();
+    let current = annotations::Annotations::read(&file).unwrap_or_default();
+    if annotations != current {
+        annotations.write(&file, &cef_version(include)?)?;
+        println!("Updated: {}", file.display());
+    }
+    Ok(())
+}
+
+/// The CEF version of the headers in `include` (`CEF_VERSION` in
+/// `cef_version.h`), the same on every machine.
+fn cef_version(include: &Path) -> Result<String> {
+    let header = fs::read_to_string(include.join("cef_version.h"))?;
+    header
+        .lines()
+        .find_map(|line| {
+            let value = line.strip_prefix("#define CEF_VERSION ")?;
+            Some(value.trim().trim_matches('"').to_owned())
+        })
+        .ok_or_else(|| Error::MissingPath(include.join("cef_version.h")))
 }
 
 fn read_bindings(source_path: &Path) -> crate::Result<String> {

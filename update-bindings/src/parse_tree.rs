@@ -13,10 +13,16 @@ use std::{
     sync::OnceLock,
 };
 
-pub fn generate_bindings(source_path: &Path) -> crate::Result<PathBuf> {
+pub fn generate_bindings(
+    source_path: &Path,
+    annotations: &crate::annotations::Annotations,
+) -> crate::Result<PathBuf> {
     let bindings = crate::read_bindings(source_path)?;
     let parsed = syn::parse_file(&bindings)?;
-    let parse_tree = ParseTree::from(&parsed);
+    let mut parse_tree = ParseTree::from(&parsed);
+    for name in parse_tree.annotate(annotations) {
+        println!("No annotation: {name}");
+    }
 
     let mut out_file = crate::dirs::get_out_dir();
     out_file.push("bindings.rs");
@@ -90,6 +96,10 @@ struct SignatureRef<'a> {
     inputs: Vec<FnArgRef<'a>>,
     output: Option<&'a syn::Type>,
     merged_params: OnceCell<Vec<MergedParam>>,
+    /// What CEF's C++ annotations say about the function (crate::annotations)
+    annotation: Option<crate::annotations::Entry>,
+    /// The struct a method belongs to; none for a global function
+    owner: Option<String>,
 }
 
 enum MergedParam {
@@ -113,6 +123,109 @@ enum MergedParam {
 }
 
 impl SignatureRef<'_> {
+    /// Whether CEF never passes `param` (a parameter as the Rust argument names
+    /// it) as null, per its annotations (crate::annotations).
+    fn requires(&self, param: &str) -> bool {
+        self.annotation.as_ref().is_some_and(|entry| {
+            entry
+                .required
+                .iter()
+                .any(|name| make_snake_case_value_name(name) == param)
+        })
+    }
+
+    /// The pixel buffer `param` is, if it is one (PIXEL_BUFFERS).
+    fn pixel_buffer(&self, param: &str) -> Option<&'static PixelBuffer> {
+        let owner = self.owner.as_deref()?;
+        PIXEL_BUFFERS.iter().find(|buffer| {
+            buffer.owner == owner && buffer.method == self.name && buffer.buffer == param
+        })
+    }
+
+    /// The Rust type of a parameter CEF never passes null: what its `Option`
+    /// holds. None for any other parameter. An array CEF requires may still
+    /// come empty; it is an empty slice then.
+    fn required_type(
+        &self,
+        param: &MergedParam,
+        tree: &ParseTree,
+    ) -> Option<proc_macro2::TokenStream> {
+        let (name, ty) = match param {
+            MergedParam::Single { name, ty: Some(ty) }
+                if ty
+                    .modifiers
+                    .iter()
+                    .any(|m| matches!(m, TypeModifier::ConstPtr | TypeModifier::MutPtr)) =>
+            {
+                (name, ty)
+            }
+            MergedParam::Bounded {
+                slice_name,
+                slice_ty,
+                count_ty,
+                ..
+            } if count_ty.modifiers.is_empty() => (slice_name, slice_ty),
+            _ => return None,
+        };
+        if !self.requires(name) {
+            return None;
+        }
+        strip_option(&ty.get_argument_type(tree)?)
+    }
+
+    /// `call`, the call of a Rust callback from its C shim, guarded as CEF's
+    /// own glue guards the call: a required argument that comes null skips
+    /// the callback and answers the default; a required array that comes
+    /// null is empty.
+    fn guarded_call(
+        &self,
+        call: proc_macro2::TokenStream,
+        tree: &ParseTree,
+    ) -> proc_macro2::TokenStream {
+        let mut singles = vec![];
+        let mut arrays = vec![];
+        for param in self.merge_params(tree) {
+            if self.required_type(param, tree).is_none() {
+                continue;
+            }
+            match param {
+                MergedParam::Single { name, .. } => singles.push(format_ident!("arg_{name}")),
+                MergedParam::Bounded { slice_name, .. } => {
+                    arrays.push(format_ident!("arg_{slice_name}"))
+                }
+                _ => {}
+            }
+        }
+        let call = if singles.is_empty() {
+            call
+        } else {
+            let returns_void_pointer = self
+                .output
+                .and_then(|ty| syn::parse2::<ModifiedType>(ty.to_token_stream()).ok())
+                .is_some_and(|ty| {
+                    ty.ty.to_token_stream().to_string()
+                        == quote! { ::std::os::raw::c_void }.to_string()
+                });
+            let default = if returns_void_pointer {
+                quote! { unsafe { std::mem::zeroed() } }
+            } else {
+                quote! { Default::default() }
+            };
+            quote! {
+                match (#(#singles,)*) {
+                    (#(Some(#singles),)*) => #call,
+                    _ => #default,
+                }
+            }
+        };
+        quote! {
+            {
+                #(let #arrays = #arrays.unwrap_or_default();)*
+                #call
+            }
+        }
+    }
+
     fn capture_params(&self) -> Option<proc_macro2::TokenStream> {
         let arg_names = self
             .inputs
@@ -394,10 +507,14 @@ impl SignatureRef<'_> {
         let args = self.merge_params(tree).filter_map(|arg| match arg {
             MergedParam::Receiver => Some(quote! { &self }),
             MergedParam::Single { name, ty: Some(ty) } => {
+                let ty = if self.pixel_buffer(name).is_some() {
+                    quote! { &[u8] }
+                } else {
+                    self.required_type(arg, tree)
+                        .or_else(|| ty.get_argument_type(tree))
+                        .unwrap_or_else(|| ty.ty.to_token_stream())
+                };
                 let name = format_ident!("{name}");
-                let ty = ty
-                    .get_argument_type(tree)
-                    .unwrap_or_else(|| ty.ty.to_token_stream());
                 Some(quote! { #name: #ty })
             }
             MergedParam::Bounded {
@@ -406,8 +523,9 @@ impl SignatureRef<'_> {
                 ..
             } => {
                 let slice_name = format_ident!("{slice_name}");
-                let slice_ty = slice_ty
-                    .get_argument_type(tree)
+                let slice_ty = self
+                    .required_type(arg, tree)
+                    .or_else(|| slice_ty.get_argument_type(tree))
                     .unwrap_or_else(|| slice_ty.ty.to_token_stream());
                 Some(quote! { #slice_name: #slice_ty })
             }
@@ -430,10 +548,36 @@ impl SignatureRef<'_> {
 
     fn unwrap_rust_args(&self, tree: &ParseTree) -> proc_macro2::TokenStream {
         let capture = self.capture_merged_params(tree);
+        // A required argument takes the conversion of an optional one that is
+        // present
+        let required = self
+            .merge_params(tree)
+            .filter_map(|arg| {
+                self.required_type(arg, tree)?;
+                let name = match arg {
+                    MergedParam::Single { name, .. } => name,
+                    MergedParam::Bounded { slice_name, .. } => slice_name,
+                    _ => return None,
+                };
+                let arg_name = format_ident!("arg_{name}");
+                Some(quote! { let #arg_name = Some(#arg_name); })
+            })
+            .collect::<Vec<_>>();
         let args = self.merge_params(tree).filter_map(|arg| match arg {
             MergedParam::Receiver => Some(quote! {
                 let arg_self_ = self.into_raw();
             }),
+            MergedParam::Single { name, ty: Some(_) } if self.pixel_buffer(name).is_some() => {
+                let len = self.pixel_buffer(name)?.len();
+                let arg_name = format_ident!("arg_{name}");
+                // C reads the whole buffer; a shorter slice is not passed
+                Some(quote! {
+                    if #arg_name.len() < #len {
+                        return;
+                    }
+                    let #arg_name = #arg_name.as_ptr().cast();
+                })
+            }
             MergedParam::Single {
                 name,
                 ty: Some(arg_ty),
@@ -627,6 +771,18 @@ impl SignatureRef<'_> {
                 };
 
                 match (count_modifiers.as_slice(), slice_modifiers.as_slice()) {
+                    ([], [TypeModifier::Slice]) if tree.plain_struct(&slice_ty).is_some() => {
+                        Some(quote! {
+                            let #arg_count = #arg_name
+                                .as_ref()
+                                .map(|arg| arg.len())
+                                .unwrap_or_default();
+                            let #arg_name = #arg_name
+                                .filter(|arg| !arg.is_empty())
+                                .map(|arg| arg.as_ptr().cast())
+                                .unwrap_or(std::ptr::null());
+                        })
+                    }
                     ([], [TypeModifier::Slice]) => Some(quote! {
                         let #arg_count = #arg_name
                             .as_ref()
@@ -774,6 +930,7 @@ impl SignatureRef<'_> {
 
         quote! {
             #capture
+            #(#required)*
             #(#args)*
         }
     }
@@ -890,6 +1047,17 @@ impl SignatureRef<'_> {
             MergedParam::Receiver => Some(quote! {
                 let arg_self_: &RcImpl<R, I> = RcImpl::get(arg_self_.cast());
             }),
+            MergedParam::Single { name, ty: Some(_) } if self.pixel_buffer(name).is_some() => {
+                let len = self.pixel_buffer(name)?.len();
+                let arg_name = format_ident!("arg_{name}");
+                Some(quote! {
+                    let #arg_name: &[u8] = if #arg_name.is_null() {
+                        &[]
+                    } else {
+                        unsafe { std::slice::from_raw_parts(#arg_name.cast(), #len) }
+                    };
+                })
+            }
             MergedParam::Single {
                 name,
                 ty: Some(arg_ty),
@@ -1114,6 +1282,14 @@ impl SignatureRef<'_> {
                     })
                     .or_else(|| {
                         match modifiers {
+                            [TypeModifier::Slice] if tree.plain_struct(&ty_string).is_some() => {
+                                let rust_ty = entry.map(|entry| format_ident!("{}", entry.name))?;
+                                Some(quote! {
+                                    let #arg_name = (!#arg_name.is_null()).then(|| unsafe {
+                                        std::slice::from_raw_parts(#arg_name.cast::<#rust_ty>(), #arg_count)
+                                    });
+                                })
+                            }
                             [TypeModifier::Slice] => Some(quote! {
                                 let #arg_name = if #arg_name.is_null() {
                                     None
@@ -1404,6 +1580,8 @@ impl<'a> TryFrom<&'a syn::Field> for SignatureRef<'a> {
             inputs,
             output,
             merged_params: Default::default(),
+            annotation: None,
+            owner: None,
         })
     }
 }
@@ -1761,6 +1939,99 @@ struct ParseTree<'a> {
 }
 
 impl ParseTree<'_> {
+    /// Whether C struct `cef_name` holds plain numbers only: no methods, no
+    /// pointer, no CEF type and no leading `size`. Such a struct's Rust type
+    /// has its layout, so CEF's arrays of it are borrowed as they are.
+    /// `Some(true)` when one of its numbers is a float.
+    fn plain_struct(&self, cef_name: &str) -> Option<bool> {
+        let s = self
+            .lookup_struct_declaration
+            .get(cef_name)
+            .and_then(|&i| self.struct_declarations.get(i))?;
+        if !s.methods.is_empty()
+            || s.fields.is_empty()
+            || s.fields.first().is_some_and(|f| f.name == "size")
+        {
+            return None;
+        }
+        let mut has_float = false;
+        for field in &s.fields {
+            let ty = self.resolve_modified_type(field.ty)?;
+            if !ty.modifiers.is_empty() {
+                return None;
+            }
+            let ty = ty.ty.to_token_stream().to_string();
+            if self.cef_name_map.contains_key(&ty) {
+                return None;
+            }
+            if float_types().contains(&ty) {
+                has_float = true;
+            } else if !integer_types().contains(&ty) {
+                return None;
+            }
+        }
+        Some(has_float)
+    }
+
+    /// The body of a wrap macro example's impl block for `s`: each method a
+    /// client must implement, answering what the trait's defaults answer, or
+    /// a placeholder comment when there is none.
+    fn example_methods(&self, s: &StructDeclarationRef<'_>) -> String {
+        let methods = s
+            .methods
+            .iter()
+            .filter(|m| {
+                m.annotation
+                    .as_ref()
+                    .is_some_and(|annotation| annotation.pure)
+            })
+            .map(|m| {
+                let sig = tidy_tokens(&m.get_signature(self).to_string());
+                let body = match m
+                    .output
+                    .and_then(|ty| syn::parse2::<ModifiedType>(ty.to_token_stream()).ok())
+                {
+                    None => String::new(),
+                    Some(ty)
+                        if ty.ty.to_token_stream().to_string()
+                            == quote! { ::std::os::raw::c_void }.to_string() =>
+                    {
+                        " unsafe { std::mem::zeroed() } ".to_owned()
+                    }
+                    Some(_) => " Default::default() ".to_owned(),
+                };
+                format!("        {sig} {{{body}}}\n")
+            })
+            .collect::<String>();
+        if methods.is_empty() {
+            "        // ...\n".to_owned()
+        } else {
+            methods
+        }
+    }
+
+    /// Gives each method and global function its annotations and returns the
+    /// names of those CEF's headers did not annotate.
+    fn annotate(&mut self, annotations: &crate::annotations::Annotations) -> Vec<String> {
+        let mut missing = vec![];
+        for s in &mut self.struct_declarations {
+            for method in &mut s.methods {
+                method.owner = Some(s.name.clone());
+                method.annotation = annotations.method(&s.name, &method.name).cloned();
+                if method.annotation.is_none() {
+                    missing.push(format!("{}::{}", s.name, method.name));
+                }
+            }
+        }
+        for function in &mut self.global_function_declarations {
+            function.annotation = annotations.function(&function.name).cloned();
+            if function.annotation.is_none() {
+                missing.push(function.name.clone());
+            }
+        }
+        missing
+    }
+
     pub fn write_prelude(&self, f: &mut Formatter<'_>) -> fmt::Result {
         let header = quote! {
             #![allow(
@@ -2357,6 +2628,15 @@ impl ParseTree<'_> {
             let sig = m.get_signature(self);
             let method_name = &m.name;
             let comment = format!("See [`{name}::{method_name}`] for more documentation.");
+            if m.annotation
+                .as_ref()
+                .is_some_and(|annotation| annotation.pure)
+            {
+                return quote! {
+                    #[doc = #comment]
+                    #sig;
+                };
+            }
             let impl_default =
                 m.output.map(
                     |ty| match syn::parse2::<ModifiedType>(ty.to_token_stream()) {
@@ -2460,16 +2740,17 @@ impl ParseTree<'_> {
             .filter_map(|base_struct| {
                 self.cef_name_map.get(&base_struct.name).map(|entry| {
                     let base = &entry.name;
+                    let methods = self.example_methods(base_struct);
                     format!(
                         r#"
     impl {base} {{
-        // ...
-    }}
+{methods}    }}
 "#
                     )
                 })
             })
             .collect::<String>();
+        let example_methods = self.example_methods(s);
 
         let wrap_type_comment = format!(
             r#"Implement the [`Wrap{rust_name}`] trait for the specified struct. You can declare more
@@ -2486,8 +2767,7 @@ methods implemented by the [`Impl{rust_name}`] trait.
     }}
 {wrap_base_type_comments}
     impl {rust_name} {{
-        // ...
-    }}
+{example_methods}    }}
 }}
 
 fn make_my_struct() -> {rust_name} {{
@@ -2637,8 +2917,10 @@ fn make_my_struct() -> {rust_name} {{
                     _ => None,
                 }
             });
-            let mut call_impl =
-                quote! { #impl_trait::#rust_method_name(&arg_self_.interface, #(#forward_args),*) };
+            let mut call_impl = m.guarded_call(
+                quote! { #impl_trait::#rust_method_name(&arg_self_.interface, #(#forward_args),*) },
+                self,
+            );
             if forward_output.is_some() || !unwrapped_args.is_empty() {
                 call_impl = quote! { let result = #call_impl; };
             }
@@ -3199,8 +3481,10 @@ fn make_my_struct() -> {rust_name} {{
                         _ => None,
                     }
                 });
-                let mut call_impl =
-                    quote! { #impl_trait::#rust_method_name(&arg_self_.interface, #(#forward_args),*) };
+                let mut call_impl = m.guarded_call(
+                    quote! { #impl_trait::#rust_method_name(&arg_self_.interface, #(#forward_args),*) },
+                    self,
+                );
                 if forward_output.is_some() || !unwrapped_args.is_empty() {
                     call_impl = quote! { let result = #call_impl; };
                 }
@@ -3450,15 +3734,54 @@ fn make_my_struct() -> {rust_name} {{
                 _ => quote! { unsafe { std::mem::zeroed() } },
             };
 
+            let plain = self.plain_struct(&s.name);
+            let derive = match plain {
+                Some(true) => quote! {
+                    #[repr(C)]
+                    #[derive(Clone, Copy, Debug, PartialEq)]
+                },
+                Some(false) => quote! {
+                    #[repr(C)]
+                    #[derive(Clone, Copy, Debug, PartialEq, Eq)]
+                },
+                None => quote! { #[derive(Clone, Debug)] },
+            };
+            // A plain struct is borrowed from CEF as its C struct; the layouts
+            // must match field for field
+            let layout = plain.map(|_| {
+                let offsets = fields.iter().map(|(rust_field, c_field, _, _)| {
+                    quote! {
+                        assert!(
+                            std::mem::offset_of!(#rust_name, #rust_field)
+                                == std::mem::offset_of!(#name_ident, #c_field)
+                        );
+                    }
+                });
+                quote! {
+                    const _: () = {
+                        assert!(std::mem::size_of::<#rust_name>() == std::mem::size_of::<#name_ident>());
+                        assert!(std::mem::align_of::<#rust_name>() == std::mem::align_of::<#name_ident>());
+                        #(#offsets)*
+                    };
+                }
+            });
+            let get_raw = if plain.is_some() {
+                quote! { (*self).into() }
+            } else {
+                quote! { self.clone().into() }
+            };
+
             let wrapper = quote! {
-                #[derive(Clone, Debug)]
+                #derive
                 pub struct #rust_name {
                     #(#fields_decl)*
                 }
 
+                #layout
+
                 impl #rust_name {
                     fn get_raw(&self) -> #name_ident {
-                        self.clone().into()
+                        #get_raw
                     }
                 }
 
@@ -3962,6 +4285,8 @@ impl<'a> From<&'a syn::File> for ParseTree<'a> {
                         syn::ReturnType::Type(_, ty) => Some(ty.as_ref()),
                     },
                     merged_params: Default::default(),
+                    annotation: None,
+                    owner: None,
                 },
             )
             .collect();
@@ -4100,11 +4425,133 @@ fn make_snake_case_value_name(name: &str) -> String {
     name.from_case(Case::Camel).to_case(Case::Snake)
 }
 
+/// Integer types of a plain struct's fields (ParseTree::plain_struct).
+fn integer_types() -> Vec<String> {
+    vec![
+        quote! { ::std::os::raw::c_char }.to_string(),
+        quote! { ::std::os::raw::c_schar }.to_string(),
+        quote! { ::std::os::raw::c_uchar }.to_string(),
+        quote! { ::std::os::raw::c_short }.to_string(),
+        quote! { ::std::os::raw::c_ushort }.to_string(),
+        quote! { ::std::os::raw::c_int }.to_string(),
+        quote! { ::std::os::raw::c_uint }.to_string(),
+        quote! { ::std::os::raw::c_long }.to_string(),
+        quote! { ::std::os::raw::c_ulong }.to_string(),
+        quote! { ::std::os::raw::c_longlong }.to_string(),
+        quote! { ::std::os::raw::c_ulonglong }.to_string(),
+        quote! { i8 }.to_string(),
+        quote! { i16 }.to_string(),
+        quote! { i32 }.to_string(),
+        quote! { i64 }.to_string(),
+        quote! { u8 }.to_string(),
+        quote! { u16 }.to_string(),
+        quote! { u32 }.to_string(),
+        quote! { u64 }.to_string(),
+        quote! { usize }.to_string(),
+        quote! { isize }.to_string(),
+    ]
+}
+
+/// Float types of a plain struct's fields (ParseTree::plain_struct).
+fn float_types() -> Vec<String> {
+    vec![
+        quote! { ::std::os::raw::c_float }.to_string(),
+        quote! { ::std::os::raw::c_double }.to_string(),
+        quote! { f32 }.to_string(),
+        quote! { f64 }.to_string(),
+    ]
+}
+
+/// Rust tokens printed as a person writes them, for a doc example
+/// (`& mut Browser` as `&mut Browser`).
+fn tidy_tokens(tokens: &str) -> String {
+    let mut text = tokens.to_owned();
+    for (from, to) in [
+        (" :: ", "::"),
+        (":: ", "::"),
+        ("& ", "&"),
+        (" ,", ","),
+        ("( ", "("),
+        (" )", ")"),
+        ("< ", "<"),
+        (" <", "<"),
+        (" >", ">"),
+        (" :", ":"),
+        (" (", "("),
+        ("> >", ">>"),
+    ] {
+        while text.contains(from) {
+            text = text.replace(from, to);
+        }
+    }
+    text.replace(":::", ": ::")
+        .replace("->", " -> ")
+        .replace("  ", " ")
+}
+
+/// The type an `Option` holds.
+fn strip_option(ty: &proc_macro2::TokenStream) -> Option<proc_macro2::TokenStream> {
+    let syn::Type::Path(syn::TypePath {
+        qself: None, path, ..
+    }) = syn::parse2(ty.clone()).ok()?
+    else {
+        return None;
+    };
+    let [segment] = path.segments.iter().collect::<Vec<_>>()[..] else {
+        return None;
+    };
+    if segment.ident != "Option" {
+        return None;
+    }
+    let syn::PathArguments::AngleBracketed(args) = &segment.arguments else {
+        return None;
+    };
+    match args.args.iter().collect::<Vec<_>>()[..] {
+        [syn::GenericArgument::Type(inner)] => Some(inner.to_token_stream()),
+        _ => None,
+    }
+}
+
+/// A `void*` parameter that is a pixel buffer, BGRA at four bytes a pixel,
+/// whose size CEF passes as two other parameters. The Rust side takes it as
+/// a byte slice borrowed for the call. Its method returns nothing.
+struct PixelBuffer {
+    owner: &'static str,
+    method: &'static str,
+    buffer: &'static str,
+    width: &'static str,
+    height: &'static str,
+}
+
+const PIXEL_BUFFERS: &[PixelBuffer] = &[PixelBuffer {
+    owner: "_cef_render_handler_t",
+    method: "on_paint",
+    buffer: "buffer",
+    width: "width",
+    height: "height",
+}];
+
+impl PixelBuffer {
+    /// The buffer's length in bytes, from the captured `arg_` values.
+    fn len(&self) -> proc_macro2::TokenStream {
+        let width = format_ident!("arg_{}", self.width);
+        let height = format_ident!("arg_{}", self.height);
+        quote! {
+            usize::try_from(#width).unwrap_or_default()
+                * usize::try_from(#height).unwrap_or_default()
+                * 4
+        }
+    }
+}
+
 const RUST_METHOD_EXCEPTIONS: &[&str] = &["get_type", "get_layout"];
 
 fn make_rust_method_name(name: &str) -> &str {
     if RUST_METHOD_EXCEPTIONS.contains(&name) {
         name
+    } else if name == "clone" {
+        // Clone::clone would clash with it; CEF's other deep copies are `copy`
+        "copy"
     } else {
         name.trim_start_matches("get_")
     }

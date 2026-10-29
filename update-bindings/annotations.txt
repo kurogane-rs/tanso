@@ -1,0 +1,1397 @@
+# CEF's C++ annotations of CEF 154.0.33+ga03e714+chromium-154.0.8037.94, read by update-bindings --annotations.
+# Each line: the C struct of a method (- for a global function), the C function,
+# pure for a client method without a default (else -), the parameters never null.
+- cef_add_cross_origin_whitelist_entry - source_origin target_protocol
+- cef_base64_decode - data
+- cef_base64_encode -
+- cef_begin_tracing -
+- cef_binary_value_create -
+- cef_browser_host_create_browser - settings windowInfo
+- cef_browser_host_create_browser_sync - settings windowInfo
+- cef_browser_host_get_browser_by_identifier -
+- cef_browser_view_create - settings
+- cef_browser_view_get_for_browser - browser
+- cef_clear_cross_origin_whitelist -
+- cef_clear_scheme_handler_factories -
+- cef_command_line_create -
+- cef_command_line_get_global -
+- cef_component_updater_get -
+- cef_cookie_manager_get_global_manager -
+- cef_crash_reporting_enabled -
+- cef_create_directory - full_path
+- cef_create_new_temp_directory - new_temp_path
+- cef_create_temp_directory_in_directory - base_dir new_dir
+- cef_create_url - parts url
+- cef_currently_on -
+- cef_delete_file - path
+- cef_dictionary_value_create -
+- cef_directory_exists - path
+- cef_display_convert_screen_point_from_pixels - point
+- cef_display_convert_screen_point_to_pixels - point
+- cef_display_convert_screen_rect_from_pixels - rect
+- cef_display_convert_screen_rect_to_pixels - rect
+- cef_display_get_alls - displays
+- cef_display_get_count -
+- cef_display_get_matching_bounds - bounds
+- cef_display_get_nearest_point - point
+- cef_display_get_primary -
+- cef_do_message_loop_work -
+- cef_drag_data_create -
+- cef_end_tracing -
+- cef_execute_process - args
+- cef_format_url_for_security_display - origin_url
+- cef_get_exit_code -
+- cef_get_extensions_for_mime_type - extensions mime_type
+- cef_get_mime_type - extension
+- cef_get_path - path
+- cef_get_temp_directory - temp_dir
+- cef_image_create -
+- cef_initialize - args settings
+- cef_is_cert_status_error -
+- cef_is_rtl -
+- cef_label_button_create - delegate
+- cef_launch_process - command_line
+- cef_list_value_create -
+- cef_load_crlsets_file - path
+- cef_media_router_get_global -
+- cef_menu_button_create - delegate
+- cef_menu_model_create - delegate
+- cef_now_from_system_trace_time -
+- cef_panel_create -
+- cef_parse_json - json_string
+- cef_parse_json_buffer -
+- cef_parse_jsonand_return_error - error_msg_out json_string
+- cef_parse_url - parts url
+- cef_post_data_create -
+- cef_post_data_element_create -
+- cef_post_delayed_task - task
+- cef_post_task - task
+- cef_preference_manager_get_chrome_variations_as_strings - strings
+- cef_preference_manager_get_chrome_variations_as_switches - switches
+- cef_preference_manager_get_global -
+- cef_print_settings_create -
+- cef_process_message_create - name
+- cef_quit_message_loop -
+- cef_register_extension - extension_name javascript_code
+- cef_register_scheme_handler_factory - scheme_name
+- cef_remove_cross_origin_whitelist_entry - source_origin target_protocol
+- cef_request_context_cef_create_context_shared - other
+- cef_request_context_create_context - settings
+- cef_request_context_get_global_context -
+- cef_request_create -
+- cef_resolve_url - base_url relative_url resolved_url
+- cef_resource_bundle_get_global -
+- cef_response_create -
+- cef_run_message_loop -
+- cef_scroll_view_create -
+- cef_server_create - address handler
+- cef_set_crash_key_value - key
+- cef_set_nestable_tasks_allowed -
+- cef_shared_process_message_builder_create - name
+- cef_shutdown -
+- cef_stream_reader_create_for_data -
+- cef_stream_reader_create_for_file - fileName
+- cef_stream_reader_create_for_handler - handler
+- cef_stream_writer_create_for_file - fileName
+- cef_stream_writer_create_for_handler - handler
+- cef_task_manager_get -
+- cef_task_runner_get_for_current_thread -
+- cef_task_runner_get_for_thread -
+- cef_textfield_create -
+- cef_thread_create -
+- cef_uridecode - text
+- cef_uriencode - text
+- cef_urlrequest_create - client request
+- cef_v8_backing_store_create -
+- cef_v8_context_get_current_context -
+- cef_v8_context_get_entered_context -
+- cef_v8_context_in_context -
+- cef_v8_stack_trace_get_current -
+- cef_v8_value_create_array -
+- cef_v8_value_create_array_buffer - release_callback
+- cef_v8_value_create_array_buffer_from_backing_store - backing_store
+- cef_v8_value_create_array_buffer_with_copy -
+- cef_v8_value_create_bool -
+- cef_v8_value_create_date -
+- cef_v8_value_create_double -
+- cef_v8_value_create_function - handler name
+- cef_v8_value_create_int -
+- cef_v8_value_create_null -
+- cef_v8_value_create_object -
+- cef_v8_value_create_promise -
+- cef_v8_value_create_string -
+- cef_v8_value_create_uint -
+- cef_v8_value_create_undefined -
+- cef_value_create -
+- cef_waitable_event_create -
+- cef_window_create_top_level -
+- cef_write_json - node
+- cef_xml_reader_create - URI stream
+- cef_zip_directory - dest_file src_dir
+- cef_zip_reader_create - stream
+cef_accessibility_handler_t on_accessibility_location_change pure value
+cef_accessibility_handler_t on_accessibility_tree_change pure value
+cef_app_t get_browser_process_handler -
+cef_app_t get_render_process_handler -
+cef_app_t get_resource_bundle_handler -
+cef_app_t on_before_command_line_processing - command_line
+cef_app_t on_register_custom_schemes - registrar
+cef_audio_handler_t get_audio_parameters - browser params
+cef_audio_handler_t on_audio_stream_error pure browser message
+cef_audio_handler_t on_audio_stream_packet pure browser
+cef_audio_handler_t on_audio_stream_started pure browser params
+cef_audio_handler_t on_audio_stream_stopped pure browser
+cef_auth_callback_t cancel -
+cef_auth_callback_t cont -
+cef_before_download_callback_t cont -
+cef_binary_value_t copy -
+cef_binary_value_t get_data -
+cef_binary_value_t get_raw_data -
+cef_binary_value_t get_size -
+cef_binary_value_t is_equal - that
+cef_binary_value_t is_owned -
+cef_binary_value_t is_same - that
+cef_binary_value_t is_valid -
+cef_box_layout_t clear_flex_for_view - view
+cef_box_layout_t set_flex_for_view - view
+cef_browser_host_t add_dev_tools_message_observer - observer
+cef_browser_host_t add_word_to_dictionary - word
+cef_browser_host_t can_execute_chrome_command -
+cef_browser_host_t can_zoom -
+cef_browser_host_t close_browser -
+cef_browser_host_t close_dev_tools -
+cef_browser_host_t download_image - callback image_url
+cef_browser_host_t drag_source_ended_at -
+cef_browser_host_t drag_source_system_drag_ended -
+cef_browser_host_t drag_target_drag_enter - drag_data event
+cef_browser_host_t drag_target_drag_leave -
+cef_browser_host_t drag_target_drag_over - event
+cef_browser_host_t drag_target_drop - event
+cef_browser_host_t execute_chrome_command -
+cef_browser_host_t execute_dev_tools_method - method
+cef_browser_host_t exit_fullscreen -
+cef_browser_host_t find - searchText
+cef_browser_host_t get_browser -
+cef_browser_host_t get_client -
+cef_browser_host_t get_default_zoom_level -
+cef_browser_host_t get_navigation_entries - visitor
+cef_browser_host_t get_opener_identifier -
+cef_browser_host_t get_opener_window_handle -
+cef_browser_host_t get_request_context -
+cef_browser_host_t get_runtime_style -
+cef_browser_host_t get_visible_navigation_entry -
+cef_browser_host_t get_window_handle -
+cef_browser_host_t get_windowless_frame_rate -
+cef_browser_host_t get_zoom_level -
+cef_browser_host_t has_dev_tools -
+cef_browser_host_t has_view -
+cef_browser_host_t ime_cancel_composition -
+cef_browser_host_t ime_commit_text - replacement_range
+cef_browser_host_t ime_finish_composing_text -
+cef_browser_host_t ime_set_composition - replacement_range selection_range
+cef_browser_host_t invalidate -
+cef_browser_host_t is_audio_muted -
+cef_browser_host_t is_fullscreen -
+cef_browser_host_t is_ready_to_be_closed -
+cef_browser_host_t is_render_process_unresponsive -
+cef_browser_host_t is_window_rendering_disabled -
+cef_browser_host_t notify_move_or_resize_started -
+cef_browser_host_t notify_screen_info_changed -
+cef_browser_host_t print -
+cef_browser_host_t print_to_pdf - path settings
+cef_browser_host_t replace_misspelling - word
+cef_browser_host_t run_file_dialog - callback
+cef_browser_host_t send_capture_lost_event -
+cef_browser_host_t send_dev_tools_message -
+cef_browser_host_t send_external_begin_frame -
+cef_browser_host_t send_key_event - event
+cef_browser_host_t send_mouse_click_event - event
+cef_browser_host_t send_mouse_move_event - event
+cef_browser_host_t send_mouse_wheel_event - event
+cef_browser_host_t send_touch_event - event
+cef_browser_host_t set_accessibility_state -
+cef_browser_host_t set_audio_muted -
+cef_browser_host_t set_auto_resize_enabled - max_size min_size
+cef_browser_host_t set_ax_viewport_collapse -
+cef_browser_host_t set_focus -
+cef_browser_host_t set_windowless_frame_rate -
+cef_browser_host_t set_zoom_level -
+cef_browser_host_t show_dev_tools -
+cef_browser_host_t start_download - url
+cef_browser_host_t stop_finding -
+cef_browser_host_t try_close_browser -
+cef_browser_host_t was_hidden -
+cef_browser_host_t was_resized -
+cef_browser_host_t zoom -
+cef_browser_process_handler_t get_default_client -
+cef_browser_process_handler_t get_default_request_context_handler -
+cef_browser_process_handler_t on_already_running_app_relaunch - command_line
+cef_browser_process_handler_t on_before_child_process_launch - command_line
+cef_browser_process_handler_t on_context_initialized -
+cef_browser_process_handler_t on_register_custom_preferences - registrar
+cef_browser_process_handler_t on_schedule_message_pump_work -
+cef_browser_t can_go_back -
+cef_browser_t can_go_forward -
+cef_browser_t get_focused_frame -
+cef_browser_t get_frame_by_identifier - identifier
+cef_browser_t get_frame_by_name -
+cef_browser_t get_frame_count -
+cef_browser_t get_frame_identifiers - identifiers
+cef_browser_t get_frame_names - names
+cef_browser_t get_host -
+cef_browser_t get_identifier -
+cef_browser_t get_main_frame -
+cef_browser_t go_back -
+cef_browser_t go_forward -
+cef_browser_t has_document -
+cef_browser_t is_loading -
+cef_browser_t is_popup -
+cef_browser_t is_same - that
+cef_browser_t is_valid -
+cef_browser_t reload -
+cef_browser_t reload_ignore_cache -
+cef_browser_t stop_load -
+cef_browser_view_delegate_t allow_move_for_picture_in_picture - browser_view
+cef_browser_view_delegate_t allow_picture_in_picture_without_user_activation - browser_view
+cef_browser_view_delegate_t get_browser_runtime_style -
+cef_browser_view_delegate_t get_chrome_toolbar_type - browser_view
+cef_browser_view_delegate_t get_delegate_for_popup_browser_view - browser_view settings
+cef_browser_view_delegate_t on_browser_created - browser browser_view
+cef_browser_view_delegate_t on_browser_destroyed - browser browser_view
+cef_browser_view_delegate_t on_gesture_command - browser_view
+cef_browser_view_delegate_t on_popup_browser_view_created - browser_view popup_browser_view
+cef_browser_view_delegate_t use_frameless_window_for_picture_in_picture - browser_view
+cef_browser_view_t get_browser -
+cef_browser_view_t get_chrome_toolbar -
+cef_browser_view_t get_runtime_style -
+cef_browser_view_t set_prefer_accelerators -
+cef_button_delegate_t on_button_pressed pure button
+cef_button_delegate_t on_button_state_changed - button
+cef_button_t as_label_button -
+cef_button_t get_state -
+cef_button_t set_accessible_name - name
+cef_button_t set_ink_drop_enabled -
+cef_button_t set_state -
+cef_button_t set_tooltip_text - tooltip_text
+cef_callback_t cancel -
+cef_callback_t cont -
+cef_client_t get_audio_handler -
+cef_client_t get_command_handler -
+cef_client_t get_context_menu_handler -
+cef_client_t get_dialog_handler -
+cef_client_t get_display_handler -
+cef_client_t get_download_handler -
+cef_client_t get_drag_handler -
+cef_client_t get_find_handler -
+cef_client_t get_focus_handler -
+cef_client_t get_frame_handler -
+cef_client_t get_jsdialog_handler -
+cef_client_t get_keyboard_handler -
+cef_client_t get_life_span_handler -
+cef_client_t get_load_handler -
+cef_client_t get_permission_handler -
+cef_client_t get_print_handler -
+cef_client_t get_render_handler -
+cef_client_t get_request_handler -
+cef_client_t on_process_message_received - browser frame message
+cef_command_handler_t is_chrome_app_menu_item_enabled - browser
+cef_command_handler_t is_chrome_app_menu_item_visible - browser
+cef_command_handler_t is_chrome_page_action_icon_visible -
+cef_command_handler_t is_chrome_toolbar_button_visible -
+cef_command_handler_t on_chrome_command - browser
+cef_command_line_t append_argument - argument
+cef_command_line_t append_switch - name
+cef_command_line_t append_switch_with_value - name value
+cef_command_line_t copy -
+cef_command_line_t get_arguments - arguments
+cef_command_line_t get_argv - argv
+cef_command_line_t get_command_line_string -
+cef_command_line_t get_program -
+cef_command_line_t get_switch_value - name
+cef_command_line_t get_switches - switches
+cef_command_line_t has_arguments -
+cef_command_line_t has_switch - name
+cef_command_line_t has_switches -
+cef_command_line_t init_from_argv -
+cef_command_line_t init_from_string - command_line
+cef_command_line_t is_read_only -
+cef_command_line_t is_valid -
+cef_command_line_t prepend_wrapper - wrapper
+cef_command_line_t remove_switch - name
+cef_command_line_t reset -
+cef_command_line_t set_program - program
+cef_completion_callback_t on_complete pure
+cef_component_t get_id -
+cef_component_t get_name -
+cef_component_t get_state -
+cef_component_t get_version -
+cef_component_update_callback_t on_complete pure component_id
+cef_component_updater_t get_component_by_id - component_id
+cef_component_updater_t get_component_count -
+cef_component_updater_t get_components - components
+cef_component_updater_t update - component_id
+cef_context_menu_handler_t on_before_context_menu - browser frame model params
+cef_context_menu_handler_t on_context_menu_command - browser frame params
+cef_context_menu_handler_t on_context_menu_dismissed - browser frame
+cef_context_menu_handler_t on_quick_menu_command - browser frame
+cef_context_menu_handler_t on_quick_menu_dismissed - browser frame
+cef_context_menu_handler_t run_context_menu - browser callback frame model params
+cef_context_menu_handler_t run_quick_menu - browser callback frame location size
+cef_context_menu_params_t get_dictionary_suggestions - suggestions
+cef_context_menu_params_t get_edit_state_flags -
+cef_context_menu_params_t get_frame_charset -
+cef_context_menu_params_t get_frame_url -
+cef_context_menu_params_t get_link_url -
+cef_context_menu_params_t get_media_state_flags -
+cef_context_menu_params_t get_media_type -
+cef_context_menu_params_t get_misspelled_word -
+cef_context_menu_params_t get_page_url -
+cef_context_menu_params_t get_selection_text -
+cef_context_menu_params_t get_source_url -
+cef_context_menu_params_t get_title_text -
+cef_context_menu_params_t get_type_flags -
+cef_context_menu_params_t get_unfiltered_link_url -
+cef_context_menu_params_t get_xcoord -
+cef_context_menu_params_t get_ycoord -
+cef_context_menu_params_t has_image_contents -
+cef_context_menu_params_t is_custom_menu -
+cef_context_menu_params_t is_editable -
+cef_context_menu_params_t is_spell_check_enabled -
+cef_cookie_access_filter_t can_save_cookie - cookie request response
+cef_cookie_access_filter_t can_send_cookie - cookie request
+cef_cookie_manager_t delete_cookies -
+cef_cookie_manager_t flush_store -
+cef_cookie_manager_t set_cookie - cookie url
+cef_cookie_manager_t visit_all_cookies - visitor
+cef_cookie_manager_t visit_url_cookies - url visitor
+cef_cookie_visitor_t visit pure cookie deleteCookie
+cef_delete_cookies_callback_t on_complete pure
+cef_dev_tools_message_observer_t on_dev_tools_agent_attached - browser
+cef_dev_tools_message_observer_t on_dev_tools_agent_detached - browser
+cef_dev_tools_message_observer_t on_dev_tools_event - browser method
+cef_dev_tools_message_observer_t on_dev_tools_message - browser
+cef_dev_tools_message_observer_t on_dev_tools_method_result - browser
+cef_dialog_handler_t on_file_dialog - browser callback
+cef_dictionary_value_t clear -
+cef_dictionary_value_t copy -
+cef_dictionary_value_t get_binary - key
+cef_dictionary_value_t get_bool - key
+cef_dictionary_value_t get_dictionary - key
+cef_dictionary_value_t get_double - key
+cef_dictionary_value_t get_int - key
+cef_dictionary_value_t get_keys - keys
+cef_dictionary_value_t get_list - key
+cef_dictionary_value_t get_size -
+cef_dictionary_value_t get_string - key
+cef_dictionary_value_t get_type - key
+cef_dictionary_value_t get_value - key
+cef_dictionary_value_t has_key - key
+cef_dictionary_value_t is_equal - that
+cef_dictionary_value_t is_owned -
+cef_dictionary_value_t is_read_only -
+cef_dictionary_value_t is_same - that
+cef_dictionary_value_t is_valid -
+cef_dictionary_value_t remove - key
+cef_dictionary_value_t set_binary - key value
+cef_dictionary_value_t set_bool - key
+cef_dictionary_value_t set_dictionary - key value
+cef_dictionary_value_t set_double - key
+cef_dictionary_value_t set_int - key
+cef_dictionary_value_t set_list - key value
+cef_dictionary_value_t set_null - key
+cef_dictionary_value_t set_string - key
+cef_dictionary_value_t set_value - key value
+cef_display_handler_t get_root_window_screen_rect - browser rect
+cef_display_handler_t on_address_change - browser frame url
+cef_display_handler_t on_auto_resize - browser new_size
+cef_display_handler_t on_console_message - browser
+cef_display_handler_t on_contents_bounds_change - browser new_bounds
+cef_display_handler_t on_cursor_change - browser custom_cursor_info
+cef_display_handler_t on_favicon_urlchange - browser
+cef_display_handler_t on_fullscreen_mode_change - browser
+cef_display_handler_t on_loading_progress_change - browser
+cef_display_handler_t on_media_access_change - browser
+cef_display_handler_t on_status_message - browser
+cef_display_handler_t on_title_change - browser
+cef_display_handler_t on_tooltip - browser
+cef_display_t convert_point_from_pixels - point
+cef_display_t convert_point_to_pixels - point
+cef_display_t get_bounds -
+cef_display_t get_device_scale_factor -
+cef_display_t get_id -
+cef_display_t get_rotation -
+cef_display_t get_work_area -
+cef_domdocument_t get_base_url -
+cef_domdocument_t get_body -
+cef_domdocument_t get_complete_url - partialURL
+cef_domdocument_t get_document -
+cef_domdocument_t get_element_by_id - id
+cef_domdocument_t get_focused_node -
+cef_domdocument_t get_head -
+cef_domdocument_t get_selection_as_markup -
+cef_domdocument_t get_selection_as_text -
+cef_domdocument_t get_selection_end_offset -
+cef_domdocument_t get_selection_start_offset -
+cef_domdocument_t get_title -
+cef_domdocument_t get_type -
+cef_domdocument_t has_selection -
+cef_domnode_t get_as_markup -
+cef_domnode_t get_document -
+cef_domnode_t get_element_attribute - attrName
+cef_domnode_t get_element_attributes - attrMap
+cef_domnode_t get_element_bounds -
+cef_domnode_t get_element_inner_text -
+cef_domnode_t get_element_tag_name -
+cef_domnode_t get_first_child -
+cef_domnode_t get_form_control_element_type -
+cef_domnode_t get_last_child -
+cef_domnode_t get_name -
+cef_domnode_t get_next_sibling -
+cef_domnode_t get_parent -
+cef_domnode_t get_previous_sibling -
+cef_domnode_t get_type -
+cef_domnode_t get_value -
+cef_domnode_t has_children -
+cef_domnode_t has_element_attribute - attrName
+cef_domnode_t has_element_attributes -
+cef_domnode_t is_editable -
+cef_domnode_t is_element -
+cef_domnode_t is_form_control_element -
+cef_domnode_t is_same - that
+cef_domnode_t is_text -
+cef_domnode_t set_element_attribute - attrName value
+cef_domnode_t set_value - value
+cef_domvisitor_t visit pure document
+cef_download_handler_t can_download - browser request_method url
+cef_download_handler_t on_before_download - browser callback download_item suggested_name
+cef_download_handler_t on_download_updated - browser callback download_item
+cef_download_image_callback_t on_download_image_finished pure image_url
+cef_download_item_callback_t cancel -
+cef_download_item_callback_t pause -
+cef_download_item_callback_t resume -
+cef_download_item_t get_content_disposition -
+cef_download_item_t get_current_speed -
+cef_download_item_t get_end_time -
+cef_download_item_t get_full_path -
+cef_download_item_t get_id -
+cef_download_item_t get_interrupt_reason -
+cef_download_item_t get_mime_type -
+cef_download_item_t get_original_url -
+cef_download_item_t get_percent_complete -
+cef_download_item_t get_received_bytes -
+cef_download_item_t get_start_time -
+cef_download_item_t get_suggested_file_name -
+cef_download_item_t get_total_bytes -
+cef_download_item_t get_url -
+cef_download_item_t is_canceled -
+cef_download_item_t is_complete -
+cef_download_item_t is_in_progress -
+cef_download_item_t is_interrupted -
+cef_download_item_t is_paused -
+cef_download_item_t is_valid -
+cef_drag_data_t add_file - path
+cef_drag_data_t clear_filenames -
+cef_drag_data_t clone -
+cef_drag_data_t get_file_contents -
+cef_drag_data_t get_file_name -
+cef_drag_data_t get_file_names - names
+cef_drag_data_t get_file_paths - paths
+cef_drag_data_t get_fragment_base_url -
+cef_drag_data_t get_fragment_html -
+cef_drag_data_t get_fragment_text -
+cef_drag_data_t get_image -
+cef_drag_data_t get_image_hotspot -
+cef_drag_data_t get_link_metadata -
+cef_drag_data_t get_link_title -
+cef_drag_data_t get_link_url -
+cef_drag_data_t has_image -
+cef_drag_data_t is_file -
+cef_drag_data_t is_fragment -
+cef_drag_data_t is_link -
+cef_drag_data_t is_read_only -
+cef_drag_data_t reset_file_contents -
+cef_drag_data_t set_fragment_base_url -
+cef_drag_data_t set_fragment_html -
+cef_drag_data_t set_fragment_text -
+cef_drag_data_t set_link_metadata -
+cef_drag_data_t set_link_title -
+cef_drag_data_t set_link_url -
+cef_drag_handler_t on_drag_enter - browser dragData
+cef_drag_handler_t on_draggable_regions_changed - browser frame regions
+cef_end_tracing_callback_t on_end_tracing_complete pure tracing_file
+cef_file_dialog_callback_t cancel -
+cef_file_dialog_callback_t cont -
+cef_find_handler_t on_find_result - browser selectionRect
+cef_focus_handler_t on_got_focus - browser
+cef_focus_handler_t on_set_focus - browser
+cef_focus_handler_t on_take_focus - browser
+cef_frame_handler_t on_frame_attached - browser frame
+cef_frame_handler_t on_frame_created - browser frame
+cef_frame_handler_t on_frame_destroyed - browser frame
+cef_frame_handler_t on_frame_detached - browser frame
+cef_frame_handler_t on_main_frame_changed - browser
+cef_frame_t copy -
+cef_frame_t create_urlrequest - client request
+cef_frame_t cut -
+cef_frame_t del -
+cef_frame_t execute_java_script - code
+cef_frame_t get_browser -
+cef_frame_t get_identifier -
+cef_frame_t get_name -
+cef_frame_t get_parent -
+cef_frame_t get_source - visitor
+cef_frame_t get_text - visitor
+cef_frame_t get_url -
+cef_frame_t get_v8_context -
+cef_frame_t is_focused -
+cef_frame_t is_main -
+cef_frame_t is_valid -
+cef_frame_t load_request - request
+cef_frame_t load_url - url
+cef_frame_t paste -
+cef_frame_t paste_and_match_style -
+cef_frame_t redo -
+cef_frame_t select_all -
+cef_frame_t send_process_message - message
+cef_frame_t undo -
+cef_frame_t view_source -
+cef_frame_t visit_dom - visitor
+cef_image_t add_bitmap -
+cef_image_t add_jpeg -
+cef_image_t add_png -
+cef_image_t get_as_bitmap - pixel_height pixel_width
+cef_image_t get_as_jpeg - pixel_height pixel_width
+cef_image_t get_as_png - pixel_height pixel_width
+cef_image_t get_height -
+cef_image_t get_representation_info - actual_scale_factor pixel_height pixel_width
+cef_image_t get_width -
+cef_image_t has_representation -
+cef_image_t is_empty -
+cef_image_t is_same - that
+cef_image_t remove_representation -
+cef_jsdialog_callback_t cont -
+cef_jsdialog_handler_t on_before_unload_dialog - browser callback
+cef_jsdialog_handler_t on_dialog_closed - browser
+cef_jsdialog_handler_t on_jsdialog - browser callback suppress_message
+cef_jsdialog_handler_t on_reset_dialog_state - browser
+cef_keyboard_handler_t on_key_event - browser event
+cef_keyboard_handler_t on_pre_key_event - browser event is_keyboard_shortcut
+cef_label_button_t as_menu_button -
+cef_label_button_t get_image -
+cef_label_button_t get_text -
+cef_label_button_t set_enabled_text_colors -
+cef_label_button_t set_font_list - font_list
+cef_label_button_t set_horizontal_alignment -
+cef_label_button_t set_image -
+cef_label_button_t set_maximum_size - size
+cef_label_button_t set_minimum_size - size
+cef_label_button_t set_text - text
+cef_label_button_t set_text_color -
+cef_layout_t as_box_layout -
+cef_layout_t as_fill_layout -
+cef_layout_t is_valid -
+cef_life_span_handler_t do_close - browser
+cef_life_span_handler_t on_after_created - browser
+cef_life_span_handler_t on_before_close - browser
+cef_life_span_handler_t on_before_dev_tools_popup - browser client extra_info settings use_default_window windowInfo
+cef_life_span_handler_t on_before_popup - browser client extra_info frame no_javascript_access popupFeatures settings windowInfo
+cef_life_span_handler_t on_before_popup_aborted - browser
+cef_list_value_t clear -
+cef_list_value_t copy -
+cef_list_value_t get_binary -
+cef_list_value_t get_bool -
+cef_list_value_t get_dictionary -
+cef_list_value_t get_double -
+cef_list_value_t get_int -
+cef_list_value_t get_list -
+cef_list_value_t get_size -
+cef_list_value_t get_string -
+cef_list_value_t get_type -
+cef_list_value_t get_value -
+cef_list_value_t is_equal - that
+cef_list_value_t is_owned -
+cef_list_value_t is_read_only -
+cef_list_value_t is_same - that
+cef_list_value_t is_valid -
+cef_list_value_t remove -
+cef_list_value_t set_binary - value
+cef_list_value_t set_bool -
+cef_list_value_t set_dictionary - value
+cef_list_value_t set_double -
+cef_list_value_t set_int -
+cef_list_value_t set_list - value
+cef_list_value_t set_null -
+cef_list_value_t set_size -
+cef_list_value_t set_string -
+cef_list_value_t set_value - value
+cef_load_handler_t on_load_end - browser frame
+cef_load_handler_t on_load_error - browser failedUrl frame
+cef_load_handler_t on_load_start - browser frame
+cef_load_handler_t on_loading_state_change - browser
+cef_media_access_callback_t cancel -
+cef_media_access_callback_t cont -
+cef_media_observer_t on_route_message_received pure route
+cef_media_observer_t on_route_state_changed pure route
+cef_media_observer_t on_routes pure routes
+cef_media_observer_t on_sinks pure sinks
+cef_media_route_create_callback_t on_media_route_create_finished pure
+cef_media_route_t get_id -
+cef_media_route_t get_sink -
+cef_media_route_t get_source -
+cef_media_route_t send_route_message -
+cef_media_route_t terminate -
+cef_media_router_t add_observer - observer
+cef_media_router_t create_route - callback sink source
+cef_media_router_t get_source - urn
+cef_media_router_t notify_current_routes -
+cef_media_router_t notify_current_sinks -
+cef_media_sink_device_info_callback_t on_media_sink_device_info pure device_info
+cef_media_sink_t get_device_info - callback
+cef_media_sink_t get_icon_type -
+cef_media_sink_t get_id -
+cef_media_sink_t get_name -
+cef_media_sink_t is_cast_sink -
+cef_media_sink_t is_compatible_with - source
+cef_media_sink_t is_dial_sink -
+cef_media_source_t get_id -
+cef_media_source_t is_cast_source -
+cef_media_source_t is_dial_source -
+cef_menu_button_delegate_t on_menu_button_pressed pure button_pressed_lock menu_button screen_point
+cef_menu_button_t show_menu - menu_model screen_point
+cef_menu_button_t trigger_menu -
+cef_menu_model_delegate_t execute_command pure menu_model
+cef_menu_model_delegate_t format_label - label menu_model
+cef_menu_model_delegate_t menu_closed - menu_model
+cef_menu_model_delegate_t menu_will_show - menu_model
+cef_menu_model_delegate_t mouse_outside_menu - menu_model screen_point
+cef_menu_model_delegate_t unhandled_close_submenu - menu_model
+cef_menu_model_delegate_t unhandled_open_submenu - menu_model
+cef_menu_model_t add_check_item - label
+cef_menu_model_t add_item - label
+cef_menu_model_t add_radio_item - label
+cef_menu_model_t add_separator -
+cef_menu_model_t add_sub_menu - label
+cef_menu_model_t clear -
+cef_menu_model_t get_accelerator - alt_pressed ctrl_pressed key_code shift_pressed
+cef_menu_model_t get_accelerator_at - alt_pressed ctrl_pressed key_code shift_pressed
+cef_menu_model_t get_color - color
+cef_menu_model_t get_color_at - color
+cef_menu_model_t get_command_id_at -
+cef_menu_model_t get_count -
+cef_menu_model_t get_group_id -
+cef_menu_model_t get_group_id_at -
+cef_menu_model_t get_index_of -
+cef_menu_model_t get_label -
+cef_menu_model_t get_label_at -
+cef_menu_model_t get_sub_menu -
+cef_menu_model_t get_sub_menu_at -
+cef_menu_model_t get_type -
+cef_menu_model_t get_type_at -
+cef_menu_model_t has_accelerator -
+cef_menu_model_t has_accelerator_at -
+cef_menu_model_t insert_check_item_at - label
+cef_menu_model_t insert_item_at - label
+cef_menu_model_t insert_radio_item_at - label
+cef_menu_model_t insert_separator_at -
+cef_menu_model_t insert_sub_menu_at - label
+cef_menu_model_t is_checked -
+cef_menu_model_t is_checked_at -
+cef_menu_model_t is_enabled -
+cef_menu_model_t is_enabled_at -
+cef_menu_model_t is_sub_menu -
+cef_menu_model_t is_visible -
+cef_menu_model_t is_visible_at -
+cef_menu_model_t remove -
+cef_menu_model_t remove_accelerator -
+cef_menu_model_t remove_accelerator_at -
+cef_menu_model_t remove_at -
+cef_menu_model_t set_accelerator -
+cef_menu_model_t set_accelerator_at -
+cef_menu_model_t set_checked -
+cef_menu_model_t set_checked_at -
+cef_menu_model_t set_color -
+cef_menu_model_t set_color_at -
+cef_menu_model_t set_command_id_at -
+cef_menu_model_t set_enabled -
+cef_menu_model_t set_enabled_at -
+cef_menu_model_t set_font_list -
+cef_menu_model_t set_font_list_at -
+cef_menu_model_t set_group_id -
+cef_menu_model_t set_group_id_at -
+cef_menu_model_t set_label - label
+cef_menu_model_t set_label_at - label
+cef_menu_model_t set_visible -
+cef_menu_model_t set_visible_at -
+cef_navigation_entry_t get_completion_time -
+cef_navigation_entry_t get_display_url -
+cef_navigation_entry_t get_http_status_code -
+cef_navigation_entry_t get_original_url -
+cef_navigation_entry_t get_sslstatus -
+cef_navigation_entry_t get_title -
+cef_navigation_entry_t get_transition_type -
+cef_navigation_entry_t get_url -
+cef_navigation_entry_t has_post_data -
+cef_navigation_entry_t is_valid -
+cef_navigation_entry_visitor_t visit pure entry
+cef_overlay_controller_t destroy -
+cef_overlay_controller_t get_bounds -
+cef_overlay_controller_t get_bounds_in_screen -
+cef_overlay_controller_t get_contents_view -
+cef_overlay_controller_t get_docking_mode -
+cef_overlay_controller_t get_insets -
+cef_overlay_controller_t get_position -
+cef_overlay_controller_t get_size -
+cef_overlay_controller_t get_window -
+cef_overlay_controller_t is_drawn -
+cef_overlay_controller_t is_same - that
+cef_overlay_controller_t is_valid -
+cef_overlay_controller_t is_visible -
+cef_overlay_controller_t set_bounds - bounds
+cef_overlay_controller_t set_insets - insets
+cef_overlay_controller_t set_position - position
+cef_overlay_controller_t set_size - size
+cef_overlay_controller_t set_visible -
+cef_overlay_controller_t size_to_preferred_size -
+cef_panel_t add_child_view - view
+cef_panel_t add_child_view_at - view
+cef_panel_t as_window -
+cef_panel_t get_child_view_at -
+cef_panel_t get_child_view_count -
+cef_panel_t get_layout -
+cef_panel_t layout -
+cef_panel_t remove_all_child_views -
+cef_panel_t remove_child_view - view
+cef_panel_t reorder_child_view - view
+cef_panel_t set_to_box_layout - settings
+cef_panel_t set_to_fill_layout -
+cef_pdf_print_callback_t on_pdf_print_finished pure
+cef_permission_handler_t on_dismiss_permission_prompt - browser
+cef_permission_handler_t on_request_media_access_permission - browser callback frame requesting_origin
+cef_permission_handler_t on_show_permission_prompt - browser callback requesting_origin
+cef_permission_prompt_callback_t cont -
+cef_post_data_element_t get_bytes -
+cef_post_data_element_t get_bytes_count -
+cef_post_data_element_t get_file -
+cef_post_data_element_t get_type -
+cef_post_data_element_t is_read_only -
+cef_post_data_element_t set_to_bytes -
+cef_post_data_element_t set_to_empty -
+cef_post_data_element_t set_to_file - fileName
+cef_post_data_t add_element - element
+cef_post_data_t get_element_count -
+cef_post_data_t get_elements - elements
+cef_post_data_t has_excluded_elements -
+cef_post_data_t is_read_only -
+cef_post_data_t remove_element - element
+cef_post_data_t remove_elements -
+cef_preference_manager_t add_preference_observer - observer
+cef_preference_manager_t can_set_preference - name
+cef_preference_manager_t get_all_preferences -
+cef_preference_manager_t get_preference - name
+cef_preference_manager_t has_preference - name
+cef_preference_manager_t set_preference - error name
+cef_preference_observer_t on_preference_changed pure name
+cef_preference_registrar_t add_preference - default_value name
+cef_print_dialog_callback_t cancel -
+cef_print_dialog_callback_t cont - settings
+cef_print_handler_t get_pdf_paper_size - browser
+cef_print_handler_t on_print_dialog pure browser callback
+cef_print_handler_t on_print_job pure browser callback document_name pdf_file_path
+cef_print_handler_t on_print_reset pure browser
+cef_print_handler_t on_print_settings pure browser settings
+cef_print_handler_t on_print_start pure browser
+cef_print_job_callback_t cont -
+cef_print_settings_t get_color_model -
+cef_print_settings_t get_copies -
+cef_print_settings_t get_device_name -
+cef_print_settings_t get_dpi -
+cef_print_settings_t get_duplex_mode -
+cef_print_settings_t get_page_ranges - ranges
+cef_print_settings_t get_page_ranges_count -
+cef_print_settings_t is_landscape -
+cef_print_settings_t is_read_only -
+cef_print_settings_t is_selection_only -
+cef_print_settings_t is_valid -
+cef_print_settings_t set_collate -
+cef_print_settings_t set_color_model -
+cef_print_settings_t set_copies -
+cef_print_settings_t set_device_name -
+cef_print_settings_t set_dpi -
+cef_print_settings_t set_duplex_mode -
+cef_print_settings_t set_orientation -
+cef_print_settings_t set_page_ranges - ranges
+cef_print_settings_t set_printer_printable_area - physical_size_device_units printable_area_device_units
+cef_print_settings_t set_selection_only -
+cef_print_settings_t will_collate -
+cef_process_message_t copy -
+cef_process_message_t get_argument_list -
+cef_process_message_t get_name -
+cef_process_message_t get_shared_memory_region -
+cef_process_message_t is_read_only -
+cef_process_message_t is_valid -
+cef_read_handler_t eof pure
+cef_read_handler_t may_block pure
+cef_read_handler_t read pure
+cef_read_handler_t seek pure
+cef_read_handler_t tell pure
+cef_render_handler_t get_accessibility_handler -
+cef_render_handler_t get_root_screen_rect - browser rect
+cef_render_handler_t get_screen_info - browser screen_info
+cef_render_handler_t get_screen_point - browser screenX screenY
+cef_render_handler_t get_touch_handle_size - browser size
+cef_render_handler_t get_view_rect pure browser rect
+cef_render_handler_t on_accelerated_paint - browser dirtyRects info
+cef_render_handler_t on_ime_composition_range_changed - browser character_bounds selected_range
+cef_render_handler_t on_paint pure browser dirtyRects
+cef_render_handler_t on_popup_show - browser
+cef_render_handler_t on_popup_size - browser rect
+cef_render_handler_t on_scroll_offset_changed - browser
+cef_render_handler_t on_text_selection_changed - browser
+cef_render_handler_t on_touch_handle_state_changed - browser state
+cef_render_handler_t on_virtual_keyboard_requested - browser
+cef_render_handler_t start_dragging - browser drag_data
+cef_render_handler_t update_drag_cursor - browser
+cef_render_process_handler_t get_load_handler -
+cef_render_process_handler_t on_browser_created - browser
+cef_render_process_handler_t on_browser_destroyed - browser
+cef_render_process_handler_t on_context_created - browser context frame
+cef_render_process_handler_t on_context_released - browser context frame
+cef_render_process_handler_t on_focused_node_changed - browser
+cef_render_process_handler_t on_process_message_received - browser frame message
+cef_render_process_handler_t on_uncaught_exception - browser context exception frame stackTrace
+cef_render_process_handler_t on_web_kit_initialized -
+cef_request_context_handler_t get_resource_request_handler - disable_default_handling request
+cef_request_context_handler_t on_request_context_initialized - request_context
+cef_request_context_t add_setting_observer - observer
+cef_request_context_t clear_certificate_exceptions -
+cef_request_context_t clear_http_auth_credentials -
+cef_request_context_t clear_http_cache -
+cef_request_context_t clear_scheme_handler_factories -
+cef_request_context_t close_all_connections -
+cef_request_context_t get_cache_path -
+cef_request_context_t get_chrome_color_scheme_color -
+cef_request_context_t get_chrome_color_scheme_mode -
+cef_request_context_t get_chrome_color_scheme_variant -
+cef_request_context_t get_content_setting -
+cef_request_context_t get_cookie_manager -
+cef_request_context_t get_handler -
+cef_request_context_t get_media_router -
+cef_request_context_t get_website_setting -
+cef_request_context_t is_global -
+cef_request_context_t is_same - other
+cef_request_context_t is_sharing_with - other
+cef_request_context_t register_scheme_handler_factory - scheme_name
+cef_request_context_t resolve_host - callback origin
+cef_request_context_t set_chrome_color_scheme -
+cef_request_context_t set_content_setting -
+cef_request_context_t set_website_setting -
+cef_request_handler_t get_auth_credentials - browser callback host origin_url
+cef_request_handler_t get_resource_request_handler - browser disable_default_handling frame request
+cef_request_handler_t on_before_browse - browser frame request
+cef_request_handler_t on_certificate_error - browser callback request_url ssl_info
+cef_request_handler_t on_document_available_in_main_frame - browser
+cef_request_handler_t on_open_urlfrom_tab - browser frame target_url
+cef_request_handler_t on_render_process_responsive - browser
+cef_request_handler_t on_render_process_terminated - browser error_string
+cef_request_handler_t on_render_process_unresponsive - browser callback
+cef_request_handler_t on_render_view_ready - browser
+cef_request_handler_t on_select_client_certificate - browser callback certificates host
+cef_request_t get_first_party_for_cookies -
+cef_request_t get_flags -
+cef_request_t get_header_by_name - name
+cef_request_t get_header_map - headerMap
+cef_request_t get_identifier -
+cef_request_t get_method -
+cef_request_t get_post_data -
+cef_request_t get_referrer_policy -
+cef_request_t get_referrer_url -
+cef_request_t get_resource_type -
+cef_request_t get_transition_type -
+cef_request_t get_url -
+cef_request_t is_read_only -
+cef_request_t set - headerMap method url
+cef_request_t set_first_party_for_cookies -
+cef_request_t set_flags -
+cef_request_t set_header_by_name - name
+cef_request_t set_header_map - headerMap
+cef_request_t set_method - method
+cef_request_t set_post_data - postData
+cef_request_t set_referrer -
+cef_request_t set_url - url
+cef_resolve_callback_t on_resolve_completed pure
+cef_resource_bundle_handler_t get_data_resource pure data data_size
+cef_resource_bundle_handler_t get_data_resource_for_scale pure data data_size
+cef_resource_bundle_handler_t get_localized_string pure string
+cef_resource_bundle_t get_data_resource -
+cef_resource_bundle_t get_data_resource_for_scale -
+cef_resource_bundle_t get_localized_string -
+cef_resource_handler_t cancel pure
+cef_resource_handler_t get_response_headers pure redirectUrl response response_length
+cef_resource_handler_t open - callback handle_request request
+cef_resource_handler_t process_request - callback request
+cef_resource_handler_t read - bytes_read callback
+cef_resource_handler_t read_response - bytes_read callback
+cef_resource_handler_t skip - bytes_skipped callback
+cef_resource_read_callback_t cont -
+cef_resource_request_handler_t get_cookie_access_filter - request
+cef_resource_request_handler_t get_resource_handler - request
+cef_resource_request_handler_t get_resource_response_filter - request response
+cef_resource_request_handler_t on_before_resource_load - callback request
+cef_resource_request_handler_t on_protocol_execution - allow_os_execution request
+cef_resource_request_handler_t on_resource_load_complete - request response
+cef_resource_request_handler_t on_resource_redirect - new_url request response
+cef_resource_request_handler_t on_resource_response - request response
+cef_resource_skip_callback_t cont -
+cef_response_filter_t filter pure data_in_read data_out_written
+cef_response_filter_t init_filter pure
+cef_response_t get_charset -
+cef_response_t get_error -
+cef_response_t get_header_by_name - name
+cef_response_t get_header_map - headerMap
+cef_response_t get_mime_type -
+cef_response_t get_status -
+cef_response_t get_status_text -
+cef_response_t get_url -
+cef_response_t is_read_only -
+cef_response_t set_charset -
+cef_response_t set_error -
+cef_response_t set_header_by_name - name
+cef_response_t set_header_map - headerMap
+cef_response_t set_mime_type -
+cef_response_t set_status -
+cef_response_t set_status_text -
+cef_response_t set_url -
+cef_run_context_menu_callback_t cancel -
+cef_run_context_menu_callback_t cont -
+cef_run_file_dialog_callback_t on_file_dialog_dismissed pure
+cef_run_quick_menu_callback_t cancel -
+cef_run_quick_menu_callback_t cont -
+cef_scheme_handler_factory_t create pure request scheme_name
+cef_scheme_registrar_t add_custom_scheme - scheme_name
+cef_scroll_view_t get_content_view -
+cef_scroll_view_t get_horizontal_scrollbar_height -
+cef_scroll_view_t get_vertical_scrollbar_width -
+cef_scroll_view_t get_visible_content_rect -
+cef_scroll_view_t has_horizontal_scrollbar -
+cef_scroll_view_t has_vertical_scrollbar -
+cef_scroll_view_t set_content_view - view
+cef_select_client_certificate_callback_t select -
+cef_server_handler_t on_client_connected pure server
+cef_server_handler_t on_client_disconnected pure server
+cef_server_handler_t on_http_request pure client_address request server
+cef_server_handler_t on_server_created pure server
+cef_server_handler_t on_server_destroyed pure server
+cef_server_handler_t on_web_socket_connected pure server
+cef_server_handler_t on_web_socket_message pure server
+cef_server_handler_t on_web_socket_request pure callback client_address request server
+cef_server_t close_connection -
+cef_server_t get_address -
+cef_server_t get_task_runner -
+cef_server_t has_connection -
+cef_server_t is_running -
+cef_server_t is_valid_connection -
+cef_server_t send_http200_response - content_type
+cef_server_t send_http404_response -
+cef_server_t send_http500_response - error_message
+cef_server_t send_http_response - content_type
+cef_server_t send_raw_data -
+cef_server_t send_web_socket_message -
+cef_server_t shutdown -
+cef_set_cookie_callback_t on_complete pure
+cef_setting_observer_t on_setting_changed pure
+cef_shared_memory_region_t is_valid -
+cef_shared_memory_region_t memory -
+cef_shared_memory_region_t size -
+cef_shared_process_message_builder_t build -
+cef_shared_process_message_builder_t is_valid -
+cef_shared_process_message_builder_t memory -
+cef_shared_process_message_builder_t size -
+cef_sslinfo_t get_cert_status -
+cef_sslinfo_t get_x509_certificate -
+cef_sslstatus_t get_cert_status -
+cef_sslstatus_t get_content_status -
+cef_sslstatus_t get_sslversion -
+cef_sslstatus_t get_x509_certificate -
+cef_sslstatus_t is_secure_connection -
+cef_stream_reader_t eof -
+cef_stream_reader_t may_block -
+cef_stream_reader_t read -
+cef_stream_reader_t seek -
+cef_stream_reader_t tell -
+cef_stream_writer_t flush -
+cef_stream_writer_t may_block -
+cef_stream_writer_t seek -
+cef_stream_writer_t tell -
+cef_stream_writer_t write -
+cef_string_visitor_t visit pure
+cef_task_manager_t get_task_id_for_browser_id -
+cef_task_manager_t get_task_ids_list - task_ids
+cef_task_manager_t get_task_info - info
+cef_task_manager_t get_tasks_count -
+cef_task_manager_t kill_task -
+cef_task_runner_t belongs_to_current_thread -
+cef_task_runner_t belongs_to_thread -
+cef_task_runner_t is_same - that
+cef_task_runner_t post_delayed_task - task
+cef_task_runner_t post_task - task
+cef_task_t execute pure
+cef_textfield_delegate_t on_after_user_action - textfield
+cef_textfield_delegate_t on_key_event - event textfield
+cef_textfield_t append_text - text
+cef_textfield_t apply_text_color - range
+cef_textfield_t apply_text_style - range
+cef_textfield_t clear_edit_history -
+cef_textfield_t clear_selection -
+cef_textfield_t execute_command -
+cef_textfield_t get_cursor_position -
+cef_textfield_t get_placeholder_text -
+cef_textfield_t get_selected_range -
+cef_textfield_t get_selected_text -
+cef_textfield_t get_selection_background_color -
+cef_textfield_t get_selection_text_color -
+cef_textfield_t get_text -
+cef_textfield_t get_text_color -
+cef_textfield_t has_selection -
+cef_textfield_t insert_or_replace_text - text
+cef_textfield_t is_command_enabled -
+cef_textfield_t is_password_input -
+cef_textfield_t is_read_only -
+cef_textfield_t select_all -
+cef_textfield_t select_range - range
+cef_textfield_t set_accessible_name - name
+cef_textfield_t set_font_list - font_list
+cef_textfield_t set_password_input -
+cef_textfield_t set_placeholder_text - text
+cef_textfield_t set_placeholder_text_color -
+cef_textfield_t set_read_only -
+cef_textfield_t set_selection_background_color -
+cef_textfield_t set_selection_text_color -
+cef_textfield_t set_text - text
+cef_textfield_t set_text_color -
+cef_thread_t get_platform_thread_id -
+cef_thread_t get_task_runner -
+cef_thread_t is_running -
+cef_thread_t stop -
+cef_unresponsive_process_callback_t terminate -
+cef_unresponsive_process_callback_t wait -
+cef_urlrequest_client_t get_auth_credentials pure callback host scheme
+cef_urlrequest_client_t on_download_data pure request
+cef_urlrequest_client_t on_download_progress pure request
+cef_urlrequest_client_t on_request_complete pure request
+cef_urlrequest_client_t on_upload_progress pure request
+cef_urlrequest_t cancel -
+cef_urlrequest_t get_client -
+cef_urlrequest_t get_request -
+cef_urlrequest_t get_request_error -
+cef_urlrequest_t get_request_status -
+cef_urlrequest_t get_response -
+cef_urlrequest_t response_was_cached -
+cef_v8_accessor_t get pure exception name object retval
+cef_v8_accessor_t set pure exception name object value
+cef_v8_array_buffer_release_callback_t release_buffer pure
+cef_v8_backing_store_t byte_length -
+cef_v8_backing_store_t data -
+cef_v8_backing_store_t is_valid -
+cef_v8_context_t enter -
+cef_v8_context_t eval - code exception retval
+cef_v8_context_t exit -
+cef_v8_context_t get_browser -
+cef_v8_context_t get_frame -
+cef_v8_context_t get_global -
+cef_v8_context_t get_task_runner -
+cef_v8_context_t is_same - that
+cef_v8_context_t is_valid -
+cef_v8_exception_t get_end_column -
+cef_v8_exception_t get_end_position -
+cef_v8_exception_t get_line_number -
+cef_v8_exception_t get_message -
+cef_v8_exception_t get_script_resource_name -
+cef_v8_exception_t get_source_line -
+cef_v8_exception_t get_start_column -
+cef_v8_exception_t get_start_position -
+cef_v8_handler_t execute pure arguments exception name object retval
+cef_v8_interceptor_t get_byindex pure exception object retval
+cef_v8_interceptor_t get_byname pure exception name object retval
+cef_v8_interceptor_t set_byindex pure exception object value
+cef_v8_interceptor_t set_byname pure exception name object value
+cef_v8_stack_frame_t get_column -
+cef_v8_stack_frame_t get_function_name -
+cef_v8_stack_frame_t get_line_number -
+cef_v8_stack_frame_t get_script_name -
+cef_v8_stack_frame_t get_script_name_or_source_url -
+cef_v8_stack_frame_t is_constructor -
+cef_v8_stack_frame_t is_eval -
+cef_v8_stack_frame_t is_valid -
+cef_v8_stack_trace_t get_frame -
+cef_v8_stack_trace_t get_frame_count -
+cef_v8_stack_trace_t is_valid -
+cef_v8_value_t adjust_externally_allocated_memory -
+cef_v8_value_t clear_exception -
+cef_v8_value_t delete_value_byindex -
+cef_v8_value_t delete_value_bykey -
+cef_v8_value_t execute_function - arguments
+cef_v8_value_t execute_function_with_context - arguments context
+cef_v8_value_t get_array_buffer_byte_length -
+cef_v8_value_t get_array_buffer_data -
+cef_v8_value_t get_array_buffer_release_callback -
+cef_v8_value_t get_array_length -
+cef_v8_value_t get_bool_value -
+cef_v8_value_t get_date_value -
+cef_v8_value_t get_double_value -
+cef_v8_value_t get_exception -
+cef_v8_value_t get_externally_allocated_memory -
+cef_v8_value_t get_function_handler -
+cef_v8_value_t get_function_name -
+cef_v8_value_t get_int_value -
+cef_v8_value_t get_keys - keys
+cef_v8_value_t get_string_value -
+cef_v8_value_t get_uint_value -
+cef_v8_value_t get_user_data -
+cef_v8_value_t get_value_byindex -
+cef_v8_value_t get_value_bykey -
+cef_v8_value_t has_exception -
+cef_v8_value_t has_value_byindex -
+cef_v8_value_t has_value_bykey -
+cef_v8_value_t is_array -
+cef_v8_value_t is_array_buffer -
+cef_v8_value_t is_bool -
+cef_v8_value_t is_date -
+cef_v8_value_t is_double -
+cef_v8_value_t is_function -
+cef_v8_value_t is_int -
+cef_v8_value_t is_null -
+cef_v8_value_t is_object -
+cef_v8_value_t is_promise -
+cef_v8_value_t is_same - that
+cef_v8_value_t is_string -
+cef_v8_value_t is_uint -
+cef_v8_value_t is_undefined -
+cef_v8_value_t is_user_created -
+cef_v8_value_t is_valid -
+cef_v8_value_t neuter_array_buffer -
+cef_v8_value_t reject_promise - errorMsg
+cef_v8_value_t resolve_promise -
+cef_v8_value_t set_rethrow_exceptions -
+cef_v8_value_t set_user_data -
+cef_v8_value_t set_value_byaccessor -
+cef_v8_value_t set_value_byindex - value
+cef_v8_value_t set_value_bykey - value
+cef_v8_value_t will_rethrow_exceptions -
+cef_value_t copy -
+cef_value_t get_binary -
+cef_value_t get_bool -
+cef_value_t get_dictionary -
+cef_value_t get_double -
+cef_value_t get_int -
+cef_value_t get_list -
+cef_value_t get_string -
+cef_value_t get_type -
+cef_value_t is_equal - that
+cef_value_t is_owned -
+cef_value_t is_read_only -
+cef_value_t is_same - that
+cef_value_t is_valid -
+cef_value_t set_binary - value
+cef_value_t set_bool -
+cef_value_t set_dictionary - value
+cef_value_t set_double -
+cef_value_t set_int -
+cef_value_t set_list - value
+cef_value_t set_null -
+cef_value_t set_string -
+cef_view_delegate_t get_height_for_width - view
+cef_view_delegate_t get_maximum_size - view
+cef_view_delegate_t get_minimum_size - view
+cef_view_delegate_t get_preferred_size - view
+cef_view_delegate_t on_blur - view
+cef_view_delegate_t on_child_view_changed - child view
+cef_view_delegate_t on_focus - view
+cef_view_delegate_t on_layout_changed - new_bounds view
+cef_view_delegate_t on_parent_view_changed - parent view
+cef_view_delegate_t on_theme_changed - view
+cef_view_delegate_t on_window_changed - view
+cef_view_t as_browser_view -
+cef_view_t as_button -
+cef_view_t as_panel -
+cef_view_t as_scroll_view -
+cef_view_t as_textfield -
+cef_view_t convert_point_from_screen - point
+cef_view_t convert_point_from_view - point view
+cef_view_t convert_point_from_window - point
+cef_view_t convert_point_to_screen - point
+cef_view_t convert_point_to_view - point view
+cef_view_t convert_point_to_window - point
+cef_view_t get_background_color -
+cef_view_t get_bounds -
+cef_view_t get_bounds_in_screen -
+cef_view_t get_delegate -
+cef_view_t get_group_id -
+cef_view_t get_height_for_width -
+cef_view_t get_id -
+cef_view_t get_insets -
+cef_view_t get_maximum_size -
+cef_view_t get_minimum_size -
+cef_view_t get_parent_view -
+cef_view_t get_position -
+cef_view_t get_preferred_size -
+cef_view_t get_size -
+cef_view_t get_theme_color -
+cef_view_t get_type_string -
+cef_view_t get_view_for_id -
+cef_view_t get_window -
+cef_view_t has_focus -
+cef_view_t invalidate_layout -
+cef_view_t is_accessibility_focusable -
+cef_view_t is_attached -
+cef_view_t is_drawn -
+cef_view_t is_enabled -
+cef_view_t is_focusable -
+cef_view_t is_same - that
+cef_view_t is_valid -
+cef_view_t is_visible -
+cef_view_t request_focus -
+cef_view_t set_background_color -
+cef_view_t set_bounds - bounds
+cef_view_t set_enabled -
+cef_view_t set_focusable -
+cef_view_t set_group_id -
+cef_view_t set_id -
+cef_view_t set_insets - insets
+cef_view_t set_position - position
+cef_view_t set_size - size
+cef_view_t set_visible -
+cef_view_t size_to_preferred_size -
+cef_view_t to_string -
+cef_waitable_event_t is_signaled -
+cef_waitable_event_t reset -
+cef_waitable_event_t signal -
+cef_waitable_event_t timed_wait -
+cef_waitable_event_t wait -
+cef_window_delegate_t accepts_first_mouse - window
+cef_window_delegate_t can_close - window
+cef_window_delegate_t can_maximize - window
+cef_window_delegate_t can_minimize - window
+cef_window_delegate_t can_resize - window
+cef_window_delegate_t get_initial_bounds - window
+cef_window_delegate_t get_initial_show_state - window
+cef_window_delegate_t get_linux_window_properties - properties window
+cef_window_delegate_t get_parent_window - can_activate_menu is_menu window
+cef_window_delegate_t get_titlebar_height - titlebar_height window
+cef_window_delegate_t get_window_runtime_style -
+cef_window_delegate_t is_frameless - window
+cef_window_delegate_t is_window_modal_dialog - window
+cef_window_delegate_t on_accelerator - window
+cef_window_delegate_t on_key_event - event window
+cef_window_delegate_t on_theme_colors_changed - window
+cef_window_delegate_t on_window_activation_changed - window
+cef_window_delegate_t on_window_bounds_changed - new_bounds window
+cef_window_delegate_t on_window_closing - window
+cef_window_delegate_t on_window_created - window
+cef_window_delegate_t on_window_destroyed - window
+cef_window_delegate_t on_window_fullscreen_transition - window
+cef_window_delegate_t with_standard_window_buttons - window
+cef_window_t activate -
+cef_window_t add_overlay_view - view
+cef_window_t bring_to_top -
+cef_window_t cancel_menu -
+cef_window_t center_window - size
+cef_window_t close -
+cef_window_t deactivate -
+cef_window_t get_client_area_bounds_in_screen -
+cef_window_t get_display -
+cef_window_t get_focused_view -
+cef_window_t get_runtime_style -
+cef_window_t get_title -
+cef_window_t get_window_app_icon -
+cef_window_t get_window_handle -
+cef_window_t get_window_icon -
+cef_window_t hide -
+cef_window_t is_active -
+cef_window_t is_always_on_top -
+cef_window_t is_closed -
+cef_window_t is_fullscreen -
+cef_window_t is_maximized -
+cef_window_t is_minimized -
+cef_window_t maximize -
+cef_window_t minimize -
+cef_window_t remove_accelerator -
+cef_window_t remove_all_accelerators -
+cef_window_t restore -
+cef_window_t send_key_press -
+cef_window_t send_mouse_events -
+cef_window_t send_mouse_move -
+cef_window_t set_accelerator -
+cef_window_t set_always_on_top -
+cef_window_t set_draggable_regions -
+cef_window_t set_fullscreen -
+cef_window_t set_theme_color -
+cef_window_t set_title -
+cef_window_t set_window_app_icon - image
+cef_window_t set_window_icon - image
+cef_window_t show -
+cef_window_t show_as_browser_modal_dialog - browser_view
+cef_window_t show_menu - menu_model screen_point
+cef_window_t theme_changed -
+cef_write_handler_t flush pure
+cef_write_handler_t may_block pure
+cef_write_handler_t seek pure
+cef_write_handler_t tell pure
+cef_write_handler_t write pure
+cef_x509_cert_principal_t get_common_name -
+cef_x509_cert_principal_t get_country_name -
+cef_x509_cert_principal_t get_display_name -
+cef_x509_cert_principal_t get_locality_name -
+cef_x509_cert_principal_t get_organization_names - names
+cef_x509_cert_principal_t get_organization_unit_names - names
+cef_x509_cert_principal_t get_state_or_province_name -
+cef_x509_certificate_t get_derencoded -
+cef_x509_certificate_t get_derencoded_issuer_chain - chain
+cef_x509_certificate_t get_issuer -
+cef_x509_certificate_t get_issuer_chain_size -
+cef_x509_certificate_t get_pemencoded -
+cef_x509_certificate_t get_pemencoded_issuer_chain - chain
+cef_x509_certificate_t get_serial_number -
+cef_x509_certificate_t get_subject -
+cef_x509_certificate_t get_valid_expiry -
+cef_x509_certificate_t get_valid_start -
+cef_xml_reader_t close -
+cef_xml_reader_t get_attribute_byindex -
+cef_xml_reader_t get_attribute_bylname - localName namespaceURI
+cef_xml_reader_t get_attribute_byqname - qualifiedName
+cef_xml_reader_t get_attribute_count -
+cef_xml_reader_t get_base_uri -
+cef_xml_reader_t get_depth -
+cef_xml_reader_t get_error -
+cef_xml_reader_t get_inner_xml -
+cef_xml_reader_t get_line_number -
+cef_xml_reader_t get_local_name -
+cef_xml_reader_t get_namespace_uri -
+cef_xml_reader_t get_outer_xml -
+cef_xml_reader_t get_prefix -
+cef_xml_reader_t get_qualified_name -
+cef_xml_reader_t get_type -
+cef_xml_reader_t get_value -
+cef_xml_reader_t get_xml_lang -
+cef_xml_reader_t has_attributes -
+cef_xml_reader_t has_error -
+cef_xml_reader_t has_value -
+cef_xml_reader_t is_empty_element -
+cef_xml_reader_t move_to_attribute_byindex -
+cef_xml_reader_t move_to_attribute_bylname - localName namespaceURI
+cef_xml_reader_t move_to_attribute_byqname - qualifiedName
+cef_xml_reader_t move_to_carrying_element -
+cef_xml_reader_t move_to_first_attribute -
+cef_xml_reader_t move_to_next_attribute -
+cef_xml_reader_t move_to_next_node -
+cef_zip_reader_t close -
+cef_zip_reader_t close_file -
+cef_zip_reader_t eof -
+cef_zip_reader_t get_file_last_modified -
+cef_zip_reader_t get_file_name -
+cef_zip_reader_t get_file_size -
+cef_zip_reader_t move_to_file - fileName
+cef_zip_reader_t move_to_first_file -
+cef_zip_reader_t move_to_next_file -
+cef_zip_reader_t open_file -
+cef_zip_reader_t read_file -
+cef_zip_reader_t tell -

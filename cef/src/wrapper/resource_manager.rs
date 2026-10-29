@@ -115,7 +115,7 @@ impl ResourceManagerRequest {
 
         let io_thread_id = ThreadId::IO;
         let mut task = ContinueRequest::new(Arc::new(Mutex::new(Some(state))), handler);
-        post_task(io_thread_id, Some(&mut task));
+        post_task(io_thread_id, &mut task);
     }
 
     pub fn stop_request(&mut self) {
@@ -128,7 +128,7 @@ impl ResourceManagerRequest {
 
         let io_thread_id = ThreadId::IO;
         let mut task = StopRequest::new(Arc::new(Mutex::new(Some(state))));
-        post_task(io_thread_id, Some(&mut task));
+        post_task(io_thread_id, &mut task);
     }
 
     /// Detaches and returns `self.state` if the provider indicates that it will not handle the
@@ -333,7 +333,7 @@ impl ResourceManagerProvider for DirectoryProvider {
         };
 
         let mut task = OpenFileRequest::new(file_path, request);
-        post_task(ThreadId::FILE_USER_BLOCKING, Some(&mut task));
+        post_task(ThreadId::FILE_USER_BLOCKING, &mut task);
 
         true
     }
@@ -355,14 +355,14 @@ wrap_task! {
 
             let file_path = self.file_path.display().to_string();
             let Some(stream) =
-                stream_reader_create_for_file(Some(&CefString::from(file_path.as_str())))
+                stream_reader_create_for_file(&CefString::from(file_path.as_str()))
             else {
                 return;
             };
 
             // Continue loading on the IO thread.
             let mut task = ContinueFileRequest::new(stream, self.request.clone());
-            post_task(ThreadId::IO, Some(&mut task));
+            post_task(ThreadId::IO, &mut task);
         }
     }
 }
@@ -499,7 +499,7 @@ impl ResourceManagerProvider for ArchiveProvider {
 
             // Load the archive file on the FILE thread.
             let mut task = OpenZipRequest::new(state.weak_self.clone());
-            post_task(ThreadId::FILE_USER_BLOCKING, Some(&mut task));
+            post_task(ThreadId::FILE_USER_BLOCKING, &mut task);
             return true;
         }
 
@@ -536,7 +536,7 @@ wrap_task! {
 
             let file_path = state.archive_path.display().to_string();
             let Some(mut stream) =
-                stream_reader_create_for_file(Some(&CefString::from(file_path.as_str())))
+                stream_reader_create_for_file(&CefString::from(file_path.as_str()))
             else {
                 return;
             };
@@ -549,7 +549,7 @@ wrap_task! {
 
             // Continue loading on the IO thread.
             let mut task = ContinueZipRequest::new(state.weak_self.clone());
-            post_task(ThreadId::IO, Some(&mut task));
+            post_task(ThreadId::IO, &mut task);
         }
     }
 }
@@ -806,7 +806,7 @@ impl ResourceManager {
                 order,
                 identifier.to_string(),
             );
-            post_task(io_thread_id, Some(&mut task));
+            post_task(io_thread_id, &mut task);
             return;
         }
 
@@ -834,7 +834,7 @@ impl ResourceManager {
         let io_thread_id = ThreadId::IO;
         if currently_on(io_thread_id) == 0 {
             let mut task = RemoveProviders::new(self.weak_self.clone(), identifier.to_string());
-            post_task(io_thread_id, Some(&mut task));
+            post_task(io_thread_id, &mut task);
             return;
         }
 
@@ -858,7 +858,7 @@ impl ResourceManager {
         let io_thread_id = ThreadId::IO;
         if currently_on(io_thread_id) == 0 {
             let mut task = RemoveAllProviders::new(self.weak_self.clone());
-            post_task(io_thread_id, Some(&mut task));
+            post_task(io_thread_id, &mut task);
             return;
         }
 
@@ -879,7 +879,7 @@ impl ResourceManager {
         if currently_on(io_thread_id) == 0 {
             let mut task =
                 SetUrlFilter::new(self.weak_self.clone(), Arc::new(Mutex::new(Some(filter))));
-            post_task(io_thread_id, Some(&mut task));
+            post_task(io_thread_id, &mut task);
             return;
         }
 
@@ -895,7 +895,7 @@ impl ResourceManager {
                 self.weak_self.clone(),
                 Arc::new(Mutex::new(Some(resolver))),
             );
-            post_task(io_thread_id, Some(&mut task));
+            post_task(io_thread_id, &mut task);
             return;
         }
 
@@ -1127,7 +1127,7 @@ pub fn get_mime_type(url: &str) -> String {
         .next()
         .map(|extension| {
             let extension = CefString::from(extension);
-            CefString::from(&crate::get_mime_type(Some(&extension))).to_string()
+            CefString::from(&crate::get_mime_type(&extension)).to_string()
         })
         .unwrap_or_else(|| String::from("text/html"))
 }

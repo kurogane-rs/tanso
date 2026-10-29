@@ -10,5 +10,11 @@ application fills when it loads libcef (`tanso_sys::load_libcef`). Run without `
 rewrites bindings bindgen or upstream left as `extern "C"` declarations and leaves rewritten ones
 as they are; when upstream changes a bindings file, take upstream's file and run it again.
 
+It reads CEF's C++ annotations from `annotations.txt` beside this README: which parameters CEF
+never passes null and which client methods have no default (`src/annotations.rs`). A required
+parameter is a reference rather than an `Option`, and a method without a default has no default
+body. `--bindgen` refreshes the file from the target's CEF headers; `--annotations <include dir>`
+refreshes it from any CEF include directory.
+
 You can find the latest version of the prebuilt CEF archives on the [Chromium Embedded Framework
 (CEF) Automated Builds](https://cef-builds.spotifycdn.com/index.html).

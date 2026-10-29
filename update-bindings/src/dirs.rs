@@ -37,3 +37,8 @@ pub fn get_cef_dir() -> crate::Result<PathBuf> {
     webview2_com_dir.push("cef");
     Ok(webview2_com_dir)
 }
+
+/// The committed file of CEF's annotations (crate::annotations).
+pub fn get_annotations_file() -> PathBuf {
+    get_manifest_dir().join("annotations.txt")
+}

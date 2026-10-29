@@ -13,9 +13,9 @@ wrap_resource_handler! {
     impl ResourceHandler {
         fn open(
             &self,
-            _request: Option<&mut Request>,
-            handle_request: Option<&mut i32>,
-            _callback: Option<&mut Callback>,
+            _request: &mut Request,
+            handle_request: &mut i32,
+            _callback: &mut Callback,
         ) -> i32 {
             debug_assert_eq!(
                 currently_on(ThreadId::UI),
@@ -29,18 +29,16 @@ wrap_resource_handler! {
             );
 
             // Continue the request immediately.
-            if let Some(handle_request) = handle_request {
-                *handle_request = 1;
-            }
+            *handle_request = 1;
 
             1
         }
 
         fn response_headers(
             &self,
-            response: Option<&mut Response>,
-            response_length: Option<&mut i64>,
-            _redirect_url: Option<&mut CefString>,
+            response: &mut Response,
+            response_length: &mut i64,
+            _redirect_url: &mut CefString,
         ) {
             debug_assert_ne!(
                 currently_on(ThreadId::IO),
@@ -48,21 +46,15 @@ wrap_resource_handler! {
                 "response_headers must be called on the IO thread"
             );
 
-            let Some(response) = response else {
-                return;
-            };
-
             response.set_status(self.status_code);
             response.set_status_text(Some(&CefString::from(self.status_text.as_str())));
             response.set_mime_type(Some(&CefString::from(self.mime_type.as_str())));
 
             if let Some(mut header_map) = self.header_map.clone() {
-                response.set_header_map(Some(&mut header_map));
+                response.set_header_map(&mut header_map);
             }
 
-            if let Some(response_length) = response_length {
-                *response_length = if self.stream.is_some() { -1 } else { 0 };
-            }
+            *response_length = if self.stream.is_some() { -1 } else { 0 };
         }
 
         #[allow(clippy::not_unsafe_ptr_arg_deref)]
@@ -70,8 +62,8 @@ wrap_resource_handler! {
             &self,
             data_out: *mut u8,
             bytes_to_read: i32,
-            bytes_read: Option<&mut i32>,
-            _callback: Option<&mut ResourceReadCallback>,
+            bytes_read: &mut i32,
+            _callback: &mut ResourceReadCallback,
         ) -> i32 {
             debug_assert_eq!(
                 currently_on(ThreadId::UI),
@@ -86,9 +78,6 @@ wrap_resource_handler! {
             if bytes_to_read < 1 {
                 return 0;
             }
-            let Some(bytes_read) = bytes_read else {
-                return 0;
-            };
             let Some(stream) = &self.stream else {
                 *bytes_read = 0;
                 return 1;
@@ -111,6 +100,9 @@ wrap_resource_handler! {
                 0
             }
         }
+
+        // Each read finishes inside `read`; nothing is left to stop
+        fn cancel(&self) {}
     }
 }
 

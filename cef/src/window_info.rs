@@ -12,7 +12,7 @@ impl WindowInfo {
             parent_window: parent,
             #[cfg(target_os = "macos")]
             parent_view: parent,
-            bounds: bounds.clone(),
+            bounds: *bounds,
             #[cfg(target_os = "macos")]
             hidden: 0,
             ..self

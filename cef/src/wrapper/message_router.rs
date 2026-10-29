@@ -347,7 +347,7 @@ impl BrowserSideCallback for BrowserSideRouterCallback {
         // 2) To let the router to persist the query information before
         // the Success callback is executed.
         let mut task = BrowserSideRouterCallbackSuccess::new(self.weak_callback.clone(), builder);
-        post_task(ThreadId::UI, Some(&mut task));
+        post_task(ThreadId::UI, &mut task);
     }
 
     fn success_binary(&self, data: &[u8]) {
@@ -362,7 +362,7 @@ impl BrowserSideCallback for BrowserSideRouterCallback {
         // 2) To let the router to persist the query information before
         // the Success callback is executed.
         let mut task = BrowserSideRouterCallbackSuccess::new(self.weak_callback.clone(), builder);
-        post_task(ThreadId::UI, Some(&mut task));
+        post_task(ThreadId::UI, &mut task);
     }
 
     fn failure(&self, error_code: i32, error_message: &str) {
@@ -375,7 +375,7 @@ impl BrowserSideCallback for BrowserSideRouterCallback {
             error_code,
             error_message.to_string(),
         );
-        post_task(ThreadId::UI, Some(&mut task));
+        post_task(ThreadId::UI, &mut task);
     }
 }
 
@@ -566,7 +566,7 @@ impl BrowserSideRouter {
             return;
         };
 
-        frame.send_process_message(ProcessId::RENDERER, Some(&mut message));
+        frame.send_process_message(ProcessId::RENDERER, &mut message);
     }
 
     fn send_query_failure(
@@ -580,7 +580,7 @@ impl BrowserSideRouter {
     ) {
         let (Some(frame), Some(mut message)) = (
             frame,
-            process_message_create(Some(&CefString::from(self.query_message_name.as_str()))),
+            process_message_create(&CefString::from(self.query_message_name.as_str())),
         ) else {
             return;
         };
@@ -594,7 +594,7 @@ impl BrowserSideRouter {
         args.set_int(3, error_code);
         args.set_string(4, Some(&CefString::from(error_message)));
 
-        frame.send_process_message(ProcessId::RENDERER, Some(&mut message));
+        frame.send_process_message(ProcessId::RENDERER, &mut message);
     }
 
     /// Cancel a query that has not been sent to a handler.
@@ -656,7 +656,7 @@ impl BrowserSideRouter {
                 handler,
                 notify_renderer,
             );
-            post_task(ThreadId::UI, Some(&mut task));
+            post_task(ThreadId::UI, &mut task);
             return;
         }
 
@@ -1225,7 +1225,9 @@ impl RendererSideRouter {
             Some(&request),
             persistent,
         );
-        frame.send_process_message(ProcessId::BROWSER, message.as_mut());
+        if let Some(message) = message.as_mut() {
+            frame.send_process_message(ProcessId::BROWSER, message);
+        }
 
         request_id
     }
@@ -1294,12 +1296,14 @@ impl RendererSideRouter {
 
         if cancel_count > 0 {
             let mut message =
-                process_message_create(Some(&CefString::from(self.cancel_message_name.as_str())));
+                process_message_create(&CefString::from(self.cancel_message_name.as_str()));
             if let Some(args) = message.as_ref().and_then(ProcessMessage::argument_list) {
                 args.set_int(0, context_id);
                 args.set_int(1, request_id);
 
-                frame.send_process_message(ProcessId::BROWSER, message.as_mut());
+                if let Some(message) = message.as_mut() {
+                    frame.send_process_message(ProcessId::BROWSER, message);
+                }
             }
 
             true
@@ -1348,7 +1352,7 @@ impl RendererSideRouter {
             }
         };
 
-        success_callback.execute_function_with_context(Some(&mut context), None, Some(&[value]));
+        success_callback.execute_function_with_context(&mut context, None, &[value]);
     }
 
     fn execute_failure_callback(
@@ -1372,12 +1376,12 @@ impl RendererSideRouter {
         };
 
         failure_callback.execute_function_with_context(
-            Some(&mut context),
+            &mut context,
             None,
-            Some(&[
+            &[
                 v8_value_create_int(error_code),
                 v8_value_create_string(Some(&CefString::from(error_message))),
-            ]),
+            ],
         );
     }
 
@@ -1407,7 +1411,7 @@ impl RendererSideRouter {
             .find(|(_, entry)| {
                 entry
                     .as_ref()
-                    .map_or(0, |entry| entry.is_same(Some(&mut context)))
+                    .map_or(0, |entry| entry.is_same(&mut context))
                     != 0
             })
             .map(|(context_id, _)| *context_id);
@@ -1539,13 +1543,17 @@ impl MessageRouterRendererSideHandlerCallbacks for RendererSideRouter {
 
         // Add the query function.
         let name = CefString::from(self.config.js_query_function.as_str());
-        let mut query_func = v8_value_create_function(Some(&name), Some(&mut handler));
-        window.set_value_bykey(Some(&name), query_func.as_mut(), attributes);
+        let mut query_func = v8_value_create_function(&name, &mut handler);
+        if let Some(query_func) = query_func.as_mut() {
+            window.set_value_bykey(Some(&name), query_func, attributes);
+        }
 
         // Add the cancel function.
         let name = CefString::from(self.config.js_cancel_function.as_str());
-        let mut cancel_func = v8_value_create_function(Some(&name), Some(&mut handler));
-        window.set_value_bykey(Some(&name), cancel_func.as_mut(), attributes);
+        let mut cancel_func = v8_value_create_function(&name, &mut handler);
+        if let Some(cancel_func) = cancel_func.as_mut() {
+            window.set_value_bykey(Some(&name), cancel_func, attributes);
+        }
     }
 
     /// Call from CefRenderProcessHandler::OnContextReleased. Any pending queries
@@ -1624,28 +1632,22 @@ wrap_v8_handler! {
     impl V8Handler {
         fn execute(
             &self,
-            name: Option<&CefString>,
-            _object: Option<&mut V8Value>,
-            arguments: Option<&[Option<V8Value>]>,
-            retval: Option<&mut Option<V8Value>>,
-            exception: Option<&mut CefString>,
+            name: &CefString,
+            _object: &mut V8Value,
+            arguments: &[Option<V8Value>],
+            retval: &mut Option<V8Value>,
+            exception: &mut CefString,
         ) -> i32 {
             macro_rules! return_exception {
                 ($message:expr) => {
-                    if let Some(exception) = exception {
-                        *exception = CefString::from($message);
-                    }
-
+                    *exception = CefString::from($message);
                     return 1;
                 };
             }
 
-            let Some(name) = name else {
-                return_exception!("Missing function name");
-            };
             let name = name.to_string();
             if name == self.config.js_query_function {
-                let Some(arg) = arguments
+                let Some(arg) = Some(arguments)
                     .filter(|arguments| arguments.len() == 1)
                     .and_then(|arguments| arguments[0].as_ref())
                     .filter(|arg| arg.is_object() != 0)
@@ -1724,13 +1726,11 @@ wrap_v8_handler! {
                         },
                     );
 
-                    if let Some(retval) = retval {
-                        *retval = v8_value_create_int(request_id);
-                    }
+                    *retval = v8_value_create_int(request_id);
                     return 1;
                 }
             } else if name == self.config.js_cancel_function {
-                let Some(arg) = arguments
+                let Some(arg) = Some(arguments)
                     .filter(|arguments| arguments.len() == 1)
                     .and_then(|arguments| arguments[0].as_ref())
                     .filter(|arg| arg.is_int() != 0)
@@ -1751,9 +1751,7 @@ wrap_v8_handler! {
                             request_id,
                         );
 
-                        if let Some(retval) = retval {
-                            *retval = v8_value_create_bool(result.into());
-                        }
+                        *retval = v8_value_create_bool(result.into());
                         return 1;
                     }
                 }

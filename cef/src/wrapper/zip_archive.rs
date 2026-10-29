@@ -19,7 +19,7 @@ impl File for ZipFile {
     fn stream_reader(&self) -> Option<StreamReader> {
         let mut handler =
             ByteReadHandler::new(Arc::new(Mutex::new(ByteStream::new(self.data.clone()))));
-        stream_reader_create_for_handler(Some(&mut handler))
+        stream_reader_create_for_handler(&mut handler)
     }
 }
 
@@ -38,7 +38,7 @@ impl ZipArchive {
         let Ok(mut contents) = self.contents.lock() else {
             return 0;
         };
-        let Some(reader) = zip_reader_create(Some(stream)) else {
+        let Some(reader) = zip_reader_create(stream) else {
             return 0;
         };
         let password = CefString::from(password);

@@ -93,7 +93,7 @@ impl Args {
 #[cfg(target_os = "windows")]
 fn cmd_line_from_utf16(command_line: &[u16]) -> Option<CommandLine> {
     let cmd_line = command_line_create()?;
-    cmd_line.init_from_string(Some(&crate::CefString::from(command_line)));
+    cmd_line.init_from_string(&crate::CefString::from(command_line));
     Some(cmd_line)
 }
 
@@ -151,11 +151,11 @@ mod tests {
         let command_line: Vec<u16> = r#"app.exe "a b" --flag"#.encode_utf16().collect();
         let cmd_line = cmd_line_from_utf16(&command_line).expect("a command line");
         let mut arguments = CefStringList::new();
-        cmd_line.arguments(Some(&mut arguments));
+        cmd_line.arguments(&mut arguments);
 
         let arguments: Vec<String> = arguments.into_iter().collect();
         assert_eq!(arguments, ["a b"]);
-        assert_eq!(cmd_line.has_switch(Some(&CefString::from("flag"))), 1);
+        assert_eq!(cmd_line.has_switch(&CefString::from("flag")), 1);
     }
 
     #[test]

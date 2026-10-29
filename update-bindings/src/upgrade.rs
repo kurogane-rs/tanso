@@ -159,7 +159,7 @@ impl ParseCallbacks for OpaqueHandleDerives {
     }
 }
 
-fn target_to_os_arch(target: &str) -> (&str, &str) {
+pub fn target_to_os_arch(target: &str) -> (&str, &str) {
     match target {
         "aarch64-apple-darwin" => ("macos", "aarch64"),
         "x86_64-apple-darwin" => ("macos", "x86_64"),

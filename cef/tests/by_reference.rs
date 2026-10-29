@@ -23,14 +23,14 @@ wrap_life_span_handler! {
     impl LifeSpanHandler {
         fn on_before_dev_tools_popup(
             &self,
-            _browser: Option<&mut Browser>,
-            _window_info: Option<&mut WindowInfo>,
-            client: Option<&mut Option<Client>>,
-            _settings: Option<&mut BrowserSettings>,
-            _extra_info: Option<&mut Option<DictionaryValue>>,
-            _use_default_window: Option<&mut i32>,
+            _browser: &mut Browser,
+            _window_info: &mut WindowInfo,
+            client: &mut Option<Client>,
+            _settings: &mut BrowserSettings,
+            _extra_info: &mut Option<DictionaryValue>,
+            _use_default_window: &mut i32,
         ) {
-            if let (Some(client), Some(replacement)) = (client, &self.replacement) {
+            if let Some(replacement) = &self.replacement {
                 *client = replacement.clone();
             }
         }
@@ -46,16 +46,26 @@ fn call(handler: &LifeSpanHandler, client: &Client) -> *mut sys::_cef_client_t {
     let raw = handler.get_raw();
     // SAFETY: the handler's own function table, filled when it was wrapped
     let callback = unsafe { (*raw).on_before_dev_tools_popup }.expect("the handler is wrapped");
-    // SAFETY: every other argument may be null
+    // The other arguments CEF never passes null. The browser stands in with
+    // no reference counting of its own
+    let mut browser: sys::_cef_browser_t = unsafe { std::mem::zeroed() };
+    browser.base.size = std::mem::size_of::<sys::_cef_browser_t>();
+    let mut window_info: sys::_cef_window_info_t = unsafe { std::mem::zeroed() };
+    window_info.size = std::mem::size_of::<sys::_cef_window_info_t>();
+    let mut settings: sys::_cef_browser_settings_t = unsafe { std::mem::zeroed() };
+    settings.size = std::mem::size_of::<sys::_cef_browser_settings_t>();
+    let mut extra_info = ptr::null_mut();
+    let mut use_default_window = 0;
+    // SAFETY: every pointer is valid for the call
     unsafe {
         callback(
             raw,
-            ptr::null_mut(),
-            ptr::null_mut(),
+            &mut browser,
+            &mut window_info,
             &mut passed,
-            ptr::null_mut(),
-            ptr::null_mut(),
-            ptr::null_mut(),
+            &mut settings,
+            &mut extra_info,
+            &mut use_default_window,
         )
     };
     passed
