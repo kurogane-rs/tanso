@@ -15,9 +15,6 @@ pub mod application_mac;
 #[cfg(target_os = "macos")]
 pub mod sandbox;
 
-#[cfg(feature = "accelerated_osr")]
-pub mod osr_texture_import;
-
 #[cfg(feature = "resources")]
 pub mod resources;
 
@@ -29,12 +26,6 @@ pub use bindings::*;
 pub use rc::Rc as _;
 
 pub use tanso_sys as sys;
-
-#[cfg(all(
-    not(any(target_os = "macos", target_os = "windows", target_os = "linux")),
-    feature = "accelerated_osr"
-))]
-compile_error!("accelerated_osr not supported on this platform");
 
 /// Held around every call to CEF's ID mappers. They share tables CEF fills on
 /// first use and two threads calling them at once can crash (seen on macOS).
