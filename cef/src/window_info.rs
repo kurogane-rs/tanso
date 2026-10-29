@@ -37,22 +37,20 @@ impl WindowInfo {
     }
 
     /// Create the browser using windowless (off-screen) rendering. No window
-    /// will be created for the browser and all rendering will occur via the
-    /// CefRenderHandler interface. The |parent| value will be used to identify
-    /// monitor info and to act as the parent window for dialogs, context menus,
-    /// etc. If |parent| is not provided then the main screen monitor will be used
-    /// and some functionality that requires a parent window may not function
-    /// correctly. In order to create windowless browsers the
-    /// CefSettings.windowless_rendering_enabled value must be set to true.
-    /// Transparent painting is enabled by default but can be disabled by setting
-    /// CefBrowserSettings.background_color to an opaque value.
-    pub fn set_as_windowless(self, parent: cef_window_handle_t) -> Self {
+    /// is created for the browser; its frames reach the client's
+    /// `RenderHandler`. `parent` identifies the monitor and parents dialogs and
+    /// context menus. Without one CEF takes the main screen, and what needs a
+    /// parent window may not work; `None` keeps the parent `self` holds, none
+    /// in a default `WindowInfo`. Windowless browsers are always of the Alloy
+    /// style. `shared_texture_enabled` and `external_begin_frame_enabled`
+    /// choose GPU frames and frames the client drives.
+    pub fn set_as_windowless(self, parent: Option<cef_window_handle_t>) -> Self {
         Self {
             windowless_rendering_enabled: 1,
             #[cfg(any(target_os = "linux", target_os = "windows"))]
-            parent_window: parent,
+            parent_window: parent.unwrap_or(self.parent_window),
             #[cfg(target_os = "macos")]
-            parent_view: parent,
+            parent_view: parent.unwrap_or(self.parent_view),
             runtime_style: RuntimeStyle::ALLOY,
             ..self
         }

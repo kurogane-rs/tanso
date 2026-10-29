@@ -2,6 +2,7 @@
 
 pub mod args;
 mod array_buffer;
+pub mod osr;
 pub mod rc;
 pub mod string;
 pub mod window_info;
