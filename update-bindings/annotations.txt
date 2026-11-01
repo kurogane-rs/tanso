@@ -1,4 +1,4 @@
-# CEF's C++ annotations of CEF 154.0.33+ga03e714+chromium-154.0.8037.94, read by update-bindings --annotations.
+# CEF's C++ annotations of CEF 156.0.15+gcf671c0+chromium-156.0.8078.80, read by update-bindings --annotations.
 # Each line: the C struct of a method (- for a global function), the C function,
 # pure for a client method without a default (else -), the parameters never null.
 - cef_add_cross_origin_whitelist_entry - source_origin target_protocol
@@ -792,6 +792,8 @@ cef_preference_manager_t has_preference - name
 cef_preference_manager_t set_preference - error name
 cef_preference_observer_t on_preference_changed pure name
 cef_preference_registrar_t add_preference - default_value name
+cef_preference_registrar_t get_default_preference - name
+cef_preference_registrar_t set_default_preference - error name value
 cef_print_dialog_callback_t cancel -
 cef_print_dialog_callback_t cont - settings
 cef_print_handler_t get_pdf_paper_size - browser

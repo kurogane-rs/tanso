@@ -4,7 +4,7 @@ tanso began as a fork of [cef-rs](https://github.com/tauri-apps/cef-rs). cef-rs 
 
 ## Last reviewed
 
-cef-rs `f044f89` (2026-10-03, `154.4.0+154.0.33`), the commit tanso forked from.
+cef-rs `84d6c77` (2026-10-24, `156.2.0+156.0.14`).
 
 ## Reviewing cef-rs
 
