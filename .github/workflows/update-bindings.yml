@@ -266,7 +266,9 @@ jobs:
 
             echo "Publishing PR for ${SOURCE_BRANCH} branch"
             for attempt in 1 2 3; do
-              if gh pr create --base dev -t "chore: update bindings" -b ""; then
+              # A PR still open follows the branch; GitHub refuses a second one
+              if [ "$(gh pr list --head "${SOURCE_BRANCH}" --base dev --json number --jq length)" = 1 ] ||
+                gh pr create --base dev -t "chore: update bindings" -b ""; then
                 break
               fi
 

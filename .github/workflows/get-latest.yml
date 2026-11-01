@@ -87,7 +87,9 @@ jobs:
           COMMIT_MESSAGE: ${{ needs.get-latest.outputs.commit-message }}
         run: |
           for attempt in 1 2 3; do
-            if gh pr create --base dev --head get-latest -t "${COMMIT_MESSAGE}" -b ""; then
+            # A PR still open follows the branch; GitHub refuses a second one
+            if [ "$(gh pr list --head get-latest --base dev --json number --jq length)" = 1 ] ||
+              gh pr create --base dev --head get-latest -t "${COMMIT_MESSAGE}" -b ""; then
               break
             fi
 
